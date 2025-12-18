@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mulai Promosikan Lahan mu - LandHub</title>
+    <title>Mulai Promosikan Lahanmu - LandHub</title>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     

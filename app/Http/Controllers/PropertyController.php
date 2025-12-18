@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property; // PENTING: Panggil model Property
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -71,19 +72,20 @@ class PropertyController extends Controller
 
         // 4. Set nilai default (Hardcode user sementara)
         $validated['user_id'] = 1; 
-        $validated['status'] = 'Available';
+        $validated['status'] = 'Pending';
 
         // 5. Simpan ke Database
         Property::create($validated);
 
         // 6. Redirect
-        return redirect()->route('properties.index');
+        return redirect()->route('properties.index')->with('success', 'Properti berhasil ditambahkan!');
     }
 
     // Menampilkan Halaman Edit Status
     public function edit(Property $property)
     {
         return view('properties.edit', compact('property'));
+        
     }
 
     // Memproses Perubahan Status
@@ -100,8 +102,30 @@ class PropertyController extends Controller
         ]);
 
         // Kembali ke halaman index dengan pesan sukses (opsional)
-        return redirect()->route('properties.index');
+        return redirect()->route('properties.index')->with('success', 'Status properti berhasil diperbarui!');
     }
     
+    // Menghapus Property
+    public function destroy(Property $property)
+    {
+        // 1. Hapus File Gambar (Jika ada)
+        if ($property->image) {
+            // Kita perlu membersihkan path '/storage/' karena Storage::delete butuh path relatif
+            $imagePath = str_replace('/storage/', '', $property->image);
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        // 2. Hapus File Dokumen (Jika ada)
+        if ($property->document) {
+            $docPath = str_replace('/storage/', '', $property->document);
+            Storage::disk('public')->delete($docPath);
+        }
+
+        // 3. Hapus Data dari Database
+        $property->delete();
+
+        // 4. Kembali ke halaman index
+        return redirect()->route('properties.index')->with('success', 'Properti dan file terkait berhasil dihapus!');
+    }
 
 }

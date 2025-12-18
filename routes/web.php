@@ -11,6 +11,11 @@ Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->
 // 2. Route untuk Memproses Perubahan (Update)
 Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
 
+// ... route edit dan update sebelumnya ...
+
+// 3. Route untuk Menghapus Property
+Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
+
 // 1. Halaman Utama (Index + Search + Filter)
 Route::get('/', [PropertyController::class, 'index'])->name('properties.index');
 

@@ -18,6 +18,19 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
+    @if(session('success'))
+    <div id="toast-notification" class="fixed top-5 right-5 z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-xl shadow-lg border-l-4 border-green-500 transform transition-all duration-300 translate-x-full opacity-0" role="alert">
+        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+        </div>
+        <div class="ml-3 text-sm font-normal text-gray-800">{{ session('success') }}</div>
+        <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8" onclick="closeToast()">
+            <span class="sr-only">Close</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+    </div>
+    @endif
+
     <div class="flex h-screen overflow-hidden">
 
         <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-10">
@@ -80,7 +93,7 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Portfolio Value</p>
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">IDR 106 T</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 mt-2">IDR {{ number_format(\App\Models\Property::sum('price'), 0, ',', '.') }}</h3>
                         <p class="text-gray-400 text-xs mt-1">Total portfolio valuation</p>
                     </div>
                     <div class="self-end mt-4 bg-green-100 p-2 rounded-lg text-green-600">
@@ -100,7 +113,11 @@
                  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">This Month</p>
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">23</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 mt-2">
+                            {{ \App\Models\Property::whereMonth('created_at', date('m'))
+                                                    ->whereYear('created_at', date('Y'))
+                                                    ->count() }}
+                        </h3>
                         <p class="text-gray-400 text-xs mt-1">New listings added</p>
                     </div>
                     <div class="self-end mt-4 bg-red-100 p-2 rounded-lg text-red-500">
@@ -122,7 +139,7 @@
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                         </div>
 
-                        <select name="status" onchange="this.form.submit()" class="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select name="status" onchange="this.form.submit()" class="border border-gray-300 rounded-lg pl-4 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option {{ request('status') == 'All Status' ? 'selected' : '' }}>All Status</option>
                             <option {{ request('status') == 'Available' ? 'selected' : '' }}>Available</option>
                             <option {{ request('status') == 'Sold' ? 'selected' : '' }}>Sold</option>
@@ -227,7 +244,7 @@
                                             'Accepted' => 'bg-green-500 text-white',
                                             'Rejected' => 'bg-red-500 text-white',
                                             'Pending' => 'bg-orange-400 text-white',
-                                            default => 'bg-green-100 text-green-700'
+                                            default => 'bg-green-500 text-white'
                                         };
                                     @endphp
                                     <span class="inline-block rounded-full px-3 py-1 text-xs font-bold {{ $statusColor }}">
@@ -237,9 +254,15 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex justify-center items-center gap-3">
+                                        <button onclick="openShowModal({{ json_encode($item) }})" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                        </button>
                                         <a href="{{ route('properties.edit', $item->id) }}" class="text-gray-500 hover:text-green-600 transition" title="Edit Status">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
+                                        <button type="button" onclick="openDeleteModal('{{ route('properties.destroy', $item->id) }}')" class="text-gray-500 hover:text-red-600 transition" title="Hapus Property">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -269,5 +292,116 @@
         </main>
     </div>
 
+    <div id="show-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeShowModal()"></div>
+        
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl mx-4 relative z-10 overflow-hidden transform transition-all scale-95 opacity-0 flex flex-col max-h-[90vh]" id="show-modal-content">
+            
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-xl font-bold text-blue-900">Detail Properti</h3>
+                <button onclick="closeShowModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div>
+                        <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
+                            <img id="show-image" src="" alt="Property Image" class="w-full h-64 object-cover">
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-white p-2 rounded-full shadow-sm">
+                                    <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-700">Dokumen Kepemilikan</p>
+                                    <p class="text-xs text-gray-500">Legal Document</p>
+                                </div>
+                            </div>
+                            <a id="show-document-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-bold">Download</a>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <span id="show-category" class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-2">Category</span>
+                            <span id="show-status" class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold mb-2 ml-2">Status</span>
+                            
+                            <h2 id="show-location" class="text-2xl font-bold text-gray-900">Location Name</h2>
+                            <p id="show-price" class="text-xl font-bold text-green-600 mt-1">Rp 0</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500">Luas Area</p>
+                                <p id="show-area" class="font-bold text-gray-800">0 m2</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500">Tipe Iklan</p>
+                                <p id="show-ads-category" class="font-bold text-gray-800">Basic</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-bold text-gray-700 mb-1">Deskripsi</p>
+                            <p id="show-description" class="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg h-24 overflow-y-auto">Desc...</p>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-bold text-gray-700 mb-1">Spesifikasi</p>
+                            <p id="show-specifications" class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">Specs...</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-xs text-gray-400 mt-2">Pemilik: <span id="show-email" class="text-gray-600">email@example.com</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                <button onclick="closeShowModal()" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative z-10 transform transition-all scale-95 opacity-0" id="delete-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+                    <svg class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Hapus Properti Ini?</h3>
+                <p class="text-sm text-gray-500 mb-6">
+                    Apakah Anda yakin ingin menghapus properti ini? <br>
+                    Tindakan ini tidak dapat dibatalkan dan file terkait akan dihapus permanen.
+                </p>
+
+                <div class="flex justify-center gap-3">
+                    <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
+                        Batal
+                    </button>
+                    <button type="button" id="confirm-delete-btn" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition shadow-md">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="delete-form" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
 </body>
 </html>
