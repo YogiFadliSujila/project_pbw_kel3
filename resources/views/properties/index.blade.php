@@ -93,7 +93,24 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Portfolio Value</p>
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">IDR {{ number_format(\App\Models\Property::sum('price'), 0, ',', '.') }}</h3>
+                        @php
+                            $totalPrice = \App\Models\Property::sum('price');
+                            
+                            if ($totalPrice >= 1000000000000) {
+                                // Jika Triliun (di atas 10^12)
+                                $formattedPrice = number_format($totalPrice / 1000000000000, 1, ',', '.') . ' T';
+                            } elseif ($totalPrice >= 1000000000) {
+                                // Jika Miliar (di atas 10^9)
+                                $formattedPrice = number_format($totalPrice / 1000000000, 1, ',', '.') . ' B';
+                            } elseif ($totalPrice >= 1000000) {
+                                // Jika Juta (di atas 10^6)
+                                $formattedPrice = number_format($totalPrice / 1000000, 1, ',', '.') . ' M';
+                            } else {
+                                // Di bawah 1 Juta, tampilkan biasa
+                                $formattedPrice = number_format($totalPrice, 0, ',', '.');
+                            }
+                        @endphp
+                        <h3 class="text-3xl font-bold text-gray-900 mt-2">IDR {{$formattedPrice}}</h3>
                         <p class="text-gray-400 text-xs mt-1">Total portfolio valuation</p>
                     </div>
                     <div class="self-end mt-4 bg-green-100 p-2 rounded-lg text-green-600">
