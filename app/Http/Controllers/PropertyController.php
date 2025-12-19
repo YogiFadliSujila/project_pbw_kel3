@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property; // PENTING: Panggil model Property
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
@@ -70,8 +73,23 @@ class PropertyController extends Controller
 
         
 
-        // 4. Set nilai default (Hardcode user sementara)
-        $validated['user_id'] = 1; 
+        // 4. Tentukan user pemilik: gunakan user yang login jika ada,
+        //    jika tidak ada, buat dummy user unik untuk setiap properti.
+        if (Auth::check()) {
+            $validated['user_id'] = Auth::id();
+        } else {
+            $uniq = time() . rand(1000, 9999);
+            $dummy = User::create([
+                'name' => 'Dummy User ' . $uniq,
+                'email' => 'dummy+' . $uniq . '@example.test',
+                'phone' => null,
+                'password' => Str::random(16),
+                'role' => 'penjual',
+            ]);
+
+            $validated['user_id'] = $dummy->id;
+        }
+
         $validated['status'] = 'Pending';
 
         // 5. Simpan ke Database
@@ -93,10 +111,11 @@ class PropertyController extends Controller
     {
         // Validasi input status
         $request->validate([
-            'status' => 'required|in:Pending,Accepted,Rejected',
+            // DB uses 'Available' for accepted listings
+            'status' => 'required|in:Pending,Available,Rejected',
         ]);
 
-        // Update status di database
+        // Update status di database (store DB values)
         $property->update([
             'status' => $request->status
         ]);

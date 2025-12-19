@@ -16,7 +16,7 @@
         .scrollbar-hide::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-[#F8F9FE] text-gray-800">
 
     @if(session('success'))
     <div id="toast-notification" class="fixed top-5 right-5 z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-xl shadow-lg border-l-4 border-green-500 transform transition-all duration-300 translate-x-full opacity-0" role="alert">
@@ -33,41 +33,48 @@
 
     <div class="flex h-screen overflow-hidden">
 
-        <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-10">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold text-blue-900">LandHub</h1>
+        <aside class="w-64 bg-white border-r border-gray-100 hidden md:flex flex-col flex-shrink-0 z-20">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <h1 class="text-2xl font-bold text-[#1E2B58]">LandHub</h1>
             </div>
 
-            <nav class="flex-1 px-4 space-y-1">
-                <a href="{{route ('dashboard')}}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition">
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Dashboard
+                    <span class="font-medium">Dashboard</span>
                 </a>
-                <a href="{{ route('properties.index') }}" class="flex items-center px-4 py-3 bg-blue-600 text-white rounded-lg shadow-md transition">
+
+                <a href="{{ route('properties.index') }}" class="flex items-center px-4 py-3 bg-[#3B82F6] text-white rounded-lg shadow-blue-200 shadow-md transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    Properties
+                    <span class="font-medium">Properties</span>
                 </a>
-                <a href="{{route("users.index")}}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition">
+
+                <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    Users
+                    <span class="font-medium">Users</span>
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition">
+
+                <a href="#" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                    Advertisement
+                    <span class="font-medium">Advertisement</span>
                 </a>
             </nav>
-            <div class="p-4 border-t border-gray-200">
-                <a href="#" class="flex items-center text-gray-600 hover:text-red-600">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    Logout
-                </a>
+
+            <div class="p-4 border-t border-gray-50 space-y-2">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <span class="font-medium">Logout</span>
+                    </button>
+                </form>
             </div>
         </aside>
 
         <main class="flex-1 overflow-y-auto p-8 relative">
             
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800">Properties</h2>
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-[#1E2B58]">Properties</h2>
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm font-bold text-gray-900">{{ Auth::user()->name ?? 'Budi' }}</p>
@@ -78,102 +85,96 @@
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Total Properties</p>
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">{{ \App\Models\Property::count() }}</h3>
-                        <p class="text-gray-400 text-xs mt-1">Available for sale</p>
+                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ \App\Models\Property::count() }}</h3>
+                        <div class="mt-4 text-sm text-gray-400">Available listings</div>
                     </div>
-                    <div class="self-end mt-4 bg-yellow-100 p-2 rounded-lg text-yellow-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    <div class="bg-orange-50 p-3 rounded-full text-orange-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Portfolio Value</p>
-                        @php
+                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">@php
                             $totalPrice = \App\Models\Property::sum('price');
-                            
                             if ($totalPrice >= 1000000000000) {
-                                // Jika Triliun (di atas 10^12)
                                 $formattedPrice = number_format($totalPrice / 1000000000000, 1, ',', '.') . ' T';
                             } elseif ($totalPrice >= 1000000000) {
-                                // Jika Miliar (di atas 10^9)
                                 $formattedPrice = number_format($totalPrice / 1000000000, 1, ',', '.') . ' B';
                             } elseif ($totalPrice >= 1000000) {
-                                // Jika Juta (di atas 10^6)
                                 $formattedPrice = number_format($totalPrice / 1000000, 1, ',', '.') . ' M';
                             } else {
-                                // Di bawah 1 Juta, tampilkan biasa
                                 $formattedPrice = number_format($totalPrice, 0, ',', '.');
                             }
-                        @endphp
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">IDR {{$formattedPrice}}</h3>
-                        <p class="text-gray-400 text-xs mt-1">Total portfolio valuation</p>
+                        @endphp IDR {{$formattedPrice}}</h3>
+                        <div class="mt-4 text-sm text-gray-400">Total portfolio valuation</div>
                     </div>
-                    <div class="self-end mt-4 bg-green-100 p-2 rounded-lg text-green-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <div class="bg-green-50 p-3 rounded-full text-green-400">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
                     </div>
                 </div>
-                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Appreciation Rate</p>
                         <h3 class="text-3xl font-bold text-green-500 mt-2">7.5%</h3>
-                        <p class="text-gray-400 text-xs mt-1">Average appreciation rate</p>
+                        <div class="mt-4 text-sm text-gray-400">Average appreciation rate</div>
                     </div>
-                    <div class="self-end mt-4 bg-blue-100 p-2 rounded-lg text-blue-600">
+                    <div class="bg-blue-50 p-3 rounded-full text-blue-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
                     </div>
                 </div>
-                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">This Month</p>
-                        <h3 class="text-3xl font-bold text-gray-900 mt-2">
-                            {{ \App\Models\Property::whereMonth('created_at', date('m'))
-                                                    ->whereYear('created_at', date('Y'))
-                                                    ->count() }}
-                        </h3>
-                        <p class="text-gray-400 text-xs mt-1">New listings added</p>
+                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ \App\Models\Property::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count() }}</h3>
+                        <div class="mt-4 text-sm text-gray-400">New listings added</div>
                     </div>
-                    <div class="self-end mt-4 bg-red-100 p-2 rounded-lg text-red-500">
+                    <div class="bg-orange-50 p-3 rounded-full text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 
-                <form action="{{ route('properties.index') }}" method="GET" class="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h3 class="text-xl font-bold text-gray-800">Property Portfolio</h3>
-                    
-                    <div class="flex gap-3 w-full md:w-auto">
-                        <div class="relative w-full md:w-64">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </span>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                        </div>
+                <div class="pt-6 pr-6 pl-6 pb-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h3 class="text-xl font-bold text-[#1E2B58]">Property Portfolio</h3>
+                    <a href="{{ route('properties.create') }}" class="px-4 py-2 bg-[#3B82F6] text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Add New Property
+                    </a>
+                </div>
 
-                        <select name="status" onchange="this.form.submit()" class="border border-gray-300 rounded-lg pl-4 pr-8 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option {{ request('status') == 'All Status' ? 'selected' : '' }}>All Status</option>
-                            <option {{ request('status') == 'Available' ? 'selected' : '' }}>Available</option>
-                            <option {{ request('status') == 'Sold' ? 'selected' : '' }}>Sold</option>
+                <form action="{{ route('properties.index') }}" method="GET" class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div class="relative w-full md:w-100">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div class="w-full md:w-48">
+                        <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
+                            <option value="All Status" {{ request('status') == 'All Status' ? 'selected' : '' }}>All Status</option>
+                            <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Accepted</option>
+                            <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                         </select>
-
-                        <a href="{{ route('properties.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition whitespace-nowrap">
-                            <span>Add New Property</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        </a>
                     </div>
                 </form>
 
-                <div class="overflow-x-auto scrollbar-hide">
+                <div class="pt-3 pr-6 pl-6 pb-3 overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-600 min-w-[1500px]"> 
-                        <thead class="bg-gray-50 text-gray-700 uppercase font-bold text-xs">
+                        <thead class="bg-gray-200 text-gray-700 uppercase font-bold text-xs">
                             <tr>
-                                <th class="px-6 py-4 whitespace-nowrap">Id Property</th>
+                                <th class="px-6 py-4 whitespace-nowrap rounded-l-xl">Id Property</th>
                                 <th class="px-6 py-4 whitespace-nowrap">Email</th>
                                 <th class="px-6 py-4 whitespace-nowrap">Images</th>
                                 <th class="px-6 py-4 whitespace-nowrap min-w-[200px]">Property Description</th>
@@ -185,7 +186,7 @@
                                 <th class="px-6 py-4 whitespace-nowrap">Ads Category</th>
                                 <th class="px-6 py-4 whitespace-nowrap">Document</th>
                                 <th class="px-6 py-4 whitespace-nowrap">Status</th>
-                                <th class="px-6 py-4 whitespace-nowrap text-center">Action</th>
+                                <th class="px-6 py-4 whitespace-nowrap text-center rounded-r-xl">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -258,7 +259,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @php
                                         $statusColor = match($item->status) {
-                                            'Accepted' => 'bg-green-500 text-white',
+                                            'Available' => 'bg-green-500 text-white',
                                             'Rejected' => 'bg-red-500 text-white',
                                             'Pending' => 'bg-orange-400 text-white',
                                             default => 'bg-green-500 text-white'
@@ -297,14 +298,6 @@
                     </table>
                 </div>
 
-                <div class="p-4 border-t border-gray-200 flex justify-between items-center text-sm text-gray-500">
-                    <p>Total data: {{ $properties->count() }} properties</p>
-                    <div class="flex gap-2">
-                        <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
-                        <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50" disabled>Next</button>
-                    </div>
-                </div>
-
             </div>
         </main>
     </div>
@@ -316,9 +309,6 @@
             
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 class="text-xl font-bold text-blue-900">Detail Properti</h3>
-                <button onclick="closeShowModal()" class="text-gray-400 hover:text-gray-600 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
             </div>
 
             <div class="p-6 overflow-y-auto">

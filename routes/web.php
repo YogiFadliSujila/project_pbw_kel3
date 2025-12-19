@@ -5,7 +5,12 @@ use App\Http\Controllers\PropertyController; // Pastikan ini ada
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Inertia\Inertia;
+use App\Http\Controllers\LandingController; // <--- Import Controller
 
+// Ubah route '/' default menjadi ini:
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+// Route untuk halaman list properti publik
+Route::get('/temukan-lahan', [LandingController::class, 'listing'])->name('listing.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard'); // <--- Mengarah ke dashboard.blade.php
@@ -26,13 +31,15 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     
     // Semua route properties pindahkan ke sini
-    Route::get('/', [PropertyController::class, 'index'])->name('properties.index'); // Dashboard Admin
+    Route::get('/admin', [PropertyController::class, 'index'])->name('properties.index');// Dashboard Admin
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
     Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
     Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
     Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');    
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 });
 

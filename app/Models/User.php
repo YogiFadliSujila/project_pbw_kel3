@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'role',
     ];
 
     /**
@@ -45,4 +47,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relasi: User memiliki banyak Property
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
 }
+
