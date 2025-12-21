@@ -173,7 +173,16 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            @foreach($properties as $prop)
+            @php
+                $samples = is_array($properties)
+                    ? array_slice($properties, 0, 2)
+                    : (
+                        $properties instanceof \Illuminate\Support\Collection
+                        ? $properties->take(2)
+                        : collect($properties)->take(2)
+                    );
+            @endphp
+            @foreach($samples as $prop)
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
                 <div class="rounded-xl overflow-hidden mb-4 relative h-48">
                     <img
@@ -186,7 +195,7 @@
                 
                 <div class="flex justify-between items-end mb-2">
                     <div>
-                        <h4 class="text-xl font-bold text-[#1E2B58]">Rp {{ $prop['price'] }}</h4>
+                        <h4 class="text-xl font-bold text-[#1E2B58]">Rp {{ is_array($prop) ? number_format($prop['price'] ?? 0, 0, ',', '.') : number_format($prop->price ?? 0, 0, ',', '.') }}</h4>
                         <p class="text-sm font-bold text-gray-800">{{ $prop['title'] }}</p>
                     </div>
                     <div class="text-right">
@@ -202,9 +211,9 @@
         </div>
         
         <div class="text-center mt-8">
-            <button class="px-8 py-2 bg-blue-100 text-blue-800 font-bold rounded-full hover:bg-blue-200 transition text-sm">
-                See all >
-            </button>
+            <a href="{{ route('listing.index') }}" class="inline-block px-8 py-2 bg-blue-100 text-blue-800 font-bold rounded-full hover:bg-blue-200 transition text-sm">
+                See all &gt;
+            </a>
         </div>
     </section>
 
