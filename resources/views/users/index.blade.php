@@ -71,45 +71,60 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Role Pencari Lahan</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $pencariLahan ?? 30396 }}</h3>
-                        <div class="mt-4 flex items-center text-sm font-medium text-green-500">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            <span>0.34% Up from past week</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Role Pencari Lahan</p>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $pencariLahan ?? 30396 }}</h3>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-2xl text-red-400">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                         </div>
                     </div>
-                    <div class="bg-red-50 p-3 rounded-full text-red-400">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-500 font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            8.5%
+                        </span>
+                        <span class="text-gray-400 ml-2">Up from yesterday</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Role Penjual Lahan</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $penjualLahan ?? 10293 }}</h3>
-                        <div class="mt-4 flex items-center text-sm font-medium text-green-500">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            <span>0.13% Up from past week</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Role Penjual Lahan</p>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $penjualLahan ?? 10293 }}</h3>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-2xl text-green-400">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                         </div>
                     </div>
-                    <div class="bg-green-50 p-3 rounded-full text-green-400">
-                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-500 font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            8.5%
+                        </span>
+                        <span class="text-gray-400 ml-2">Up from yesterday</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Total Users</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($totalUsers) }}</h3>
-                        <div class="mt-4 flex items-center text-sm font-medium text-green-500">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            <span>0.21% Up from past week</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Total Users</p>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($totalUsers) }}</h3>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-2xl text-purple-400">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
                         </div>
                     </div>
-                    <div class="bg-purple-50 p-3 rounded-full text-purple-400">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-green-500 font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            8.5%
+                        </span>
+                        <span class="text-gray-400 ml-2">Up from yesterday</span>
                     </div>
                 </div>
 
@@ -119,7 +134,7 @@
                         <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $thisMonth }}</h3>
                         <div class="mt-4 text-sm text-gray-400">New users added</div>
                     </div>
-                    <div class="bg-orange-50 p-3 rounded-full text-orange-400">
+                    <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                 </div>
@@ -210,7 +225,7 @@
                                         <button onclick="openUserModal({{ json_encode($user) }})" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </button>
-                                        <a href="#" class="text-gray-500 hover:text-yellow-500 transition" title="Edit User">
+                                        <a href="{{ route('users.edit', $user->id ?? 0) }}" class="text-gray-500 hover:text-yellow-500 transition" title="Edit User">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
                                         <button type="button" onclick="openDeleteModal('{{ route('users.destroy', $user->id ?? 0) }}')" class="text-gray-500 hover:text-red-600 transition" title="Hapus User">

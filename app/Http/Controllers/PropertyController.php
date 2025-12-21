@@ -95,8 +95,13 @@ class PropertyController extends Controller
         // 5. Simpan ke Database
         Property::create($validated);
 
-        // 6. Redirect
-        return redirect()->route('properties.index')->with('success', 'Properti berhasil ditambahkan!');
+        // 6. Redirect berdasarkan role: admin -> properties.index, lainnya -> listing.index
+        $user = Auth::user();
+        if ($user && $user->role === 'admin') {
+            return redirect()->route('properties.index')->with('success', 'Properti berhasil ditambahkan!');
+        }
+
+        return redirect()->route('listing.index')->with('success', 'Properti berhasil ditambahkan!');
     }
 
     // Menampilkan Halaman Edit Status

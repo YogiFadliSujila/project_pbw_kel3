@@ -92,7 +92,7 @@
                         <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ \App\Models\Property::count() }}</h3>
                         <div class="mt-4 text-sm text-gray-400">Available listings</div>
                     </div>
-                    <div class="bg-orange-50 p-3 rounded-full text-orange-400">
+                    <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                         @endphp IDR {{$formattedPrice}}</h3>
                         <div class="mt-4 text-sm text-gray-400">Total portfolio valuation</div>
                     </div>
-                    <div class="bg-green-50 p-3 rounded-full text-green-400">
+                    <div class="bg-green-50 p-3 rounded-2xl text-green-400">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                         <h3 class="text-3xl font-bold text-green-500 mt-2">7.5%</h3>
                         <div class="mt-4 text-sm text-gray-400">Average appreciation rate</div>
                     </div>
-                    <div class="bg-blue-50 p-3 rounded-full text-blue-400">
+                    <div class="bg-blue-50 p-3 rounded-2xl text-blue-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                         <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ \App\Models\Property::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count() }}</h3>
                         <div class="mt-4 text-sm text-gray-400">New listings added</div>
                     </div>
-                    <div class="bg-orange-50 p-3 rounded-full text-orange-400">
+                    <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                 </div>

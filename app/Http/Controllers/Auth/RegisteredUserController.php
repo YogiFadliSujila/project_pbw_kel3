@@ -47,7 +47,14 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Do not auto-login. Redirect user to login page.
-        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+        // Auto-login user after successful registration
+        Auth::login($user);
+
+        // Redirect based on role: admin -> dashboard, others -> landing
+        if ($user->role === 'admin') {
+            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil. Selamat datang, Admin!');
+        }
+
+        return redirect()->route('landing')->with('success', 'Registrasi berhasil. Selamat datang!');
     }
 }
