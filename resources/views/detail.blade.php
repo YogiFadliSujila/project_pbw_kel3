@@ -148,10 +148,10 @@
                     <span class="material-icons-outlined text-sm">chat_bubble</span>
                     Hubungi Penjual
                 </button>
-                <button class="flex-1 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition">
+                <a href="{{ route('payment.show', $property->id) }}" class="flex-1 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition text-center">
                     <span class="material-icons-outlined text-sm">shopping_cart</span>
                     Lanjut Transaksi
-                </button>
+                </a>
             </div>
 
             <div class="mt-10 border border-slate-200 rounded-lg p-6 bg-white shadow-sm">

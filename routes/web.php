@@ -10,6 +10,12 @@ use App\Http\Controllers\LandingController; // <--- Import Controller
 // Route Detail Properti (Menerima parameter ID)
 Route::get('/property/{id}', [App\Http\Controllers\LandingController::class, 'show'])->name('property.show');
 
+// Route Halaman Pembayaran
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payment/{id}', [App\Http\Controllers\LandingController::class, 'payment'])->name('payment.show');
+    Route::post('/payment/process', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('payment.process');
+});
+
 // Ubah route '/' default menjadi ini:
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 // Route untuk halaman list properti publik
@@ -48,6 +54,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');    
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/transactions', [App\Http\Controllers\TransactionController::class, 'index'])->name('transactions.index');
 
 });
 
