@@ -33,4 +33,14 @@ class LandingController extends Controller
 
 
     }
+
+    // Tambahkan di bawah method listing()
+    public function show($id)
+    {
+        // Cari properti berdasarkan ID, jika tidak ketemu tampilkan 404
+        $property = Property::findOrFail($id);
+
+        // Kirim data ke view detail
+        return view('detail', compact('property'));
+    }
 }

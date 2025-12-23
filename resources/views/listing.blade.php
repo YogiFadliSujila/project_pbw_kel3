@@ -125,7 +125,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
             
             @foreach($properties as $prop)
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition group">
+            <a href="{{ route('property.show', $prop->id) }}" class="group block no-underline">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
                 <div class="rounded-xl overflow-hidden mb-4 relative h-64 w-full">
                     <img 
                         src="{{asset(ltrim($prop->image, '/'))}}" 
@@ -147,8 +148,9 @@
                     {{ $prop->location ?? 'Lokasi tidak tersedia' }}
                 </p>
                 
-                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Detail Lahan</a>
+                <span class="text-xs font-bold text-blue-700 group-hover:underline">Detail Lahan</span>
             </div>
+            </a>
             @endforeach
 
         </div>

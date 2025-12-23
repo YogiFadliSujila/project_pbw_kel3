@@ -7,6 +7,9 @@ use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 use App\Http\Controllers\LandingController; // <--- Import Controller
 
+// Route Detail Properti (Menerima parameter ID)
+Route::get('/property/{id}', [App\Http\Controllers\LandingController::class, 'show'])->name('property.show');
+
 // Ubah route '/' default menjadi ini:
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 // Route untuk halaman list properti publik
