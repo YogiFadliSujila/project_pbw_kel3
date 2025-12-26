@@ -15,6 +15,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payment/{id}', [App\Http\Controllers\LandingController::class, 'payment'])->name('payment.show');
     Route::post('/payment/process', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('payment.process');
     Route::get('/profil', [App\Http\Controllers\LandingController::class, 'profil'])->name('profil');
+    Route::get('/ticket-status/{transactionCode}', [App\Http\Controllers\LandingController::class, 'trackTicket'])->name('ticket.status');
 });
 
 // Ubah route '/' default menjadi ini:
@@ -57,6 +58,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/transactions', [App\Http\Controllers\TransactionController::class, 'index'])->name('transactions.index');
+
+    Route::get('/admin/tickets', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
+    Route::post('/admin/tickets/{id}/update', [App\Http\Controllers\TicketController::class, 'update'])->name('tickets.update');
 
 });
 

@@ -7,6 +7,7 @@ use App\Models\Property;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Models\TicketTimeline;
 
 class LandingController extends Controller
 {
@@ -80,6 +81,24 @@ class LandingController extends Controller
             'payment_method' => 'Bank Transfer'
         ]);
 
+        // [TAMBAHAN BARU] Buat Timeline Pertama
+        TicketTimeline::create([
+            'transaction_id' => $transaction->id,
+            'title' => 'Pembayaran Selesai',
+            'description' => 'Pembayaran telah diverifikasi oleh sistem.',
+            'status_type' => 'completed'
+        ]);
+        // Tambahkan dummy timeline (PROSES CONTOH) agar tampilan tidak sepi saat demo
+
+        TicketTimeline::create([
+            'transaction_id' => $transaction->id,
+            'title' => 'Tiket Dibuat',
+            'description' => 'Menunggu konfirmasi admin untuk proses selanjutnya.',
+            'status_type' => 'progress',
+            'created_at' => now()->addMinutes(5) // Simulasi waktu beda
+        ]);
+
+
         // 3. [LOGIKA BARU] Update Status Properti Jadi "Sold"
         $property->update([
             'status' => 'Sold'
@@ -92,6 +111,7 @@ class LandingController extends Controller
             'real_trx_time' => $transaction->created_at->format('d-m-Y, H:i:s') // Kirim Waktu Asli
         ]);
     }
+    
     // Tambahkan method ini
     public function profil()
     {
@@ -128,5 +148,13 @@ class LandingController extends Controller
 
         return view('profil', compact('user', 'transactions', 'myProperties'));
     }
-    
+    public function trackTicket($transactionCode)
+    {
+        // Cari transaksi berdasarkan kode (misal: TM-A1B2C3)
+        $transaction = \App\Models\Transaction::with(['timelines', 'property'])
+                        ->where('transaction_code', $transactionCode)
+                        ->firstOrFail();
+
+        return view('ticket-status', compact('transaction'));
+    }
 }

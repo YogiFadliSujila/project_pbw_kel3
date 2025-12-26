@@ -29,4 +29,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(Property::class);
     }
+    
+    // Relasi: Transaksi memiliki banyak TicketTimeline
+    public function timelines()
+    {
+        return $this->hasMany(TicketTimeline::class)->latest();
+    }
 }

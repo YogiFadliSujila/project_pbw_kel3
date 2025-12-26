@@ -177,6 +177,11 @@
                                 <span class="text-slate-500">Dibeli dengan Harga :</span>
                                 <span class="text-red-600 font-bold text-lg">Rp {{ number_format($trx->price, 0, ',', '.') }}</span>
                             </div>
+                            <div class="pt-4 border-t border-slate-200 mt-4">
+                            <a href="{{ route('ticket.status', $trx->transaction_code) }}" class="text-blue-600 text-sm font-medium hover:underline inline-flex items-center gap-1" href="#">
+                                Lihat Invoice / Estimasi <span class="material-icons text-sm">arrow_forward</span>
+                            </a>
+                        </div>
                         </div>
                     </div>
                 </div>
