@@ -174,20 +174,63 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-4">Kategori Iklan</label>
+                    
+                    <script>
+                        function checkAccess(targetLevel, paymentUrl, event) {
+                            // 1. Definisi Hirarki Paket
+                            const levels = {
+                                'Basic': 1,
+                                'Silver': 2,
+                                'Gold': 3
+                            };
+
+                            // 2. Ambil Level User saat ini (dari Blade)
+                            const currentUserLevel = levels["{{ Auth::user()->membership_type ?? 'Basic' }}"];
+                            const targetUserLevel = levels[targetLevel];
+
+                            // 3. Logika Pengecekan
+                            // Jika Target > Current (NAIK KELAS), Block & Redirect
+                            if (targetUserLevel > currentUserLevel) {
+                                event.preventDefault(); // Batalkan pemilihan radio button
+                                
+                                // Simpan draft form sebelum pindah halaman (PENTING)
+                                if (typeof saveDraft === 'function') {
+                                    saveDraft();
+                                }
+
+                                // Redirect ke halaman bayar
+                                window.location.href = paymentUrl;
+                                return false;
+                            }
+
+                            // Jika Target <= Current (TURUN/SAMA), Izinkan (Normal)
+                            return true;
+                        }
+                    </script>
+
                     <div class="flex flex-wrap items-center gap-4">
+                        
                         <label class="cursor-pointer">
-                            <input type="radio" name="ads_category" value="Basic" class="peer sr-only" required>
+                            <input type="radio" name="ads_category" value="Basic" class="peer sr-only" 
+                                {{ (Auth::user()->membership_type ?? 'Basic') == 'Basic' ? 'checked' : '' }} required>
                             <div class="px-6 py-2 rounded-full border-2 border-blue-200 text-blue-700 font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition text-center min-w-[100px]">Basic</div>
                         </label>
+                        
                         <label class="cursor-pointer">
-                            <input type="radio" name="ads_category" value="Silver" class="peer sr-only">
+                            <input type="radio" name="ads_category" value="Silver" class="peer sr-only"
+                                {{ Auth::user()->membership_type == 'Silver' ? 'checked' : '' }}
+                                onclick="checkAccess('Silver', '{{ route('membership.payment', ['package' => 'Silver']) }}', event)">
                             <div class="px-6 py-2 rounded-full border-2 border-gray-300 text-gray-700 font-medium peer-checked:bg-gray-600 peer-checked:text-white peer-checked:border-gray-600 transition text-center min-w-[100px]">Silver</div>
                         </label>
+                        
                         <label class="cursor-pointer">
-                            <input type="radio" name="ads_category" value="Gold" class="peer sr-only">
+                            <input type="radio" name="ads_category" value="Gold" class="peer sr-only"
+                                {{ Auth::user()->membership_type == 'Gold' ? 'checked' : '' }}
+                                onclick="checkAccess('Gold', '{{ route('membership.payment', ['package' => 'Gold']) }}', event)">
                             <div class="px-6 py-2 rounded-full border-2 border-yellow-400 text-yellow-700 font-medium peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 transition text-center min-w-[100px]">Gold</div>
                         </label>
-                        <a href="#" class="text-blue-600 hover:underline text-sm font-medium">Lihat detail Kategori</a>
+                        
+                        <a href="{{route('pricing.index')}}" class="text-blue-600 hover:underline text-sm font-medium ml-2" onclick="saveDraft()">Lihat detail / Upgrade</a>
                     </div>
                 </div>
 
@@ -251,6 +294,52 @@
     </footer>
 
     <script>
+        // Ambil ID User dari Laravel Blade
+        const userId = "{{ Auth::id() }}"; 
+        const storageKey = `property_draft_${userId}`; // Kunci unik: property_draft_1, property_draft_5, dst.
+
+        // 1. Fungsi Simpan Draft (Gunakan key yang dinamis)
+        function saveDraft() {
+            const formData = {
+                description: document.querySelector('[name="description"]').value,
+                price: document.querySelector('[name="price"]').value,
+                location: document.querySelector('[name="location"]').value,
+                specifications: document.querySelector('[name="specifications"]').value,
+                area: document.querySelector('[name="area"]').value,
+                category: document.querySelector('[name="category"]').value,
+            };
+            localStorage.setItem(storageKey, JSON.stringify(formData)); // Simpan ke kunci milik user ini
+        }
+        
+        // 2. Fungsi Load Draft
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = localStorage.getItem(storageKey); // Hanya ambil data milik user ini
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                if(data.description) document.querySelector('[name="description"]').value = data.description;
+                if(data.price) document.querySelector('[name="price"]').value = data.price;
+                if(data.location) document.querySelector('[name="location"]').value = data.location;
+                if(data.specifications) document.querySelector('[name="specifications"]').value = data.specifications;
+                if(data.area) document.querySelector('[name="area"]').value = data.area;
+                if(data.category) document.querySelector('[name="category"]').value = data.category;
+            }
+
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', saveDraft);
+                input.addEventListener('change', saveDraft);
+            });
+        });
+        
+        // 3. Hapus Draft Setelah Submit Berhasil
+        document.querySelector('form').addEventListener('submit', function() {
+            localStorage.removeItem(storageKey);
+        });
+
+
+        // Update nama file saat upload
         document.getElementById('upload-doc').addEventListener('change', function(e) {
             document.getElementById('doc-name').textContent = e.target.files[0].name;
         });

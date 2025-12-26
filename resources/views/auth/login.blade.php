@@ -34,9 +34,6 @@
                     @csrf
 
                     <div>
-                        <label for="email" class="block text-lg font-medium text-black mb-2">
-                            Nomer Telepon Atau Email
-                        </label>
                         <input 
                             type="email" 
                             name="email" 

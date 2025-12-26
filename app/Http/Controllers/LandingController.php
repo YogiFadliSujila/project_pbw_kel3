@@ -111,7 +111,7 @@ class LandingController extends Controller
             'real_trx_time' => $transaction->created_at->format('d-m-Y, H:i:s') // Kirim Waktu Asli
         ]);
     }
-    
+
     // Tambahkan method ini
     public function profil()
     {
@@ -148,6 +148,7 @@ class LandingController extends Controller
 
         return view('profil', compact('user', 'transactions', 'myProperties'));
     }
+
     public function trackTicket($transactionCode)
     {
         // Cari transaksi berdasarkan kode (misal: TM-A1B2C3)
@@ -156,5 +157,11 @@ class LandingController extends Controller
                         ->firstOrFail();
 
         return view('ticket-status', compact('transaction'));
+    }
+    
+    // Tambahkan method ini
+    public function pricing()
+    {
+        return view('pricing');
     }
 }

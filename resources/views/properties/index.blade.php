@@ -276,6 +276,9 @@
                                             default => 'bg-green-500 text-white'
                                         };
                                     @endphp
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
+                                        {{ $item->status }}
+                                    </span>
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center">

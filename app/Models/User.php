@@ -23,6 +23,10 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        // TAMBAHKAN KOLOM-KOLOM INI:
+        'membership_type',
+        'membership_expires_at',
+        'priority_level',
     ];
 
     /**

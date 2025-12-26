@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Property; // PENTING: Panggil model Property
+use App\Models\Property;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Carbon\Carbon; // Pastikan import ini ada untuk fitur expired
 
 class PropertyController extends Controller
 {
 
     public function index(Request $request){
         // Mulai query, sertakan data user pemiliknya
-        $query = Property::with('user');
+        // UPDATE FASE 4: Urutkan berdasarkan priority_level (asc) lalu created_at (desc)
+        // Level 1 (Gold) tampil duluan, baru Level 2 (Silver), dst.
+        $query = Property::with('user')->orderBy('priority_level', 'asc')->latest();
 
-        // 1. Logika Search (Mencari berdasarkan Deskripsi, Kategori, atau Lokasi)
+        // 1. Logika Search
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -31,8 +34,7 @@ class PropertyController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Eksekusi query (ambil data terbaru dulu)
-        $properties = $query->latest()->get();
+        $properties = $query->get();
 
         return view('properties.index', compact('properties'));
     }
@@ -44,7 +46,28 @@ class PropertyController extends Controller
 
     // Menyimpan Data ke Database
     public function store(Request $request){
-        // 1. Validasi Input (Tambahkan validasi untuk document)
+        
+        $user = Auth::user();
+
+        // [LOGIKA BARU - FASE 3] Cek Kuota Upload Sebelum Validasi
+        if ($user) {
+            $currentPropertiesCount = Property::where('user_id', $user->id)->count();
+            
+            // Tentukan limit berdasarkan paket (Default Basic jika null)
+            $membership = $user->membership_type ?? 'Basic';
+            
+            $limit = match($membership) {
+                'Silver' => 5,
+                'Gold'   => 9999, // Unlimited
+                default  => 3,    // Basic
+            };
+
+            if ($currentPropertiesCount >= $limit) {
+                return redirect()->back()->with('error', "Anda telah mencapai batas kuota upload paket {$membership}. Silakan upgrade untuk menambah kuota.");
+            }
+        }
+
+        // 1. Validasi Input
         $validated = $request->validate([
             'description' => 'required',
             'price' => 'required|numeric',
@@ -52,9 +75,9 @@ class PropertyController extends Controller
             'specifications' => 'required',
             'area' => 'required',
             'category' => 'required',
-            'ads_category' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Wajib ada gambar
-            'document' => 'required|mimes:pdf,doc,docx|max:5120', // Wajib ada dokumen (max 5MB)
+            // 'ads_category' tidak perlu required dari form, karena kita ambil dari user membership
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'document' => 'required|mimes:pdf,doc,docx|max:5120',
         ]);
 
         // 2. Handle Upload Gambar
@@ -63,21 +86,18 @@ class PropertyController extends Controller
             $validated['image'] = '/storage/' . $pathImg;
         }
 
-        // 3. Handle Upload Dokumen (BARU)
+        // 3. Handle Upload Dokumen
         if ($request->hasFile('document')) {
-            // Simpan di folder storage/app/public/properties/documents
             $pathDoc = $request->file('document')->store('properties/documents', 'public');
-            // Simpan path-nya ke database
             $validated['document'] = '/storage/' . $pathDoc;
         }
 
-        
-
-        // 4. Tentukan user pemilik: gunakan user yang login jika ada,
-        //    jika tidak ada, buat dummy user unik untuk setiap properti.
-        if (Auth::check()) {
-            $validated['user_id'] = Auth::id();
+        // 4. Tentukan user pemilik & Setup Paket
+        if ($user) {
+            $validated['user_id'] = $user->id;
+            $membershipType = $user->membership_type ?? 'Basic';
         } else {
+            // Logic Guest/Dummy User (Otomatis dapat paket Basic)
             $uniq = time() . rand(1000, 9999);
             $dummy = User::create([
                 'name' => 'Dummy User ' . $uniq,
@@ -85,18 +105,36 @@ class PropertyController extends Controller
                 'phone' => null,
                 'password' => Str::random(16),
                 'role' => 'penjual',
+                'membership_type' => 'Basic' // Default dummy
             ]);
-
             $validated['user_id'] = $dummy->id;
+            $membershipType = 'Basic';
         }
 
+        // [LOGIKA BARU - FASE 3] Set Priority & Expiration berdasarkan Paket
+        $priorityLevel = 3; // Default Basic
+        $autoExpireAt = null;
+
+        if ($membershipType == 'Gold') {
+            $priorityLevel = 1; // Paling atas
+        } elseif ($membershipType == 'Silver') {
+            $priorityLevel = 2; // Menengah
+        } else {
+            // Basic: Priority 3 & Expired dalam 60 hari
+            $priorityLevel = 3;
+            $autoExpireAt = Carbon::now()->addDays(60); 
+        }
+
+        // Masukkan data tambahan ke array $validated
         $validated['status'] = 'Pending';
+        $validated['ads_category'] = $membershipType; // Simpan tipe paket saat upload
+        $validated['priority_level'] = $priorityLevel;
+        $validated['auto_expire_at'] = $autoExpireAt;
 
         // 5. Simpan ke Database
         Property::create($validated);
 
-        // 6. Redirect berdasarkan role: admin -> properties.index, lainnya -> listing.index
-        $user = Auth::user();
+        // 6. Redirect
         if ($user && $user->role === 'admin') {
             return redirect()->route('properties.index')->with('success', 'Properti berhasil ditambahkan!');
         }
@@ -108,48 +146,40 @@ class PropertyController extends Controller
     public function edit(Property $property)
     {
         return view('properties.edit', compact('property'));
-        
     }
 
     // Memproses Perubahan Status
     public function update(Request $request, Property $property)
     {
-        // Validasi input status
         $request->validate([
-            // DB uses 'Available' for accepted listings
-            'status' => 'required|in:Pending,Accepted,Rejected',
+            'status' => 'required|in:Pending,Accepted,Rejected,Sold',
         ]);
 
-        // Update status di database (store DB values)
         $property->update([
             'status' => $request->status
         ]);
 
-        // Kembali ke halaman index dengan pesan sukses (opsional)
         return redirect()->route('properties.index')->with('success', 'Status properti berhasil diperbarui!');
     }
     
     // Menghapus Property
     public function destroy(Property $property)
     {
-        // 1. Hapus File Gambar (Jika ada)
+        // 1. Hapus File Gambar
         if ($property->image) {
-            // Kita perlu membersihkan path '/storage/' karena Storage::delete butuh path relatif
             $imagePath = str_replace('/storage/', '', $property->image);
             Storage::disk('public')->delete($imagePath);
         }
 
-        // 2. Hapus File Dokumen (Jika ada)
+        // 2. Hapus File Dokumen
         if ($property->document) {
             $docPath = str_replace('/storage/', '', $property->document);
             Storage::disk('public')->delete($docPath);
         }
 
-        // 3. Hapus Data dari Database
+        // 3. Hapus Data
         $property->delete();
 
-        // 4. Kembali ke halaman index
         return redirect()->route('properties.index')->with('success', 'Properti dan file terkait berhasil dihapus!');
     }
-
 }

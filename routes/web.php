@@ -7,6 +7,9 @@ use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 use App\Http\Controllers\LandingController; // <--- Import Controller
 
+// Route Halaman Pricing / Kategori Iklan
+Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
+
 // Route Detail Properti (Menerima parameter ID)
 Route::get('/property/{id}', [App\Http\Controllers\LandingController::class, 'show'])->name('property.show');
 
@@ -16,6 +19,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payment/process', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('payment.process');
     Route::get('/profil', [App\Http\Controllers\LandingController::class, 'profil'])->name('profil');
     Route::get('/ticket-status/{transactionCode}', [App\Http\Controllers\LandingController::class, 'trackTicket'])->name('ticket.status');
+    // Route Halaman Bayar Paket (GET)
+    Route::get('/membership/payment', [App\Http\Controllers\MembershipController::class, 'payment'])->name('membership.payment');
+    
+    // Route Proses Bayar / Aktivasi (POST)
+    Route::post('/membership/process', [App\Http\Controllers\MembershipController::class, 'process'])->name('membership.process');
 });
 
 // Ubah route '/' default menjadi ini:
@@ -61,6 +69,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/tickets', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
     Route::post('/admin/tickets/{id}/update', [App\Http\Controllers\TicketController::class, 'update'])->name('tickets.update');
+    Route::get('/admin/advertisement', [App\Http\Controllers\AdvertisementController::class, 'index'])->name('advertisement.index');
 
 });
 
