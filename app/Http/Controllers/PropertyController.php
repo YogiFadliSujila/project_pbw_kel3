@@ -17,6 +17,9 @@ class PropertyController extends Controller
         // Mulai query, sertakan data user pemiliknya
         // UPDATE FASE 4: Urutkan berdasarkan priority_level (asc) lalu created_at (desc)
         // Level 1 (Gold) tampil duluan, baru Level 2 (Silver), dst.
+        $query = \App\Models\Property::with('user')
+             ->where('status', 'Accepted'); // Pastikan hanya Accepted
+             
         $query = Property::with('user')->orderBy('priority_level', 'asc')->latest();
 
         // 1. Logika Search
@@ -34,7 +37,9 @@ class PropertyController extends Controller
             $query->where('status', $request->status);
         }
 
-        $properties = $query->get();
+        $properties = $query->orderBy('priority_level', 'asc')
+                        ->latest()
+                        ->get();
 
         return view('properties.index', compact('properties'));
     }

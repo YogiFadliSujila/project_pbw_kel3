@@ -156,7 +156,7 @@
         <div class="lg:col-span-7 space-y-8">
             <div>
                 <h1 class="text-2xl md:text-4xl font-bold text-slate-900 leading-tight mb-3">
-                    {{ $property->title }}
+                    {{ $property->description }}
                 </h1>
                 <h2 class="text-2xl md:text-3xl font-bold text-primary mb-2">
                     Rp {{ number_format($property->price, 0, ',', '.') }}
@@ -174,15 +174,8 @@
                 <h3 class="text-lg font-bold text-slate-900 mb-3">Deskripsi</h3>
                 <div class="prose text-slate-600 text-sm leading-relaxed max-w-none">
                     <p class="mb-4">
-                        {{ $property->description ?? 'Deskripsi lengkap belum tersedia untuk properti ini. Namun properti ini menjanjikan investasi yang menarik dengan lokasi yang strategis.' }}
+                        {{ $property->specifications ?? 'Deskripsi lengkap belum tersedia untuk properti ini. Namun properti ini menjanjikan investasi yang menarik dengan lokasi yang strategis.' }}
                     </p>
-                    
-                    <p class="mb-2 font-semibold">Fasilitas:</p>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Sertifikat SHM</li>
-                        <li>Akses Jalan Mobil</li>
-                        <li>Bebas Banjir</li>
-                    </ul>
                 </div>
             </div>
 

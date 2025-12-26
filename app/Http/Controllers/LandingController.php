@@ -13,22 +13,37 @@ class LandingController extends Controller
 {
     public function index()
     {
-        // Ambil properti terbaru berstatus 'available' untuk ditampilkan di landing
-        // Batasi jumlah menjadi 2 sample agar tidak memuat terlalu banyak data
-        $properties = Property::latest()
-            ->where('status', 'available')
-            ->take(2)
-            ->get();
+        $properties = \App\Models\Property::with('user')
+                ->where('status', 'Accepted') // Hanya yang aktif
+                ->orderBy('priority_level', 'asc') // [PENTING] Urutkan Level 1 -> 2 -> 3
+                ->latest() // [PENTING] Jika level sama, yang baru upload tampil duluan
+                ->take(8)
+                ->get();
+        
+        // 2. Data Khusus Section "Featured Gold" (Ambil 4 Terbaru)
+        $featuredProperties = \App\Models\Property::with('user')
+                    ->where('priority_level', 1) // 1 = Gold
+                    ->where('status', 'Accepted')
+                    ->latest()
+                    ->take(4)
+                    ->get();
 
-        return view('landing', compact('properties'));
+        // 3. Data Khusus Pop-up Promo (Ambil 1 secara Acak)
+        $popupProperty = \App\Models\Property::with('user')
+                    ->where('priority_level', 1) // 1 = Gold
+                    ->where('status', 'Accepted')
+                    ->inRandomOrder() // Acak agar semua Gold dapat giliran
+                    ->first();
+
+        return view('landing', compact('properties', 'featuredProperties', 'popupProperty'));
     }
 
     // Tambahkan ini di bawah method index()
     public function listing()
     {
-        // Ambil semua properti berstatus 'available' untuk halaman listing
+        // Ambil semua properti berstatus 'accepted' untuk halaman listing
         $properties = Property::latest()
-            ->where('status', 'available')
+            ->where('status', 'accepted')
             ->get();
 
         return view('listing', compact('properties'));

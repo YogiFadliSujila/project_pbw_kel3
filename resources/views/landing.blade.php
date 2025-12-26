@@ -6,6 +6,7 @@
     <title>LandHub - Temukan Lahan Impianmu</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         /* Custom Scrollbar hide */
@@ -27,13 +28,11 @@
             @if(Route::has('login'))
                 @auth
                     <div class="relative">
-                        
                         <button onclick="toggleProfilePopup()" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold border-2 border-transparent hover:border-blue-300 transition focus:outline-none">
                             {{ substr(Auth::user()->name, 0, 1) }}
                         </button>
 
                         <div id="profilePopup" class="hidden absolute right-0 top-14 w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 p-6 z-50 transform origin-top-right transition-all duration-200">
-                            
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-16 h-16 rounded-full bg-[#F3E8FF] border-2 border-[#7E22CE] flex items-center justify-center text-[#7E22CE]">
@@ -43,7 +42,6 @@
                                     </div>
                                     <h4 class="font-bold text-lg text-black">{{ Auth::user()->name }}</h4>
                                 </div>
-
                                 <button onclick="toggleProfilePopup()" class="text-black hover:text-gray-500 transition">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -51,11 +49,8 @@
                                     </svg>
                                 </button>
                             </div>
-
                             <div class="h-px w-full bg-[#E9D5FF] mb-6"></div>
-
                             <div class="space-y-3">
-                                
                                 <a href="{{route('profil')}}" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
                                     <span>Profil</span>
                                     <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -64,7 +59,6 @@
                                     <span>Rekomendasi Lahan</span>
                                     <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
-
                                 <a href="#" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
                                     <div class="flex items-center gap-3">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -72,7 +66,6 @@
                                     </div>
                                     <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
-
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="flex items-center gap-3 w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-red-50 hover:text-red-600 transition w-full text-left">
@@ -80,7 +73,6 @@
                                         <span>Logout</span>
                                     </button>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -96,20 +88,16 @@
                     const popup = document.getElementById('profilePopup');
                     if (popup.classList.contains('hidden')) {
                         popup.classList.remove('hidden');
-                        // Animasi masuk halus
                         popup.classList.add('opacity-100', 'translate-y-0');
                         popup.classList.remove('opacity-0', '-translate-y-2');
                     } else {
                         popup.classList.add('hidden');
                     }
                 }
-
-                // Opsional: Tutup pop-up jika klik di luar area
                 document.addEventListener('click', function(event) {
                     const popup = document.getElementById('profilePopup');
                     const trigger = document.querySelector('button[onclick="toggleProfilePopup()"]');
                     const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
-                    
                     if (!isClickInside && popup && !popup.classList.contains('hidden')) {
                         popup.classList.add('hidden');
                     }
@@ -153,7 +141,6 @@
         
         <div class="w-full rounded-3xl overflow-hidden shadow-xl bg-blue-100 relative group">
             <img src="{{ asset('storage/promo/promo.png') }}" alt="Promo Banner" class="w-full h-64 md:h-80 object-cover object-center group-hover:scale-105 transition duration-500">
-
         </div>
         <div class="flex justify-center gap-2 mt-4">
             <div class="w-2 h-2 rounded-full bg-gray-800"></div>
@@ -176,40 +163,62 @@
             <p class="text-xs text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            @php
-                $samples = is_array($properties)
-                    ? array_slice($properties, 0, 2)
-                    : (
-                        $properties instanceof \Illuminate\Support\Collection
-                        ? $properties->take(2)
-                        : collect($properties)->take(2)
-                    );
-            @endphp
-            @foreach($samples as $prop)
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                <div class="rounded-xl overflow-hidden mb-4 relative h-48">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            @foreach($properties as $prop)
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
+                <a href="{{ route('property.show', $prop->id)}}">
+                <div class="rounded-xl overflow-hidden mb-4 relative h-48 group">
                     <img
-                        src="{{ is_array($prop) ? $prop['image'] : ($prop->image ? asset(ltrim($prop->image, '/')) : '') }}"
-                        alt="{{ is_array($prop) ? $prop['title'] : ($prop->title ?? '') }}"
+                        src="{{ $prop->image ? asset(ltrim($prop->image, '/')) : '' }}"
+                        alt="{{ $prop->title }}"
                         class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
                     >
+                    
+                    {{-- [FASE 4] VISUAL BADGE START --}}
+                    @if($prop->priority_level == 1) 
+                        <div class="absolute top-4 left-4 z-10">
+                            <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-yellow-200">
+                                <span class="material-icons text-[14px]">workspace_premium</span>
+                                <span>GOLD</span>
+                            </div>
+                            <div class="absolute inset-0 bg-white opacity-20 blur-sm rounded-full animate-pulse"></div>
+                        </div>
+
+                    @elseif($prop->priority_level == 2)
+                        <div class="absolute top-4 left-4 z-10">
+                            <div class="bg-gradient-to-r from-gray-400 to-gray-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-gray-300">
+                                <span class="material-icons text-[14px]">verified</span>
+                                <span>SILVER</span>
+                            </div>
+                        </div>
+                    @endif
+                    {{-- [FASE 4] VISUAL BADGE END --}}
+
                     <div class="absolute bottom-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded shadow-md uppercase">For Sale</div>
                 </div>
                 
-                <div class="flex justify-between items-end mb-2">
+                <div class="flex justify-between items-center">
                     <div>
-                        <h4 class="text-xl font-bold text-[#1E2B58]">Rp {{ is_array($prop) ? number_format($prop['price'] ?? 0, 0, ',', '.') : number_format($prop->price ?? 0, 0, ',', '.') }}</h4>
-                        <p class="text-sm font-bold text-gray-800">{{ $prop['title'] }}</p>
+                        @php
+                            $price = $prop->price;
+                                if ($price >= 1_000_000_000) {
+                                    $priceFormatted = number_format($price / 1_000_000_000, 2, ',', '.') . ' M';
+                                } elseif ($price >= 1_000_000) {
+                                    $priceFormatted = number_format($price / 1_000_000, 2, ',', '.') . ' Jt';
+                                } else {
+                                    $priceFormatted = number_format($priceFormatted);
+                                }
+                        @endphp
+                        <h4 class="text-lg font-bold text-[#1E2B58]">Rp {{ $priceFormatted }}</h4>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-bold text-gray-600">Luas Tanah: {{ $prop['area'] }} m</p>
+                        <p class="text-xs font-bold text-gray-600">Luas: {{ $prop->area }} m²</p>
                     </div>
                 </div>
-                
-                <p class="text-xs text-gray-400 mb-4">{{ $prop['location'] }}</p>
-                
-                <a href="#" class="text-sm font-bold text-blue-600 hover:underline">Detail Lahan</a>
+                <p class="text-xs font-bold text-gray-800 truncate max-w-[150px]">{{ $prop->description }}</p>
+                <p class="text-xs text-gray-400 truncate">{{ $prop->location }}</p>
+                <a href="{{ route('property.show', $prop->id) }}" class="text-xs font-bold text-blue-600 hover:underline">Detail Lahan</a>
             </div>
             @endforeach
         </div>
@@ -348,6 +357,100 @@
             </div>
         </div>
     </footer>
+
+    @if(isset($popupProperty) && $popupProperty)
+    <div id="promoModal" class="fixed inset-0 z-[999] flex items-center justify-center hidden opacity-0 transition-opacity duration-500">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePromo()"></div>
+        
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl mx-4 overflow-hidden flex flex-col md:flex-row transform scale-95 transition-transform duration-500" id="promoContent">
+            
+            <button onclick="closePromo()" class="absolute top-4 right-4 z-20 bg-white/80 hover:bg-white text-slate-800 rounded-full p-2 shadow-sm transition">
+                <span class="material-icons">close</span>
+            </button>
+
+            <div class="w-full md:w-1/2 h-64 md:h-auto relative">
+                <img src="{{ $popupProperty->image ? asset(ltrim($popupProperty->image, '/')) : '' }}" class="w-full h-full object-cover">
+                <div class="absolute top-4 left-4 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded shadow-md">
+                    REKOMENDASI HARI INI
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 p-8 md:p-10 flex flex-col justify-center bg-gradient-to-br from-white to-yellow-50">
+                <h4 class="text-yellow-600 font-bold tracking-widest text-xs uppercase mb-2">🔥 Hot Property (Gold)</h4>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2 leading-tight">{{ $popupProperty->title }}</h2>
+                <p class="text-slate-500 mb-6 line-clamp-2">{{ $popupProperty->description }}</p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                            <span class="material-icons">location_on</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Lokasi</p>
+                            <p class="font-bold text-slate-800">{{ $popupProperty->location }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-green-100 text-green-600 rounded-lg">
+                            <span class="material-icons">payments</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Harga Penawaran</p>
+                            <p class="font-bold text-slate-800 text-xl">Rp {{ number_format($popupProperty->price, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <a href="{{ route('property.show', $popupProperty->id) }}" class="block w-full py-3 bg-[#1E2B58] hover:bg-blue-900 text-white text-center font-bold rounded-xl shadow-lg transition transform hover:-translate-y-1">
+                        Lihat Detail Properti
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek apakah user sudah melihat promo sesi ini
+            const hasSeenPromo = sessionStorage.getItem('seen_promo');
+            
+            if (!hasSeenPromo) {
+                // Tampilkan Modal dengan delay sedikit agar smooth
+                setTimeout(() => {
+                    const modal = document.getElementById('promoModal');
+                    const content = document.getElementById('promoContent');
+                    
+                    if(modal) {
+                        modal.classList.remove('hidden');
+                        // Trigger reflow agar transisi opacity jalan
+                        void modal.offsetWidth; 
+                        modal.classList.remove('opacity-0');
+                        
+                        content.classList.remove('scale-95');
+                        content.classList.add('scale-100');
+                        
+                        // Tandai sudah melihat
+                        sessionStorage.setItem('seen_promo', 'true');
+                    }
+                }, 1500); // Muncul setelah 1.5 detik
+            }
+        });
+
+        function closePromo() {
+            const modal = document.getElementById('promoModal');
+            const content = document.getElementById('promoContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500);
+        }
+    </script>
+    @endif
 
 </body>
 </html>

@@ -139,6 +139,25 @@
                         alt="{{ $prop->title }}" 
                         class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
                     >
+                    @if($prop->priority_level == 1) 
+                        <div class="absolute top-4 left-4 z-10">
+                            <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-yellow-200">
+                                <span class="material-icons text-[14px]">workspace_premium</span>
+                                <span>GOLD PARTNER</span>
+                            </div>
+                            <div class="absolute inset-0 bg-white opacity-20 blur-sm rounded-full animate-pulse"></div>
+                        </div>
+
+                    @elseif($prop->priority_level == 2)
+                        <div class="absolute top-4 left-4 z-10">
+                            <div class="bg-gradient-to-r from-gray-400 to-gray-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-gray-300">
+                                <span class="material-icons text-[14px]">verified</span>
+                                <span>SILVER PARTNER</span>
+                            </div>
+                        </div>
+
+                    @else
+                        @endif
                 </div>
                 
                 <div class="flex justify-between items-end mb-1">
