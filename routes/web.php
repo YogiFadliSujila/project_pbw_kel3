@@ -14,6 +14,7 @@ Route::get('/property/{id}', [App\Http\Controllers\LandingController::class, 'sh
 Route::middleware(['auth'])->group(function () {
     Route::get('/payment/{id}', [App\Http\Controllers\LandingController::class, 'payment'])->name('payment.show');
     Route::post('/payment/process', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('payment.process');
+    Route::get('/profil', [App\Http\Controllers\LandingController::class, 'profil'])->name('profil');
 });
 
 // Ubah route '/' default menjadi ini:

@@ -24,9 +24,92 @@
         <div class="flex items-center gap-6">
             <a href="#" class="text-gray-600 hover:text-blue-900 font-medium">Home</a>
             <a href="#" class="text-gray-600 hover:text-blue-900 font-medium">About Us</a>
-            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-            </div>
+            @auth
+                <div class="relative">
+                    
+                    <button onclick="toggleProfilePopup()" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold border-2 border-transparent hover:border-blue-300 transition focus:outline-none">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </button>
+
+                    <div id="profilePopup" class="hidden absolute right-0 top-14 w-80 bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 p-6 z-50 transform origin-top-right transition-all duration-200">
+                        
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-full bg-[#F3E8FF] border-2 border-[#7E22CE] flex items-center justify-center text-[#7E22CE]">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="font-bold text-lg text-black">{{ Auth::user()->name }}</h4>
+                            </div>
+
+                            <button onclick="toggleProfilePopup()" class="text-black hover:text-gray-500 transition">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="h-px w-full bg-[#E9D5FF] mb-6"></div>
+
+                        <div class="space-y-3">
+                            
+                            <a href="#" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
+                                <span>Rekomendasi Lahan</span>
+                                <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+
+                            <a href="#" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <span>Pengaturan</span>
+                                </div>
+                                <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="flex items-center gap-3 w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-red-50 hover:text-red-600 transition w-full text-left">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 hover:bg-purple-200 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </a>
+            @endauth
+
+            <script>
+                function toggleProfilePopup() {
+                    const popup = document.getElementById('profilePopup');
+                    if (popup.classList.contains('hidden')) {
+                        popup.classList.remove('hidden');
+                        // Animasi masuk halus
+                        popup.classList.add('opacity-100', 'translate-y-0');
+                        popup.classList.remove('opacity-0', '-translate-y-2');
+                    } else {
+                        popup.classList.add('hidden');
+                    }
+                }
+
+                // Tutup pop-up jika klik di luar area
+                document.addEventListener('click', function(event) {
+                    const popup = document.getElementById('profilePopup');
+                    const trigger = document.querySelector('button[onclick="toggleProfilePopup()"]');
+                    const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
+                    
+                    if (!isClickInside && popup && !popup.classList.contains('hidden')) {
+                        popup.classList.add('hidden');
+                    }
+                });
+            </script>
+
         </div>
     </nav>
 
@@ -38,7 +121,7 @@
     </div>
 
     <header class="bg-blue-50 pt-10 pb-6 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-3">Mulai Promosikan Lahan mu <br> hanya di LandHub</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-3">Mulai Promosikan Lahanmu <br> hanya di LandHub</h1>
         <p class="text-gray-600 text-lg">isi data berikut untuk melengkapi proses registrasi</p>
     </header>
 
@@ -48,7 +131,7 @@
             <form action="{{ route('properties.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Property</label>
-                    <textarea name="description" rows="4" placeholder="Masukan Deskripsi Property" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3" required></textarea>
+                    <input type="text" name="description" placeholder="Masukan Deskripsi Property" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3" required>
                 </div>
 
                 <div>
@@ -66,7 +149,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Spesifikasi Property</label>
-                    <input type="text" name="specifications" placeholder="Masukan Spesifikasi Property" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3" required>
+                    <textarea name="specifications" rows="4" placeholder="Masukan Spesifikasi Property" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3" required></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -104,7 +187,7 @@
                             <input type="radio" name="ads_category" value="Gold" class="peer sr-only">
                             <div class="px-6 py-2 rounded-full border-2 border-yellow-400 text-yellow-700 font-medium peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 transition text-center min-w-[100px]">Gold</div>
                         </label>
-                        <a href="#" class="text-blue-600 hover:underline text-sm font-medium ml-auto">Lihat detail Kategori</a>
+                        <a href="#" class="text-blue-600 hover:underline text-sm font-medium">Lihat detail Kategori</a>
                     </div>
                 </div>
 

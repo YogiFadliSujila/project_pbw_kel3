@@ -114,8 +114,7 @@ window.openShowModal = function (data) {
     if (modal) {
         // 1. Isi Data Text
         document.getElementById("show-category").innerText = data.category;
-        const displayedStatus =
-            data.status === "Available" ? "Accepted" : data.status;
+        const displayedStatus = data.status;
         document.getElementById("show-status").innerText = displayedStatus;
         document.getElementById("show-location").innerText = data.location;
         document.getElementById("show-area").innerText = data.area + " m²";

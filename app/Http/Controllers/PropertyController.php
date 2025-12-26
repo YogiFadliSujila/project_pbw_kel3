@@ -117,7 +117,7 @@ class PropertyController extends Controller
         // Validasi input status
         $request->validate([
             // DB uses 'Available' for accepted listings
-            'status' => 'required|in:Pending,Available,Rejected',
+            'status' => 'required|in:Pending,Accepted,Rejected',
         ]);
 
         // Update status di database (store DB values)
