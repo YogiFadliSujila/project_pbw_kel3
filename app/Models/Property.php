@@ -16,5 +16,11 @@ class Property extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Relasi: Property memiliki banyak PropertyImage
+    public function images()
+    {
+        return $this->hasMany(PropertyImage::class);
+    }
 }
 

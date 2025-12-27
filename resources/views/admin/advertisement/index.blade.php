@@ -6,6 +6,7 @@
     <title>Advertisement Logs - LandHub</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-[#F8F9FE] text-gray-800">
@@ -49,13 +50,14 @@
                 </a>
             </nav>
             <div class="p-4 border-t border-gray-50 space-y-2">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
-                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        <span class="font-medium">Logout</span>
-                    </button>
-                </form>
+                <a href="{{route('settings.edit')}}" class="flex items-center px-4 py-3 text-gray-500 hover:text-[#1E2B58] transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="font-medium">Settings</span>
+                </a>
+                <button type="button" onclick="openLogoutModal()" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span class="font-medium">Logout</span>
+                </button>
             </div>
         </aside>
 
@@ -87,11 +89,13 @@
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                        <span class="text-green-500 font-bold flex items-center gap-1">
-                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            {{ number_format($growth, 1) }}%
+                        <span class="{{ $activeAdsGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $activeAdsGrowth >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' }}"></path>
+                             </svg>
+                            {{ abs($activeAdsGrowth) }}%
                         </span>
-                        <span class="text-gray-400 ml-2">Up from past week</span>
+                        <span class="text-gray-400 ml-2">Up from past month</span>
                     </div>
                 </div>
 
@@ -99,18 +103,16 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm font-medium">Ads Growth</p>
-                            <h3 class="text-3xl font-bold text-green-500 mt-2">{{ number_format($growth, 1) }}%</h3>
+                            <h3 class="text-3xl font-bold {{ $adsGrowthPercentage >= 0 ? 'text-green-500' : 'text-red-500' }} mt-2">
+                                {{ $adsGrowthPercentage }}%
+                            </h3>
                         </div>
                         <div class="bg-green-50 p-3 rounded-2xl text-green-400">
                              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                         <span class="text-green-500 font-bold flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            Growth
-                        </span>
-                        <span class="text-gray-400 ml-2">from past week</span>
+                        <span class="text-gray-400">Monthly Transaction Growth</span>
                     </div>
                 </div>
 
@@ -118,26 +120,41 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm font-medium">Ads Revenue</p>
-                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">IDR {{ number_format($adsRevenue / 1000000, 1) }} M</h3>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">
+                                @if($adsRevenue >= 1000000000)
+                                    IDR {{ number_format($adsRevenue / 1000000000, 1, ',', '.') }} B
+                                @elseif($adsRevenue >= 1000000)
+                                    IDR {{ number_format($adsRevenue / 1000000, 1, ',', '.') }} M
+                                @else
+                                    IDR {{ number_format($adsRevenue, 0, ',', '.') }}
+                                @endif
+                            </h3>
                         </div>
                         <div class="bg-purple-50 p-3 rounded-2xl text-purple-400">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                        <span class="text-green-500 font-bold flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            0.45%
+                        <span class="{{ $revenueGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $revenueGrowth >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' }}"></path>
+                            </svg>
+                            {{ abs($revenueGrowth) }}%
                         </span>
-                        <span class="text-gray-400 ml-2">Up from past week</span>
+                        <span class="text-gray-400 ml-2">Up from past month</span>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">New Advertisers</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $newAdvertisers }}</h3>
-                        <div class="mt-4 text-sm text-gray-400">New advertisers this week</div>
+                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($newAdvertisers) }}</h3>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="{{ $newAdvertisersGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                                {{ $newAdvertisersGrowth >= 0 ? '+' : '' }}{{ $newAdvertisersGrowth }}%
+                            </span>
+                            <span class="text-gray-400 ml-2">vs last month</span>
+                        </div>
                     </div>
                     <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -154,33 +171,37 @@
                     </button>
                 </div>
 
-                <div class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+                <form method="GET" action="{{ route('advertisement.index') }}" class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+    
                     <div class="relative w-full md:w-full">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
-                        <input type="text" placeholder="Search" class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search" 
+                            class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
+
                     <div class="w-full md:w-48">
-                        <select class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
-                            <option>All Status</option>
-                            <option>Success</option>
-                            <option>Pending</option>
+                        <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
+                            <option value="All Status" {{ request('status') == 'All' ? 'selected' : '' }}>All Status</option>
+                            <option value="Success" {{ request('status') == 'Success' ? 'selected' : '' }}>Success</option>
                         </select>
                     </div>
-                </div>
+                </form>
 
                 <div class="pt-3 pr-6 pl-6 pb-3 overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-100 text-gray-900 text-xs font-bold tracking-wider">
                                 <th class="px-6 py-4 rounded-l-xl">Id Adds</th>
-                                <th class="px-6 py-4">Id Property / Email</th>
+                                <th class="px-6 py-4"> Email</th>
                                 <th class="px-6 py-4">Package</th>
                                 <th class="px-6 py-4">Date</th>
                                 <th class="px-6 py-4 text-center">Ads Category</th>
                                 <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4 text-center rounded-r-xl">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -216,23 +237,9 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold text-white bg-[#00C09E]">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold text-white bg-green-500">
                                         {{ $log->status }}
                                     </span>
-                                </td>
-
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex items-center justify-center gap-3">
-                                        <button class="text-gray-500 hover:text-blue-600 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                        </button>
-                                        <button class="text-gray-500 hover:text-yellow-500 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                        </button>
-                                        <button class="text-gray-500 hover:text-red-600 transition">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
-                                    </div>
                                 </td>
                             </tr>
                             @empty
@@ -250,9 +257,64 @@
                     {{ $logs->links() }}
                 </div>
             </div>
-
+            
         </main>
     </div>
+    <div id="logoutModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md transform scale-95 transition-transform duration-300 text-center relative">
+            
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-8 leading-snug tracking-tight">
+                Are you sure you want <br> to log out?
+            </h3>
+            
+            <div class="flex items-center justify-center gap-6 ">
+                <button onclick="confirmLogout()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Logout
+                </button>
+                
+                <button onclick="closeLogoutModal()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+        @csrf
+    </form>
+    <script>
+        const modal = document.getElementById('logoutModal');
+        const modalContent = modal.querySelector('div'); // Div pembungkus putih
+        function openLogoutModal() {
+            modal.classList.remove('hidden');
+            // Animasi Fade In (tunggu sebentar agar class hidden hilang dulu)
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
 
+        function closeLogoutModal() {
+            // Animasi Fade Out
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Sesuaikan durasi transition-opacity
+        }
+
+        function confirmLogout() {
+            document.getElementById('logout-form').submit();
+        }
+
+        // Tutup modal jika klik di luar area putih (backdrop)
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeLogoutModal();
+            }
+        });
+    </script>
 </body>
 </html>

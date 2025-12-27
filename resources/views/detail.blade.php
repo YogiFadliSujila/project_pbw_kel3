@@ -9,6 +9,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 
     <script>
         tailwind.config = {
@@ -219,29 +220,39 @@
         </div>
 
         <div class="lg:col-span-5 space-y-6">
+            
             <div class="relative w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-md group">
                 <img 
                     alt="{{ $property->title }}" 
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                    src="{{ $property->image ? asset(ltrim($property->image, '/')) : 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' }}"
+                    src="{{ $property->image ? asset('storage/' . $property->image) : 'https://via.placeholder.com/800' }}"
                 />
                 <div class="absolute bottom-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg transform rotate-[-5deg]">FOR SALE</div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="aspect-video rounded-lg overflow-hidden shadow-sm">
-                    <img class="w-full h-full object-cover hover:opacity-90 transition" src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=400&q=80" alt="Interior"/>
-                </div>
-                <div class="aspect-video rounded-lg overflow-hidden shadow-sm">
-                    <img class="w-full h-full object-cover hover:opacity-90 transition" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=400&q=80" alt="Exterior"/>
-                </div>
-                <div class="aspect-video rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
-                    <img class="w-full h-full object-cover group-hover:opacity-75 transition" src="https://images.unsplash.com/photo-1600596542815-2250c385e319?auto=format&fit=crop&w=400&q=80" alt="More"/>
-                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-20">
-                        <span class="text-white text-xs font-semibold">+3 Lainnya</span>
+            @if($property->images->count() > 0)
+            <div class="grid grid-cols-3 gap-4"> @foreach($property->images->take(3) as $index => $img)
+                    <div class="aspect-video rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
+                        <img 
+                            class="w-full h-full object-cover hover:opacity-90 transition" 
+                            src="{{ asset('storage/' . $img->image_path) }}" 
+                            alt="Gallery {{ $index }}"
+                        />
+
+                        @if($loop->last && $property->images->count() > 3)
+                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group-hover:bg-opacity-40 transition">
+                                <span class="text-white font-bold text-lg">
+                                    +{{ $property->images->count() - 3 }} Lainnya
+                                </span>
+                            </div>
+                        @endif
                     </div>
-                </div>
+                @endforeach
+
             </div>
+            @endif
+
+
 
             <div class="w-full h-48 md:h-64 rounded-xl overflow-hidden shadow-md mt-6 relative">
                 <iframe 
@@ -251,7 +262,7 @@
                     scrolling="no" 
                     marginheight="0" 
                     marginwidth="0" 
-                    src="https://maps.google.com/maps?q={{ urlencode($property->location) }}&t=&z=13&ie=UTF8&iwloc=&output=embed">
+                    src="https://maps.google.com/maps?q={{ $property->latitude && $property->longitude ? $property->latitude . ',' . $property->longitude : urlencode($property->location) }}&z=15&output=embed">
                 </iframe>
             </div>
         </div>

@@ -8,6 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         /* Styling khusus untuk input harga dengan prefix Rp */
@@ -146,6 +147,21 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi Property</label>
                     <input type="text" name="location" placeholder="Masukan Lokasi Property" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3" required>
                 </div>
+                <div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
+                        <input type="text" name="latitude" placeholder="Contoh: -6.200000" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
+                        <input type="text" name="longitude" placeholder="Contoh: 106.816666" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 p-3">
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1 mb-4">
+                    *Buka Google Maps, klik kanan pada lokasi, lalu salin angka koordinat (cth: -6.2088, 106.8456)
+                </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Spesifikasi Property</label>
@@ -236,7 +252,9 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-4">Konfirmasi Surat Kepemilikan Property dan Foto</label>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
                         <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition p-6 text-center cursor-pointer group relative">
                             <input type="file" name="document" id="upload-doc" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept=".pdf,.doc,.docx">
                             <div class="flex flex-col items-center justify-center h-full">
@@ -254,7 +272,21 @@
                                 <p class="text-xs text-gray-500 mt-1" id="img-name">Format: JPG, PNG (Max 2MB)</p>
                             </div>
                         </div>
+
+                    </div> 
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Foto Galeri (Maks 10)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition p-6 text-center cursor-pointer group relative">
+                            <input type="file" name="gallery_images[]" id="upload-gallery" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/png, image/jpeg, image/jpg" multiple>
+                            
+                            <div class="flex flex-col items-center justify-center h-full">
+                                <svg class="w-12 h-12 text-gray-400 group-hover:text-blue-500 mb-3 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <p class="text-sm font-bold text-gray-700 group-hover:text-blue-600">Pilih Foto Tambahan</p>
+                                <p class="text-xs text-gray-500 mt-1" id="gallery-count">Bisa pilih banyak sekaligus</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="flex justify-end mt-8">
@@ -345,6 +377,15 @@
         });
         document.getElementById('upload-img').addEventListener('change', function(e) {
             document.getElementById('img-name').textContent = e.target.files[0].name;
+        });
+        document.getElementById('upload-img').addEventListener('change', function(e) {
+            document.getElementById('img-name').textContent = e.target.files[0].name;
+        });
+
+        // TAMBAHAN: Script update nama file galeri
+        document.getElementById('upload-gallery').addEventListener('change', function(e) {
+            const count = e.target.files.length;
+            document.getElementById('gallery-count').textContent = count + " foto dipilih";
         });
     </script>
 

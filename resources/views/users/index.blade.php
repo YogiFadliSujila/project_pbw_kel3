@@ -6,6 +6,7 @@
     <title>Manajemen Users - LandHub</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-[#F8F9FE] text-gray-800">
@@ -38,24 +39,26 @@
                     <span class="font-medium">Transactions</span>
                 </a>
 
-                <a href="#" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
+                <a href="{{route('advertisement.index')}}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                     <span class="font-medium">Advertisement</span>
                 </a>
 
-                <a href="#" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
+                <a href="{{route('tickets.index')}}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
                     <span class="font-medium">Tickets</span>
                 </a>
             </nav>
 
             <div class="p-4 border-t border-gray-50 space-y-2">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        <span class="font-medium">Logout</span>
-                    </button>
+                <a href="{{route('settings.edit')}}" class="flex items-center px-4 py-3 text-gray-500 hover:text-[#1E2B58] transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="font-medium">Settings</span>
+                </a>
+                <button type="button" onclick="openLogoutModal()" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span class="font-medium">Logout</span>
+                </button>
                 </form>
             </div>
         </aside>
@@ -81,18 +84,20 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm font-medium">Role Pencari Lahan</p>
-                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $pencariLahan ?? 30396 }}</h3>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($pencariCount) }}</h3>
                         </div>
-                        <div class="bg-red-50 p-3 rounded-2xl text-red-400">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                        <div class="bg-blue-50 p-3 rounded-2xl text-blue-400">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                        <span class="text-green-500 font-bold flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            8.5%
+                        <span class="{{ $pencariGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $pencariGrowth >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' }}"></path>
+                            </svg>
+                            {{ abs($pencariGrowth) }}%
                         </span>
-                        <span class="text-gray-400 ml-2">Up from yesterday</span>
+                        <span class="text-gray-400 ml-2">vs last month</span>
                     </div>
                 </div>
 
@@ -100,18 +105,20 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-gray-500 text-sm font-medium">Role Penjual Lahan</p>
-                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $penjualLahan ?? 10293 }}</h3>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($penjualCount) }}</h3>
                         </div>
                         <div class="bg-green-50 p-3 rounded-2xl text-green-400">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                        <span class="text-green-500 font-bold flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            8.5%
+                        <span class="{{ $penjualGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $penjualGrowth >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' }}"></path>
+                            </svg>
+                            {{ abs($penjualGrowth) }}%
                         </span>
-                        <span class="text-gray-400 ml-2">Up from yesterday</span>
+                        <span class="text-gray-400 ml-2">vs last month</span>
                     </div>
                 </div>
 
@@ -126,19 +133,26 @@
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-sm">
-                        <span class="text-green-500 font-bold flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                            8.5%
+                        <span class="{{ $totalUserGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $totalUserGrowth >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' }}"></path>
+                            </svg>
+                            {{ abs($totalUserGrowth) }}%
                         </span>
-                        <span class="text-gray-400 ml-2">Up from yesterday</span>
+                        <span class="text-gray-400 ml-2">vs last month</span>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">This Month</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $thisMonth }}</h3>
-                        <div class="mt-4 text-sm text-gray-400">New users added</div>
+                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($newUsersCount) }}</h3>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="{{ $newUserGrowth >= 0 ? 'text-green-500' : 'text-red-500' }} font-bold flex items-center gap-1">
+                                {{ $newUserGrowth >= 0 ? '+' : '' }}{{ $newUserGrowth }}%
+                            </span>
+                            <span class="text-gray-400 ml-2">vs last month</span>
+                        </div>
                     </div>
                     <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -155,21 +169,28 @@
                     </button>
                 </div>
 
-                <div class="pt-3 pr-6 pl-6 pb-3  flex flex-col md:flex-row gap-4 justify-between items-center">
-                    <div class="relative w-full md:w-100">
+                <form method="GET" action="{{ route('users.index') }}" class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+                        
+                    <div class="relative w-full md:w-full">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
-                        <input type="text" placeholder="Search" class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search" 
+                            class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
+
                     <div class="w-full md:w-48">
-                        <select class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
-                            <option>All Status</option>
-                            <option>Active</option>
-                            <option>Inactive</option>
+                        <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
+                            <option value="All Roles" {{ request('role') == 'All Roles' ? 'selected' : '' }}>All Roles</option>
+                            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="penjual" {{ request('role') == 'penjual' ? 'selected' : '' }}>Penjual</option>
+                            <option value="pencari" {{ request('role') == 'pencari' ? 'selected' : '' }}>Pencari</option>
                         </select>
                     </div>
-                </div>
+                </form>
 
                 <div class="pt-3 pr-6 pl-6 pb-3 overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -231,9 +252,6 @@
                                         <button onclick="openUserModal({{ json_encode($user) }})" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </button>
-                                        <a href="{{ route('users.edit', $user->id ?? 0) }}" class="text-gray-500 hover:text-yellow-500 transition" title="Edit User">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                        </a>
                                         <button type="button" onclick="openDeleteModal('{{ route('users.destroy', $user->id ?? 0) }}')" class="text-gray-500 hover:text-red-600 transition" title="Hapus User">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
@@ -259,78 +277,134 @@
         </main>
     </div>
 
+    <div id="user-show-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeUserShowModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 relative z-10 overflow-hidden transform transition-all scale-95 opacity-0" id="user-show-modal-content">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-xl font-bold text-blue-900">Detail User</h3>
+            </div>
+    
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-sm text-gray-500">Nama</p>
+                        <p id="user-show-name" class="text-lg font-bold text-gray-800">-</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Email</p>
+                        <p id="user-show-email" class="text-sm text-gray-700">-</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Nomor Telepon</p>
+                        <p id="user-show-phone" class="text-sm text-gray-700">-</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Role</p>
+                            <p id="user-show-role" class="text-sm font-bold text-gray-800">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Bergabung Sejak</p>
+                            <p id="user-show-joined" class="text-sm text-gray-700">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                <button onclick="closeUserShowModal()" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative z-10 transform transition-all scale-95 opacity-0" id="delete-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+                    <svg class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+    
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Hapus Item Ini?</h3>
+                <p class="text-sm text-gray-500 mb-6">
+                    Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
+                </p>
+    
+                <div class="flex justify-center gap-3">
+                    <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
+                        Batal
+                    </button>
+                    <button type="button" id="confirm-delete-btn" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition shadow-md">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="logoutModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md transform scale-95 transition-transform duration-300 text-center relative">
+            
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-8 leading-snug tracking-tight">
+                Are you sure you want <br> to log out?
+            </h3>
+            
+            <div class="flex items-center justify-center gap-6 ">
+                <button onclick="confirmLogout()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Logout
+                </button>
+                
+                <button onclick="closeLogoutModal()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+        @csrf
+    </form>
+    
+    <form id="delete-form" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <script>
+        const modal = document.getElementById('logoutModal');
+        const modalContent = modal.querySelector('div'); // Div pembungkus putih
+        function openLogoutModal() {
+            modal.classList.remove('hidden');
+            // Animasi Fade In (tunggu sebentar agar class hidden hilang dulu)
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeLogoutModal() {
+            // Animasi Fade Out
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Sesuaikan durasi transition-opacity
+        }
+
+        function confirmLogout() {
+            document.getElementById('logout-form').submit();
+        }
+
+        // Tutup modal jika klik di luar area putih (backdrop)
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeLogoutModal();
+            }
+        });
+    </script>
 </body>
 </html>
-
-<div id="user-show-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeUserShowModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 relative z-10 overflow-hidden transform transition-all scale-95 opacity-0" id="user-show-modal-content">
-        <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <h3 class="text-xl font-bold text-blue-900">Detail User</h3>
-        </div>
-
-        <div class="p-6">
-            <div class="space-y-4">
-                <div>
-                    <p class="text-sm text-gray-500">Nama</p>
-                    <p id="user-show-name" class="text-lg font-bold text-gray-800">-</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Email</p>
-                    <p id="user-show-email" class="text-sm text-gray-700">-</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Nomor Telepon</p>
-                    <p id="user-show-phone" class="text-sm text-gray-700">-</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-sm text-gray-500">Role</p>
-                        <p id="user-show-role" class="text-sm font-bold text-gray-800">-</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-500">Bergabung Sejak</p>
-                        <p id="user-show-joined" class="text-sm text-gray-700">-</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-            <button onclick="closeUserShowModal()" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Tutup</button>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative z-10 transform transition-all scale-95 opacity-0" id="delete-modal-content">
-        <div class="text-center">
-            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-                <svg class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </div>
-
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Hapus Item Ini?</h3>
-            <p class="text-sm text-gray-500 mb-6">
-                Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
-            </p>
-
-            <div class="flex justify-center gap-3">
-                <button type="button" onclick="closeDeleteModal()" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
-                    Batal
-                </button>
-                <button type="button" id="confirm-delete-btn" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition shadow-md">
-                    Ya, Hapus
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<form id="delete-form" method="POST" class="hidden">
-    @csrf
-    @method('DELETE')
-</form>

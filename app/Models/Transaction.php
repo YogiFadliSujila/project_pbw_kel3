@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TicketTimeline;
 
 class Transaction extends Model
 {
@@ -34,5 +35,11 @@ class Transaction extends Model
     public function timelines()
     {
         return $this->hasMany(TicketTimeline::class)->latest();
+    }
+
+    public function latestTimeline()
+    {
+        // Relasi ini akan mengambil satu data timeline paling baru (berdasarkan ID terbesar)
+        return $this->hasOne(TicketTimeline::class)->latestOfMany();
     }
 }

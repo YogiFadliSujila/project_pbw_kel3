@@ -56,7 +56,7 @@
                     <span class="font-medium">Transactions</span>
                 </a>
 
-                <a href="#" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
+                <a href="{{route('advertisement.index')}}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-[#1E2B58] rounded-lg transition group">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                     <span class="font-medium">Advertisement</span>
                 </a>
@@ -68,13 +68,14 @@
             </nav>
 
             <div class="p-4 border-t border-gray-50 space-y-2">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        <span class="font-medium">Logout</span>
-                    </button>
-                </form>
+                <a href="{{route('settings.edit')}}" class="flex items-center px-4 py-3 text-gray-500 hover:text-[#1E2B58] transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="font-medium">Settings</span>
+                </a>
+                <button type="button" onclick="openLogoutModal()" class="flex items-center w-full px-4 py-3 text-gray-500 hover:text-red-600 transition">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span class="font-medium">Logout</span>
+                </button>
             </div>
         </aside>
 
@@ -92,58 +93,104 @@
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Total Tickets</p>
-                        <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ $totalTickets }}</h3>
-                    </div>
-                    <div class="bg-blue-50 p-3 rounded-2xl text-blue-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Completed</p>
-                        <h3 class="text-3xl font-bold text-green-500 mt-2">{{ $completedTickets }}</h3>
-                    </div>
-                    <div class="bg-green-50 p-3 rounded-2xl text-green-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">On Progress</p>
-                        <h3 class="text-3xl font-bold text-orange-500 mt-2">{{ $onProgressTickets }}</h3>
-                    </div>
-                    <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-500 text-sm font-medium">Avg. Resolution Time</p>
-                        <div class="flex items-baseline gap-1 mt-2">
-                            <h3 class="text-3xl font-bold text-purple-600">{{ $avgResTime }}</h3>
-                            <span class="text-sm text-gray-400 font-medium">{{ $avgResUnit }}</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Total Tickets</p>
+                            <h3 class="text-3xl font-bold text-[#1E2B58] mt-2">{{ number_format($totalTickets) }}</h3>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-2xl text-blue-400">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                         </div>
                     </div>
-                    <div class="bg-purple-50 p-3 rounded-2xl text-purple-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-gray-400">All service requests</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Completed</p>
+                            <h3 class="text-3xl font-bold text-green-500 mt-2">{{ number_format($completedTickets) }}</h3>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-2xl text-green-400">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-gray-400">Tickets resolved</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">On Progress</p>
+                            <h3 class="text-3xl font-bold text-orange-500 mt-2">{{ number_format($onProgressTickets) }}</h3>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-2xl text-orange-400">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-gray-400">Needs attention</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-sm font-medium">Avg. Resolution Time</p>
+                            <div class="flex items-baseline gap-1 mt-2">
+                                <h3 class="text-3xl font-bold text-purple-600">{{ $avgResTime }}</h3>
+                                <span class="text-sm text-gray-400 font-medium">{{ $avgResUnit }}</span>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-2xl text-purple-400">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-sm">
+                        <span class="text-gray-400">Average handling speed</span>
                     </div>
                 </div>
 
             </div>
-
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="pt-6 pr-6 pl-6 pb-3 flex justify-between items-center gap-4">
                     <h3 class="text-xl font-bold text-[#1E2B58]">Active Tickets</h3>
                 </div>
+
+                <form method="GET" action="{{ route('tickets.index') }}" class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+                    
+                    <div class="relative w-full md:flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </span>
+                        <input type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search" 
+                            class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="w-full md:w-72">
+                        <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
+                            <option value="">All Status</option>
+                            <option value="Baru dibuat" {{ request('status') == 'Baru dibuat' ? 'selected' : '' }}>Baru dibuat</option>
+                            <option value="Konfirmasi ATR/BPN/Notaris" {{ request('status') == 'Konfirmasi ATR/BPN/Notaris' ? 'selected' : '' }}>Konfirmasi ATR/BPN/Notaris</option>
+                            <option value="Tiket Dalam Antrean" {{ request('status') == 'Tiket Dalam Antrean' ? 'selected' : '' }}>Tiket Dalam Antrean</option>
+                            <option value="Berkas Diproses" {{ request('status') == 'Berkas Diproses' ? 'selected' : '' }}>Berkas Diproses</option>
+                            <option value="Validasi Lapangan" {{ request('status') == 'Validasi Lapangan' ? 'selected' : '' }}>Validasi Lapangan</option>
+                            <option value="Penerbitan Dokumen" {{ request('status') == 'Penerbitan Dokumen' ? 'selected' : '' }}>Penerbitan Dokumen</option>
+                            <option value="Tiket Selesai" {{ request('status') == 'Tiket Selesai' ? 'selected' : '' }}>Tiket Selesai</option>
+                        </select>
+                    </div>
+                </form>
+            
 
                 <div class="pt-3 pr-6 pl-6 pb-3 overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-600"> 
@@ -298,7 +345,28 @@
             </form>
         </div>
     </div>
-
+    <div id="logoutModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md transform scale-95 transition-transform duration-300 text-center relative">
+            
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-8 leading-snug tracking-tight">
+                Are you sure you want <br> to log out?
+            </h3>
+            
+            <div class="flex items-center justify-center gap-6 ">
+                <button onclick="confirmLogout()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Logout
+                </button>
+                
+                <button onclick="closeLogoutModal()" class="w-48 py-3 rounded-2xl bg-white text-gray-800 font-bold text-lg hover:bg-gray-50 transition-colors shadow-lg">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+        @csrf
+    </form>
+    
     <script>
         function openUpdateModal(ticket, lastTimeline) {
             const modal = document.getElementById('update-modal');
@@ -326,18 +394,52 @@
                 content.classList.add('scale-100', 'opacity-100');
             }, 10);
         }
-
+        
         function closeUpdateModal() {
             const modal = document.getElementById('update-modal');
             const content = document.getElementById('update-modal-content');
-
+            
             content.classList.remove('scale-100', 'opacity-100');
             content.classList.add('scale-95', 'opacity-0');
-
+            
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
         }
+        
+        const modal = document.getElementById('logoutModal');
+        const modalContent = modal.querySelector('div'); // Div pembungkus putih
+        function openLogoutModal() {
+            modal.classList.remove('hidden');
+            // Animasi Fade In (tunggu sebentar agar class hidden hilang dulu)
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeLogoutModal() {
+            // Animasi Fade Out
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // Sesuaikan durasi transition-opacity
+        }
+
+        function confirmLogout() {
+            document.getElementById('logout-form').submit();
+        }
+
+        // Tutup modal jika klik di luar area putih (backdrop)
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeLogoutModal();
+            }
+        });
     </script>
 </body>
 </html>

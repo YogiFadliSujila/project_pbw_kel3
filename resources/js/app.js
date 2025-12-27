@@ -7,6 +7,7 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appElement = document.getElementById("app");
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

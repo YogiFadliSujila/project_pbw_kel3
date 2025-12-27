@@ -5,7 +5,11 @@ use App\Http\Controllers\PropertyController; // Pastikan ini ada
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Inertia\Inertia;
-use App\Http\Controllers\LandingController; // <--- Import Controller
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\SettingsController; // <--- Import Controller
 
 // Route Halaman Pricing / Kategori Iklan
 Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
@@ -53,6 +57,7 @@ Route::middleware('auth')->group(function () {
 // GROUP ROUTE KHUSUS ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
     // Dashboard Admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/admin', [PropertyController::class, 'index'])->name('properties.index');
 
     // Routes untuk manajemen properti oleh admin
@@ -66,10 +71,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/transactions', [App\Http\Controllers\TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/admin/advertisement', [App\Http\Controllers\AdvertisementController::class, 'index'])->name('advertisement.index');
 
     Route::get('/admin/tickets', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
     Route::post('/admin/tickets/{id}/update', [App\Http\Controllers\TicketController::class, 'update'])->name('tickets.update');
     Route::get('/admin/advertisement', [App\Http\Controllers\AdvertisementController::class, 'index'])->name('advertisement.index');
+
+    Route::get('/admin/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+    Route::put('/admin/settings', [SettingsController::class, 'update'])->name('settings.update');
 
 });
 
