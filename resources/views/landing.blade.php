@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('storage/logo/logo.png') }}">
     <title>LandHub - Temukan Lahan Impianmu</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -107,45 +108,77 @@
         </div>
     </nav>
 
-    <header class="px-6 md:px-12 max-w-7xl mx-auto mt-8 mb-16">
-        <div class="flex flex-col md:flex-row justify-between items-start gap-10">
+    <header class="px-6 md:px-12 max-w-7xl items-center mx-auto mt-8 mb-16 h-[60vh]">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
             <div class="md:w-1/2 pt-10">
-                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+                <h1 class="text-7xl md:text-5xl font-extrabold leading-tight mb-4">
                     Temukan Lahan <br> Impianmu <br> di LandHub
                 </h1>
-                <p class="text-sm text-gray-500 mb-8 max-w-md leading-relaxed">
+                <p class="text-base text-gray-500 mb-8 max-w-md leading-relaxed">
                     Platform Digital Penjualan dan Pencarian Lahan yang mempertemukan penjual dan pembeli lahan secara transparan, mudah, dan aman.
                 </p>
-                <div class="flex gap-4">
-                    <a href="{{ route('listing.index') }}" class="inline-block px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
-                        Temukan Lahan &gt;
+                <div class="gap-4 flex">
+                    <a href="{{ route('listing.index') }}" class="flex px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
+                        <span class="mr-3">Temukan Lahan</span>
+                        <Span>→</Span>
                     </a>
-                    <a href="{{ route('properties.create') }}" class="inline-block px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
-                        Pasang Iklan &gt;
+                    <a href="{{ route('properties.create') }}" class="flex px-6 py-3 border-2 border-[#1E2B58] text-[#1E2B58] font-bold rounded-lg hover:bg-[#1E2B58] hover:text-white transition">
+                        <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
+                        </svg>
+                        <span>Pasang Iklan</span>
                     </a>
                 </div>
             </div>
 
             <div class="md:w-1/2 flex justify-end pt-10">
                  <svg width="375" height="270" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M25 122 V 83 L 70 40 L 115 79" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-                    <text x="50" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
-                    <text x="135" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
+                    <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
+                    <text x="145" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
                 </svg>
             </div>
         </div>
     </header>
 
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-16 text-center">
-        <h3 class="font-bold text-lg mb-1">Promo Periode 2025</h3>
-        <p class="text-xs text-gray-500 mb-6">Lahan terbaik dengan harga terjangkau siap jadi milik kamu</p>
+        <h3 class="font-bold text-xl mb-1">Promo Periode 2025</h3>
+        <p class="text-base text-gray-500 mb-6">Lahan terbaik dengan harga terjangkau siap jadi milik kamu</p>
         
-        <div class="w-full rounded-3xl overflow-hidden shadow-xl bg-blue-100 relative group">
-            <img src="{{ asset('storage/promo/promo.png') }}" alt="Promo Banner" class="w-full h-64 md:h-80 object-cover object-center group-hover:scale-105 transition duration-500">
-        </div>
-        <div class="flex justify-center gap-2 mt-4">
-            <div class="w-2 h-2 rounded-full bg-gray-800"></div>
-            <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+        @php
+            $promoImages = [
+                'storage/promo/promo.png', // Ganti dengan path gambar asli Anda
+                
+            ];
+        @endphp
+
+        <div class="relative w-full group">
+            
+            <div class="w-full rounded-3xl overflow-hidden shadow-xl bg-blue-100 relative">
+                <div id="slider-track" class="flex transition-transform duration-700 ease-in-out transform">
+                    @foreach($promoImages as $index => $image)
+                        <div class="w-full h-auto object-contain flex-shrink-0 relative justify-items-center items-center">
+                            <img 
+                                src="{{ Str::startsWith($image, 'http') ? $image : asset($image) }}" 
+                                alt="Promo Banner {{ $index + 1 }}" 
+                                class="w-auto h-auto md:h-160 object-cover  object-center"
+                            >
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-2 mt-4">
+                @foreach($promoImages as $index => $image)
+                    <button 
+                        onclick="goToSlide({{ $index }})" 
+                        class="slider-dot w-2 h-2 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-gray-800 w-6' : 'bg-gray-300' }}"
+                        aria-label="Go to slide {{ $index + 1 }}">
+                    </button>
+                @endforeach
+            </div>
+
         </div>
     </section>
 
@@ -160,8 +193,8 @@
 
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
         <div class="text-center mb-10">
-            <h3 class="font-bold text-lg mb-1">Rekomendasi</h3>
-            <p class="text-xs text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
+            <h3 class="font-bold text-xl mb-1">Rekomendasi</h3>
+            <p class="text-base text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -233,51 +266,51 @@
 
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
         <div class="text-center mb-10">
-            <h3 class="font-bold text-lg mb-1">Kelebihan</h3>
-            <p class="text-xs text-gray-500">Mengapa LandHub dan bagaimana Platformnya</p>
+            <h3 class="font-bold text-xl mb-1">Kelebihan</h3>
+            <p class="text-base text-gray-500">Mengapa LandHub dan bagaimana Platformnya</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2942/2942544.png" class="h-20 opacity-80" alt="Icon">
+                <div >
+                    <img src="storage/assets/g1.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Menyediakan fitur simulasi lahan dan property</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur simulasi lahan dan property</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1000/1000997.png" class="h-20 opacity-80" alt="Icon">
+                <div >
+                    <img src="storage/assets/g2.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Penjual dan pencari lahan bernegosiasi tanpa tatap muka</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Penjual dan pencari lahan bernegosiasi tanpa tatap muka</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                     <img src="https://cdn-icons-png.flaticon.com/512/1534/1534193.png" class="h-20 opacity-80" alt="Icon">
+                <div >
+                     <img src="storage/assets/g3.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Menjamin legalitas lahan dan property</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Menjamin legalitas lahan dan property</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2534/2534204.png" class="h-20 opacity-80" alt="Icon">
+                <div >
+                    <img src="storage/assets/g4.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Menyediakan fitur transaksi secara online</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur transaksi secara online</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2037/2037061.png" class="h-20 opacity-80" alt="Icon">
+                <div>
+                    <img src="storage/assets/g5.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Menyediakan fitur pasang iklan lahan agar cepat terjual</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur pasang iklan lahan agar cepat terjual</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                <div class="bg-blue-50 w-full h-32 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://cdn-icons-png.flaticon.com/512/4205/4205906.png" class="h-20 opacity-80" alt="Icon">
+                <div>
+                    <img src="storage/assets/g6.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
-                <p class="text-xs text-gray-600 font-medium px-4">Untuk meyakinkan penjual kami terintegrasi dengan Google Maps</p>
+                <p class="text-sm text-gray-600 font-medium px-4">Untuk meyakinkan penjual kami terintegrasi dengan Google Maps</p>
             </div>
         </div>
     </section>
@@ -285,7 +318,7 @@
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-24">
         <div class="text-center mb-10">
             <h3 class="font-bold text-lg mb-1">Ulasan</h3>
-            <p class="text-xs text-gray-500">Kata mereka tentang LandHub</p>
+            <p class="text-sm text-gray-500">Kata mereka tentang LandHub</p>
         </div>
 
         <div class="flex flex-col md:flex-row gap-6">
@@ -293,8 +326,8 @@
                 <div class="w-10 h-10 rounded-full bg-purple-100 flex-shrink-0"></div>
                 <div>
                     <h5 class="font-bold text-sm">Tatang Kurniawan</h5>
-                    <p class="text-xs text-gray-400 mb-2">Penjual Lahan</p>
-                    <p class="text-xs text-gray-600 leading-relaxed">
+                    <p class="text-sm text-gray-400 mb-2">Penjual Lahan</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         Platform ini membantu saya menjual lahan yang sudah 1 tahun lamanya tidak terjual, dengan bantuan fitur pasang iklan menjadikan lahan saya cepat terjual.
                     </p>
                 </div>
@@ -304,8 +337,8 @@
                 <div class="w-10 h-10 rounded-full bg-pink-100 flex-shrink-0"></div>
                 <div>
                     <h5 class="font-bold text-sm">Zaskia Zivara Cellista</h5>
-                    <p class="text-xs text-gray-400 mb-2">Pencari Lahan</p>
-                    <p class="text-xs text-gray-600 leading-relaxed">
+                    <p class="text-sm text-gray-400 mb-2">Pencari Lahan</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                        Saya sangat terbantu dengan adanya platform ini. Bisa mencari lahan dengan legalitas yang jelas dan transaksi yang aman.
                     </p>
                 </div>
@@ -315,8 +348,8 @@
                 <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0"></div>
                 <div>
                     <h5 class="font-bold text-sm">Rahmat Hasanuddin</h5>
-                    <p class="text-xs text-gray-400 mb-2">Pencari Lahan</p>
-                    <p class="text-xs text-gray-600 leading-relaxed">
+                    <p class="text-sm text-gray-400 mb-2">Pencari Lahan</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         Platform ini menyediakan fitur negosiasi yang sangat membantu bagi orang seperti saya yang mempunyai budget pas.
                     </p>
                 </div>
@@ -450,6 +483,56 @@
                 modal.classList.add('hidden');
             }, 500);
         }
+
+        // Konfigurasi
+        const slideInterval = 5000; // Waktu pindah (ms) -> 5000 = 5 detik
+        
+        let currentSlide = 0;
+        const totalSlides = {{ count($promoImages) }};
+        const track = document.getElementById('slider-track');
+        const dots = document.querySelectorAll('.slider-dot');
+        let autoSlideTimer;
+
+        // Fungsi Update Posisi Slider
+        function updateSlider() {
+            // Geser track
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update warna dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-gray-300', 'w-2');
+                    dot.classList.add('bg-gray-800', 'w-6'); // Active style (lebih panjang)
+                } else {
+                    dot.classList.remove('bg-gray-800', 'w-6');
+                    dot.classList.add('bg-gray-300', 'w-2'); // Inactive style
+                }
+            });
+        }
+
+        // Fungsi Pindah ke Slide Berikutnya
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }
+
+        // Fungsi Pindah Manual (Saat klik dot)
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            resetTimer(); // Reset waktu agar tidak langsung pindah lagi
+        }
+
+        // Fungsi Reset Timer (Agar user experience lebih halus)
+        function resetTimer() {
+            clearInterval(autoSlideTimer);
+            autoSlideTimer = setInterval(nextSlide, slideInterval);
+        }
+
+        // Mulai Otomatis saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            resetTimer();
+        });
     </script>
     @endif
 
