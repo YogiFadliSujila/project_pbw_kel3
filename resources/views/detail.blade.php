@@ -197,26 +197,94 @@
             </div>
 
             <div class="mt-10 border border-slate-200 rounded-lg p-6 bg-white shadow-sm">
-                <h3 class="font-bold text-sm text-slate-500 mb-4">Diskusi / Komentar</h3>
-                <div class="space-y-6">
-                    <div class="flex gap-3">
-                        <img alt="User" class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=Udin&background=random"/>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="font-bold text-xs text-slate-900">Udin123</span>
-                                <span class="text-[10px] text-slate-400">2 hari lalu</span>
+                <h3 class="font-bold text-sm text-slate-500 mb-4">Diskusi / Komentar ({{ $property->comments->count() }})</h3>
+                
+                <div class="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar flex flex-col">
+                    
+                    @forelse($property->comments as $comment)
+                        <div class="flex gap-3">
+                            <img alt="{{ $comment->user->name }}" class="w-8 h-8 rounded-full object-cover shrink-0" 
+                                 src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&background=random"/>
+                            
+                            <div class="flex-1">
+                                <div class="bg-gray-100 p-3 rounded-r-xl rounded-bl-xl">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="font-bold text-xs text-slate-900">{{ $comment->user->name }}</span>
+                                        <span class="text-[10px] text-slate-400">{{ $comment->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <p class="text-sm text-slate-700 mt-1 leading-relaxed">{{ $comment->body }}</p>
+                                </div>
+
+                                <button onclick="toggleReplyForm({{ $comment->id }})" class="text-xs text-blue-600 font-bold mt-1 ml-2 hover:underline">
+                                    Balas
+                                </button>
+
+                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-2 ml-2">
+                                    @auth
+                                        <form action="{{ route('comments.store', $property->id) }}" method="POST" class="flex gap-2">
+                                            @csrf
+                                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                            <input name="body" class="w-full text-xs border border-slate-300 rounded px-2 py-1 focus:ring-1 focus:ring-primary" placeholder="Balas komentar ini..." required>
+                                            <button type="submit" class="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700">Kirim</button>
+                                        </form>
+                                    @endauth
+                                </div>
+
+                                @if($comment->replies->count() > 0)
+                                    <div class="mt-3 space-y-3 pl-4 border-l-2 border-gray-100">
+                                        @foreach($comment->replies as $reply)
+                                            <div class="flex gap-3">
+                                                <img alt="{{ $reply->user->name }}" class="w-6 h-6 rounded-full object-cover shrink-0" 
+                                                     src="https://ui-avatars.com/api/?name={{ urlencode($reply->user->name) }}&background=random"/>
+                                                
+                                                <div class="bg-blue-50 p-2 rounded-r-lg rounded-bl-lg flex-1">
+                                                    <div class="flex items-center justify-between gap-2">
+                                                        <span class="font-bold text-xs text-slate-900">{{ $reply->user->name }}</span>
+                                                        <span class="text-[10px] text-slate-400">{{ $reply->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                    <p class="text-xs text-slate-700 mt-1">{{ $reply->body }}</p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                            <p class="text-sm text-slate-700 mt-1">Surat-surat aman gan?</p>
                         </div>
-                    </div>
+                    @empty
+                        <div class="text-center py-8">
+                            <p class="text-sm text-gray-400">Belum ada diskusi. Jadilah yang pertama bertanya!</p>
+                        </div>
+                    @endforelse
+
                 </div>
-                <div class="mt-6 relative">
-                    <input class="w-full text-sm border border-slate-200 rounded-md py-2 px-3 pr-10 focus:ring-1 focus:ring-primary bg-transparent" placeholder="Tanya sesuatu..." type="text"/>
-                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-primary">
-                        <span class="material-icons-outlined text-sm">send</span>
-                    </button>
+
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    @auth
+                        <form action="{{ route('comments.store', $property->id) }}" method="POST" class="relative">
+                            @csrf
+                            <input name="body" class="w-full text-sm border border-slate-200 rounded-lg py-3 px-4 pr-12 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition outline-none" 
+                                   placeholder="Tulis pertanyaan baru..." type="text" required autocomplete="off"/>
+                            
+                            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800 p-2 transition">
+                                <span class="material-icons-outlined text-lg">send</span>
+                            </button>
+                        </form>
+                    @else
+                        <div class="text-center py-3 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                            <p class="text-sm text-gray-500">
+                                Silakan <a href="{{ route('login') }}" class="text-blue-600 font-bold hover:underline">Login</a> untuk ikut berdiskusi.
+                            </p>
+                        </div>
+                    @endauth
                 </div>
             </div>
+
+            <script>
+                function toggleReplyForm(commentId) {
+                    const form = document.getElementById(`reply-form-${commentId}`);
+                    form.classList.toggle('hidden');
+                }
+            </script>
         </div>
 
         <div class="lg:col-span-5 space-y-6">
@@ -225,13 +293,19 @@
                 <img 
                     alt="{{ $property->title }}" 
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                    src="{{ $property->image ? asset('storage/' . $property->image) : 'https://via.placeholder.com/800' }}"
+                    src="{{ $property->image ? asset( $property->image) : 'https://via.placeholder.com/800' }}"
                 />
                 <div class="absolute bottom-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg transform rotate-[-5deg]">FOR SALE</div>
             </div>
 
-            @if($property->images->count() > 0)
-            <div class="grid grid-cols-3 gap-4"> @foreach($property->images->take(3) as $index => $img)
+           @php
+                // Ambil data gallery, jika null/error dianggap array kosong
+                $gallery = $property->gallery ?? collect([]);
+            @endphp
+
+            @if($gallery->count() > 0)
+            <div class="grid grid-cols-3 gap-4"> 
+                @foreach($gallery->take(3) as $index => $img)
                     <div class="aspect-video rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
                         <img 
                             class="w-full h-full object-cover hover:opacity-90 transition" 
@@ -239,20 +313,17 @@
                             alt="Gallery {{ $index }}"
                         />
 
-                        @if($loop->last && $property->images->count() > 3)
+                        @if($loop->last && $gallery->count() > 3)
                             <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group-hover:bg-opacity-40 transition">
                                 <span class="text-white font-bold text-lg">
-                                    +{{ $property->images->count() - 3 }} Lainnya
+                                    +{{ $gallery->count() - 3 }} Lainnya
                                 </span>
                             </div>
                         @endif
                     </div>
                 @endforeach
-
             </div>
             @endif
-
-
 
             <div class="w-full h-48 md:h-64 rounded-xl overflow-hidden shadow-md mt-6 relative">
                 <iframe 

@@ -9,7 +9,8 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\TransactionsController;
-use App\Http\Controllers\SettingsController; // <--- Import Controller
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\CommentController; // <--- Import Controller
 
 // Route Halaman Pricing / Kategori Iklan
 Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     
     // Route Proses Bayar / Aktivasi (POST)
     Route::post('/membership/process', [App\Http\Controllers\MembershipController::class, 'process'])->name('membership.process');
+    Route::post('/properties/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
 // Ubah route '/' default menjadi ini:

@@ -161,14 +161,14 @@
                         @endif
                 </div>
                 
-                <div class="flex justify-between items-end mb-1">
+                <div class="flex justify-between items-top mb-1">
                     <h4 class="text-xl font-bold text-[#1E2B58]">
                         Rp {{ number_format($prop->price, 0, ',', '.') }}
                     </h4>
                     <p class="text-xs font-bold text-gray-800">Luas Tanah: {{ $prop->area ?? '-' }} m²</p>
                 </div>
                 
-                <h5 class="font-bold text-black text-sm mb-2">{{ $prop->title }}</h5>
+                <h5 class="font-bold text-black text-sm mb-2">{{ $prop->description }}</h5>
                 
                 <p class="text-[10px] text-gray-500 mb-4 leading-relaxed line-clamp-2">
                     {{ $prop->location ?? 'Lokasi tidak tersedia' }}

@@ -62,11 +62,9 @@ class LandingController extends Controller
     // Tambahkan di bawah method show()
     public function payment($id)
     {
-        // Ambil data properti berdasarkan ID
-        $property = Property::findOrFail($id);
+        $property = Property::with(['gallery', 'user', 'comments.user'])->findOrFail($id);
 
-        // Tampilkan halaman payment dengan data tersebut
-        return view('payment', compact('property'));
+        return view('detail', compact('property'));
     }
     
     public function processPayment(Request $request)

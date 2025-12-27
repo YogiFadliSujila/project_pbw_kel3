@@ -16,7 +16,6 @@ class PropertyController extends Controller
     {
         // Query Dasar: Urutkan berdasarkan priority_level (asc) lalu created_at (desc)
         $query = Property::with('user')
-                    ->where('status', 'Accepted')
                     ->orderBy('priority_level', 'asc')
                     ->latest();
 
