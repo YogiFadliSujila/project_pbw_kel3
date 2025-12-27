@@ -122,7 +122,7 @@
                     </div>
 
                     <div class="p-5">
-                        <h4 class="font-bold text-slate-900 text-lg mb-1 truncate">{{ $prop->title }}</h4>
+                        <h4 class="font-bold text-slate-900 text-lg mb-1 truncate">{{ $prop->description }}</h4>
                         <p class="text-slate-500 text-sm mb-3 truncate">{{ $prop->location }}</p>
                         <div class="flex justify-between items-center pt-3 border-t border-slate-100">
                             <span class="font-bold text-primary">Rp {{ number_format($prop->price, 0, ',', '.') }}</span>

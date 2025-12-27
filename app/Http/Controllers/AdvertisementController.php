@@ -7,7 +7,6 @@ use App\Models\SubscriptionLog;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Property;
-use GrahamCampbell\ResultType\Success;
 
 class AdvertisementController extends Controller
 {
@@ -22,9 +21,7 @@ class AdvertisementController extends Controller
             $query->where(function($q) use ($search) {
                 // Cari berdasarkan ID Transaksi
                 $q->where('id', 'like', "%{$search}%")
-                  // JIKA ADA kolom 'transaction_code' atau 'invoice_number', tambahkan ini:
-                  ->orWhere('property_id', 'like', "%{$search}%") 
-                  
+
                   // Cari berdasarkan User (Nama atau Email)
                   ->orWhereHas('user', function($u) use ($search) {
                       $u->Where('email', 'like', "%{$search}%")

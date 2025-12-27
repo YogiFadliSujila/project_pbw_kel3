@@ -29,7 +29,7 @@
     </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-sans antialiased text-gray-800 dark:text-gray-200 h-screen overflow-hidden flex transition-colors duration-300">
-
+    
     <div id="logoutModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0">
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 w-full max-w-md transform scale-95 transition-transform duration-300 text-center relative">
             <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8 leading-snug tracking-tight">
