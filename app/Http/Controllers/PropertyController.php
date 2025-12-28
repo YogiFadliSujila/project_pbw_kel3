@@ -14,27 +14,24 @@ class PropertyController extends Controller
 {
     public function index(Request $request)
     {
-        // Query Dasar: Urutkan berdasarkan priority_level (asc) lalu created_at (desc)
+        // 1. Mulai Query dasar & Sorting
         $query = Property::with('user')
                     ->orderBy('priority_level', 'asc')
                     ->latest();
 
-        // 1. Logika Search
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('description', 'like', '%'.$search.'%')
-                  ->orWhere('location', 'like', '%'.$search.'%')
-                  ->orWhere('category', 'like', '%'.$search.'%');
-            });
-        }
+        // 2. PANGGIL SEARCH DARI MODEL (Menggantikan logika manual yang panjang)
+        // Pastikan Anda sudah menambahkan scopeFilter di Model Property
+        $query->filter(request(['search']));
 
-        // 2. Logika Filter Status (Jika ada filter tambahan dari admin)
+        // 3. Logika Filter Status (Admin Specific)
+        // Kita biarkan manual karena ada opsi 'All Status' yang spesifik untuk admin
         if ($request->has('status') && $request->status != 'All Status') {
             $query->where('status', $request->status);
         }
 
-        $properties = $query->get();
+        // 4. Eksekusi Data
+        // Saya sarankan ganti ->get() menjadi ->paginate(10) agar halaman tidak berat
+        $properties = $query->paginate(10); 
 
         return view('properties.index', compact('properties'));
     }

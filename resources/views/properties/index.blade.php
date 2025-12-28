@@ -164,17 +164,25 @@
                 </div>
 
                 <form action="{{ route('properties.index') }}" method="GET" class="pt-3 pr-6 pl-6 pb-3 flex flex-col md:flex-row gap-4 justify-between items-center">
+    
                     <div class="relative w-full md:w-100">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </span>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search" class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search ID, Location, Description..." 
+                            class="w-full bg-gray-100 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
                     </div>
 
                     <div class="w-full md:w-48">
                         <select name="status" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 focus:outline-none bg-gray-100">
                             <option value="All Status" {{ request('status') == 'All Status' ? 'selected' : '' }}>All Status</option>
-                            <option value="Available" {{ request('status') == 'Available' ? 'selected' : '' }}>Accepted</option>
+                            
+                            <option value="Accepted" {{ request('status') == 'Accepted' ? 'selected' : '' }}>Accepted</option>
                             <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
                             <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                             <option value="Sold" {{ request('status') == 'Sold' ? 'selected' : '' }}>Sold</option>
@@ -317,6 +325,9 @@
                     </table>
                 </div>
 
+                <div class="mt-4 px-6">
+                    {{ $properties->withQueryString()->links() }}
+                </div>
             </div>
         </main>
     </div>

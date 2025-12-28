@@ -32,5 +32,17 @@ class Property extends Model
         return $this->hasMany(Comment::class)->whereNull('parent_id')->oldest();
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function($query, $search) {
+            return $query->where(function($q) use ($search) {
+                $q->where('description', 'like', '%' . $search . '%')
+                  ->orWhere('location', 'like', '%' . $search . '%')
+                  ->orWhere('category', 'like', '%' . $search . '%')
+                  ->orWhere('specifications', 'like', '%' . $search . '%');
+            });
+        });
+    }
+
 }
 

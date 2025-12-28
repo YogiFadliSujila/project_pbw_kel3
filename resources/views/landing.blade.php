@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('storage/logo/logo.png') }}">
     <title>LandHub - Temukan Lahan Impianmu</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,7 +23,7 @@
         </div>
 
         <div class="flex items-center gap-8">
-            <a href="#" class="font-medium hover:text-blue-600 transition">Home</a>
+            <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
             <a href="#" class="font-medium hover:text-blue-600 transition">About Us</a>
             
             @if(Route::has('login'))
@@ -57,7 +56,22 @@
                                     <span>Profil</span>
                                     <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
-                                <a href="#" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
+                    
+                                <a href="{{ route('chat.index') }}" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
+                                    <div class="flex items-center gap-3">
+                                        <span>Pesan</span>
+                                        @php
+                                            $unreadCount = \App\Models\Message::whereHas('conversation', function($q) {
+                                                $q->where('sender_id', Auth::id())->orWhere('receiver_id', Auth::id());
+                                            })->where('user_id', '!=', Auth::id())->where('is_read', false)->count();
+                                        @endphp
+                                        @if($unreadCount > 0)
+                                            <span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full ml-2">{{ $unreadCount }}</span>
+                                        @endif
+                                    </div>
+                                    <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </a>
+                                <a href="#Rekomendasi" class="flex items-center justify-between w-full p-4 bg-[#EEF2FF] rounded-xl text-[#1E2B58] font-bold hover:bg-blue-100 transition group">
                                     <span>Rekomendasi Lahan</span>
                                     <svg class="w-5 h-5 text-black group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
@@ -148,52 +162,59 @@
         @php
             $promoImages = [
                 'storage/promo/promo.png', // Ganti dengan path gambar asli Anda
-                
+                'storage/promo/promo01.png',
+                'storage/promo/promo02.png',
+                'storage/promo/promo03.png',
             ];
         @endphp
 
-        <div class="relative w-full group">
-            
-            <div class="w-full rounded-3xl overflow-hidden shadow-xl bg-blue-100 relative">
-                <div id="slider-track" class="flex transition-transform duration-700 ease-in-out transform">
+        <section class="px-6 md:px-12 max-w-7xl mx-auto mb-12">
+            <div class="relative w-full group">
+                <div class="w-full rounded-3xl overflow-hidden shadow-xl bg-blue-100 relative h-64 md:h-80">
+                    <div id="slider-track" class="flex h-full transition-transform duration-700 ease-in-out transform">
+                        @foreach($promoImages as $index => $image)
+                            <div class="w-full h-full flex-shrink-0 relative">
+                                <img src="{{ $image }}" alt="Promo {{ $index + 1 }}" class="w-full h-full object-cover object-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 text-white">
+                                    <h3 class="text-2xl font-bold">Promo Spesial #{{ $index + 1 }}</h3>
+                                    <p class="text-sm opacity-90">Diskon admin fee hingga 50%!</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="flex justify-center gap-2 mt-4">
                     @foreach($promoImages as $index => $image)
-                        <div class="w-full h-auto object-contain flex-shrink-0 relative justify-items-center items-center">
-                            <img 
-                                src="{{ Str::startsWith($image, 'http') ? $image : asset($image) }}" 
-                                alt="Promo Banner {{ $index + 1 }}" 
-                                class="w-auto h-auto md:h-160 object-cover  object-center"
-                            >
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-                        </div>
+                        <button onclick="goToSlide({{ $index }})" class="slider-dot w-2 h-2 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-gray-800 w-6' : 'bg-gray-300' }}"></button>
                     @endforeach
                 </div>
             </div>
-
-            <div class="flex justify-center gap-2 mt-4">
-                @foreach($promoImages as $index => $image)
-                    <button 
-                        onclick="goToSlide({{ $index }})" 
-                        class="slider-dot w-2 h-2 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-gray-800 w-6' : 'bg-gray-300' }}"
-                        aria-label="Go to slide {{ $index + 1 }}">
-                    </button>
-                @endforeach
-            </div>
-
-        </div>
+        </section>
     </section>
 
     <section class="px-6 md:px-12 max-w-4xl mx-auto mb-16">
-        <div class="relative">
-            <input type="text" placeholder="Cari Lahan Impianmu..." class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700">
-            <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+        <form action="{{ route('listing.index') }}" method="GET" class="relative">
+            
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}"
+                placeholder="Cari Lahan Impianmu..." 
+                class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
+            >
+            
+            <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
             </button>
-        </div>
+        </form>
     </section>
 
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
         <div class="text-center mb-10">
-            <h3 class="font-bold text-xl mb-1">Rekomendasi</h3>
+            <h3 id = "Rekomendasi" class="font-bold text-xl mb-1">Rekomendasi</h3>
             <p class="text-base text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
         </div>
 

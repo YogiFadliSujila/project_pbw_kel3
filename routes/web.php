@@ -11,7 +11,8 @@ use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ChatController; // <--- Import Controller
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ListingController; // <--- Import Controller
 
 // Route Halaman Pricing / Kategori Iklan
 Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
@@ -40,7 +41,8 @@ Route::middleware(['auth'])->group(function () {
 // Ubah route '/' default menjadi ini:
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 // Route untuk halaman list properti publik
-Route::get('/temukan-lahan', [LandingController::class, 'listing'])->name('listing.index');
+
+Route::get('/temukan-lahan', [ListingController::class, 'index'])->name('listing.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard'); // <--- Mengarah ke dashboard.blade.php

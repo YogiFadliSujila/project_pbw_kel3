@@ -6,6 +6,7 @@
     <title>Temukan Lahan - LandHub</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
@@ -114,13 +115,23 @@
         </div>
     </nav>
 
-    <section class="px-6 md:px-12 max-w-4xl mx-auto mt-6 mb-12">
-        <div class="relative">
-            <input type="text" placeholder="Cari Lahan impianmu..." class="w-full py-4 pl-8 pr-16 rounded-lg bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700 placeholder-gray-500">
-            <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+    <section class="px-6 md:px-12 max-w-4xl mx-auto mb-16">
+        <form action="{{ route('listing.index') }}" method="GET" class="relative">
+            
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}"
+                placeholder="Cari Lahan Impianmu..." 
+                class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
+            >
+            
+            <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
             </button>
-        </div>
+        </form>
     </section>
 
     <div class="text-center mb-12">
@@ -131,7 +142,7 @@
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
             
-            @foreach($properties as $prop)
+            @forelse($properties as $prop)
             <a href="{{ route('property.show', $prop->id) }}" class="group block no-underline">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
                 <div class="rounded-xl overflow-hidden mb-4 relative h-64 w-full">
@@ -144,7 +155,7 @@
                         <div class="absolute top-4 left-4 z-10">
                             <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-yellow-200">
                                 <span class="material-icons text-[14px]">workspace_premium</span>
-                                <span>GOLD PARTNER</span>
+                                <span>GOLD</span>
                             </div>
                             <div class="absolute inset-0 bg-white opacity-20 blur-sm rounded-full animate-pulse"></div>
                         </div>
@@ -177,10 +188,25 @@
                 <span class="text-xs font-bold text-blue-700 group-hover:underline">Detail Lahan</span>
             </div>
             </a>
-            @endforeach
+            @empty
+            <div class="col-span-3 text-center py-20">
+                <h3 class="text-xl font-bold text-gray-700">Tidak ditemukan</h3>
+                <p class="text-gray-500">
+                    Maaf, kami tidak menemukan properti dengan kata kunci 
+                    <span class="font-bold">"{{ request('search') }}"</span>.
+                </p>
+                <a href="{{ route('listing.index') }}" class="inline-block mt-4 text-blue-600 font-bold hover:underline">
+                    Lihat Semua Properti
+                </a>
+            </div>
+            @endforelse
 
         </div>
     </section>
+
+    <div class="mt-8">
+        {{ $properties->withQueryString()->links() }}
+    </div>
 
     <footer class="bg-white border-t border-gray-200 py-12 mt-auto">
         <div class="px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
