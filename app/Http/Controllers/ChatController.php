@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PropertyDeal;
 
 class ChatController extends Controller
 {
@@ -77,6 +78,69 @@ class ChatController extends Controller
         
         // Update timestamp percakapan agar naik ke atas list
         Conversation::find($conversationId)->touch();
+
+        return back();
+    }
+    // Kirim Tawaran Harga
+    public function sendOffer(Request $request, $conversationId)
+    {
+        $request->validate([
+            'offer_price' => 'required|numeric|min:1000'
+        ]);
+
+        Message::create([
+            'conversation_id' => $conversationId,
+            'user_id' => Auth::id(),
+            'body' => 'Saya mengajukan penawaran harga.', // Text fallback
+            'type' => 'offer',
+            'offer_price' => $request->offer_price,
+            'offer_status' => 'pending'
+        ]);
+
+        return back();
+    }
+
+    // Terima / Tolak Tawaran
+    public function handleOffer($messageId, $status)
+    {
+        $message = Message::with('conversation')->findOrFail($messageId);
+        
+        if ($message->user_id == Auth::id()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        // 1. Update Status di Chat Bubble
+        $message->update(['offer_status' => $status]);
+
+        // 2. JIKA DITERIMA -> SIMPAN KE PROPERTY DEALS
+        if ($status == 'accepted') {
+            
+            $propertyId = $message->conversation->property_id; 
+
+            // Simpan Kesepakatan Harga
+            $deal = PropertyDeal::create([
+                'user_id'      => $message->user_id, // ID Pembeli
+                'property_id'  => $propertyId,
+                'agreed_price' => $message->offer_price, // Harga Tawar
+                'status'       => 'waiting_payment'
+            ]);
+
+            // Kirim Link Pembayaran yang mengarah ke Deal ID
+            // Perhatikan parameternya: 'deal_id'
+            $paymentLink = route('payment.show', ['deal_id' => $deal->id]);
+            
+            $responseText = "✅ Tawaran diterima! Harga sepakat: Rp " . number_format($message->offer_price,0,',','.');
+        } else {
+            $responseText = "❌ Maaf, tawaran Anda belum bisa saya terima.";
+        }
+
+        // 3. Kirim Balasan Otomatis
+        Message::create([
+            'conversation_id' => $message->conversation_id,
+            'user_id' => Auth::id(),
+            'body' => $responseText,
+            'type' => 'text'
+        ]);
 
         return back();
     }

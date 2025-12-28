@@ -161,10 +161,9 @@
         
         @php
             $promoImages = [
-                'storage/promo/promo.png', // Ganti dengan path gambar asli Anda
-                'storage/promo/promo01.png',
-                'storage/promo/promo02.png',
-                'storage/promo/promo03.png',
+                'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80', 
+                'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', 
+                'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
             ];
         @endphp
 
@@ -175,7 +174,7 @@
                         @foreach($promoImages as $index => $image)
                             <div class="w-full h-full flex-shrink-0 relative">
                                 <img src="{{ $image }}" alt="Promo {{ $index + 1 }}" class="w-full h-full object-cover object-center">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                                <div class="absolute inset-0 "></div>
                                 <div class="absolute bottom-6 left-6 text-white">
                                     <h3 class="text-2xl font-bold">Promo Spesial #{{ $index + 1 }}</h3>
                                     <p class="text-sm opacity-90">Diskon admin fee hingga 50%!</p>
@@ -204,13 +203,12 @@
                 class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
             >
             
-            <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-            </button>
+            <button type="button" onclick="toggleFilterModal()" class="absolute right-6 transform translate-y-4 text-gray-500 hover:text-gray-800">
+                <span class="material-icons">tune</span> </button>
+            </button>            
         </form>
     </section>
+    <x-filter-modal />
 
     <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
         <div class="text-center mb-10">

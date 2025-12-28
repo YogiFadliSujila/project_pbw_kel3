@@ -16,7 +16,8 @@ class ListingController extends Controller
 
         // 2. Terapkan Filter Search (Menggunakan ScopeFilter yang sudah kita buat)
         // Jika ada search, dia filter. Jika tidak, dia tampilkan semua.
-        $query->filter(request(['search']));
+        // ListingController.php
+        $query->filter(request(['search', 'category', 'min_price', 'max_price', 'min_area', 'max_area']));
 
         // 3. Ambil data (Paginate)
         $properties = $query->paginate(12);

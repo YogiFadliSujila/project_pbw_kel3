@@ -42,6 +42,29 @@ class Property extends Model
                   ->orWhere('specifications', 'like', '%' . $search . '%');
             });
         });
+
+        // 2. Filter Kategori (Lahan, Rumah, dll)
+        $query->when($filters['category'] ?? false, function($query, $category) {
+            return $query->where('category', $category);
+        });
+
+        // 3. Filter Harga Min
+        $query->when($filters['min_price'] ?? false, function($query, $price) {
+            return $query->where('price', '>=', $price);
+        });
+
+        // 4. Filter Harga Max
+        $query->when($filters['max_price'] ?? false, function($query, $price) {
+            return $query->where('price', '<=', $price);
+        });
+        
+        // 5. Filter Area (Luas)
+        $query->when($filters['min_area'] ?? false, function($query, $area) {
+            return $query->where('area', '>=', $area);
+        });
+        $query->when($filters['max_area'] ?? false, function($query, $area) {
+            return $query->where('area', '<=', $area);
+        });
     }
 
 }

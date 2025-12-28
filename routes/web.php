@@ -12,7 +12,8 @@ use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ListingController; // <--- Import Controller
+use App\Http\Controllers\ListingController; 
+use App\Http\Controllers\PaymentController;// <--- Import Controller
 
 // Route Halaman Pricing / Kategori Iklan
 Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
@@ -22,8 +23,8 @@ Route::get('/property/{id}', [App\Http\Controllers\LandingController::class, 'sh
 
 // Route Halaman Pembayaran
 Route::middleware(['auth'])->group(function () {
-    Route::get('/payment/{id}', [App\Http\Controllers\LandingController::class, 'payment'])->name('payment.show');
-    Route::post('/payment/process', [App\Http\Controllers\LandingController::class, 'processPayment'])->name('payment.process');
+
+
     Route::get('/profil', [App\Http\Controllers\LandingController::class, 'profil'])->name('profil');
     Route::get('/ticket-status/{transactionCode}', [App\Http\Controllers\LandingController::class, 'trackTicket'])->name('ticket.status');
     // Route Halaman Bayar Paket (GET)
@@ -36,6 +37,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::post('/chat/initiate', [ChatController::class, 'initiate'])->name('chat.initiate');
     Route::post('/chat/{id}/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::post('/chat/{id}/offer', [ChatController::class, 'sendOffer'])->name('chat.offer');
+    Route::get('/chat/offer/{id}/{status}', [ChatController::class, 'handleOffer'])->name('chat.handle_offer');
+    // Menampilkan halaman checkout
+    Route::get('/payment/checkout', [PaymentController::class, 'show'])->name('payment.show');
+    
+    // Memproses pembayaran (tombol "Bayar Sekarang")
+    Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
 });
 
 // Ubah route '/' default menjadi ini:

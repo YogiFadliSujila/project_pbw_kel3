@@ -152,7 +152,7 @@ class PropertyController extends Controller
                 
                 // Simpan ke tabel property_images via relasi
                 // Pastikan Anda sudah membuat relasi images() di model Property
-                $property->images()->create([
+                $property->gallery()->create([
                     'image_path' => $path // Simpan path raw (tanpa /storage/) atau sesuaikan
                 ]);
             }
@@ -203,7 +203,7 @@ class PropertyController extends Controller
 
         // [BARU] 3. Hapus File Foto Galeri
         // Loop semua gambar galeri terkait dan hapus dari storage
-        foreach ($property->images as $galleryImage) {
+        foreach ($property->gallery as $galleryImage) {
             // Asumsi image_path disimpan tanpa '/storage/' prefix di loop store di atas.
             // Jika Anda menyimpannya dengan prefix, gunakan str_replace seperti di atas.
             Storage::disk('public')->delete($galleryImage->image_path);

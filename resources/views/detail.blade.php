@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -135,16 +136,23 @@
         </div>
     </nav>
 
-    <section class="w-full px-6 flex justify-center mb-10 mt-4">
-        <div class="relative w-full max-w-3xl">
-            <div class="bg-search-light rounded-full px-6 py-3 flex items-center justify-between shadow-sm">
-                <input class="bg-transparent border-none focus:ring-0 w-full text-slate-700 placeholder-slate-500 text-sm" placeholder="Cari Lahan Impianmu..." type="text"/>
-                <button class="text-slate-600 hover:text-primary">
-                    <span class="material-icons-outlined">search</span>
-                </button>
-            </div>
-        </div>
+    <section class="px-6 md:px-12 max-w-4xl mx-auto mb-16">
+        <form action="{{ route('listing.index') }}" method="GET" class="relative">
+            
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}"
+                placeholder="Cari Lahan Impianmu..." 
+                class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
+            >
+            
+            <button type="button" onclick="toggleFilterModal()" class="absolute right-6 transform translate-y-4 text-gray-500 hover:text-gray-800">
+                <span class="material-icons">tune</span> </button>
+            </button>            
+        </form>
     </section>
+    <x-filter-modal />
 
     <div class="text-center mb-12">
         <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Deskripsi Lahan</h2>
@@ -212,7 +220,7 @@
                     </a>
                 @endauth
 
-                <a href="{{ route('payment.show', $property->id) }}" class="flex-1 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition text-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                <a href="{{ route('payment.show', ['property_id' => $property->id]) }}" class="flex-1 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition text-center shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                     <span class="material-icons-outlined text-sm">shopping_cart</span>
                     Lanjut Transaksi
                 </a>
@@ -220,7 +228,7 @@
 
             <div class="mt-12 border border-slate-200 rounded-xl p-6 bg-white shadow-sm">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="font-bold text-lg text-slate-800">Diskusi / Komentar ({{ $property->comments->count() }})</h3>
+                    <h3 class="font-bold text-lg text-slate-800">Diskusi ({{ $property->comments->count() + $property->comments->sum(fn($c) => $c->replies->count()) }})</h3>
                 </div>
 
                 <div class="space-y-8 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">

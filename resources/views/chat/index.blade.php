@@ -101,16 +101,11 @@
     </style>
 </head>
 <body class="bg-gray-50 text-neutral-800 antialiased h-screen flex flex-col overflow-hidden">
-
     <header class="bg-white border-b border-gray-200 h-[72px] flex items-center justify-between px-6 lg:px-8 z-20 shadow-sm relative shrink-0">
-        <div class="flex items-center gap-4">
-            <a href="{{ route('landing') }}" class="text-neutral-500 hover:text-brand-700 transition-colors p-1 rounded-full hover:bg-gray-100">
-                <span class="material-symbols-outlined text-[28px]">arrow_back</span>
-            </a>
-            <div class="flex items-center gap-2">
-                <span class="text-brand-900 font-bold text-2xl tracking-tight">LandHub</span>
-            </div>
+        <div class="flex items-center gap-2">
+            <span class="text-brand-900 font-bold text-2xl tracking-tight">LandHub</span>
         </div>
+        
         <div>
             <span class="text-brand-900 font-semibold text-sm hover:text-brand-700 cursor-pointer">Messages</span>
         </div>
@@ -195,8 +190,11 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
+                            <button onclick="toggleOfferModal()" class="p-2 text-green-600 bg-green-50 hover:bg-green-100 rounded-full transition-colors mr-1" title="Tawar Harga">
+                                <span class="material-symbols-outlined text-[24px]">monetization_on</span>
+                            </button>
                             <button onclick="startVideoCall('{{ $activeConversation->id }}')" 
-                                    class="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors" 
+                                    class="p-2 text-gray-400 rounded-full transition-colors" 
                                     title="Mulai Video Call">
                                 <span class="material-symbols-outlined text-[24px]">videocam</span>
                             </button>
@@ -213,14 +211,91 @@
 
                         @foreach($activeConversation->messages as $msg)
                             <div class="flex flex-col space-y-1 w-full">
-                                <div class="message-bubble {{ $msg->user_id == Auth::id() ? 'sent' : 'received' }}">
-                                    {{ $msg->body }}
-                                </div>
+                                
+                                @if($msg->type == 'offer')
+                                    
+                                    <div class="message-bubble {{ $msg->user_id == Auth::id() ? 'sent' : 'received' }} !p-0 overflow-hidden min-w-[250px]">
+                                        <div class="p-4 bg-white border-b border-gray-100">
+                                            <p class="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">Penawaran Harga</p>
+                                            <h3 class="text-xl font-extrabold text-gray-800">Rp {{ number_format($msg->offer_price, 0, ',', '.') }}</h3>
+                                        </div>
+                                        
+                                        <div class="px-4 py-3 bg-gray-50 flex items-center justify-between">
+                                            @if($msg->offer_status == 'pending')
+                                                <span class="text-xs font-bold text-orange-500 bg-orange-100 px-2 py-1 rounded">Menunggu Respon</span>
+                                                
+                                                @if($msg->user_id != Auth::id())
+                                                    <div class="flex gap-2">
+                                                        <a href="{{ route('chat.handle_offer', ['id' => $msg->id, 'status' => 'rejected']) }}" class="p-1 bg-white border border-gray-200 rounded text-red-500 hover:bg-red-50" title="Tolak">
+                                                            <span class="material-symbols-outlined text-[18px]">close</span>
+                                                        </a>
+                                                        <a href="{{ route('chat.handle_offer', ['id' => $msg->id, 'status' => 'accepted']) }}" class="p-1 bg-green-600 border border-green-600 rounded text-white hover:bg-green-700 shadow-sm" title="Terima">
+                                                            <span class="material-symbols-outlined text-[18px]">check</span>
+                                                        </a>
+                                                    </div>
+                                                @endif
+
+                                            @elseif($msg->offer_status == 'accepted')
+                                                
+                                                @if($msg->user_id == Auth::id())
+                                                    
+                                                    @php
+                                                        // Cari Data Deal ID terkait secara otomatis di View
+                                                        // Ini cara cepat agar tidak perlu ubah struktur database pesan
+                                                        $deal = App\Models\PropertyDeal::where('user_id', Auth::id())
+                                                                ->where('property_id', $activeConversation->property_id)
+                                                                ->where('agreed_price', $msg->offer_price) // Pastikan harganya sama
+                                                                ->latest()
+                                                                ->first();
+                                                    @endphp
+
+                                                    @if($deal && $deal->status == 'waiting_payment')
+                                                        <div class="mt-2">
+                                                            <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center mb-2">
+                                                                <p class="text-xs text-green-800 font-bold flex items-center justify-center gap-1">
+                                                                    <span class="material-icons text-sm">verified</span>
+                                                                    Tawaran Diterima!
+                                                                </p>
+                                                            </div>
+                                                            
+                                                            <a href="{{ route('payment.show', ['deal_id' => $deal->id]) }}" class="block w-full bg-primary hover:bg-blue-900 text-white text-center py-2 rounded-lg text-sm font-bold shadow-md transition transform hover:-translate-y-0.5">
+                                                                Bayar Sekarang
+                                                            </a>
+                                                        </div>
+                                                    @elseif($deal && $deal->status == 'paid')
+                                                        <div class="w-full text-center py-2 bg-blue-100 text-blue-800 text-xs font-bold rounded flex items-center justify-center gap-1 mt-2">
+                                                            <span class="material-icons text-sm">check_circle</span> Sudah Dibayar
+                                                        </div>
+                                                    @else
+                                                        <div class="w-full text-center py-1 bg-green-100 text-green-700 text-xs font-bold rounded mt-2">
+                                                            Diterima
+                                                        </div>
+                                                    @endif
+
+                                                @else
+                                                    <div class="mt-2">
+                                                        <div class="bg-green-100 text-green-800 text-xs font-bold px-3 py-2 rounded flex items-center justify-center gap-1">
+                                                            <span class="material-icons text-sm">verified</span>
+                                                            Anda Menerima Tawaran Ini
+                                                        </div>
+                                                        <p class="text-[10px] text-center text-gray-400 mt-1">Menunggu pembayaran pembeli...</p>
+                                                    </div>
+                                                @endif
+
+                                            @else
+                                                <div class="w-full text-center py-1 bg-red-100 text-red-700 text-xs font-bold rounded mt-2">Ditolak</div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                @else
+                                    <div class="message-bubble {{ $msg->user_id == Auth::id() ? 'sent' : 'received' }}">
+                                        {{ $msg->body }}
+                                    </div>
+                                @endif
+
                                 <div class="text-[10px] text-neutral-400 {{ $msg->user_id == Auth::id() ? 'text-right pr-1' : 'pl-1' }}">
                                     {{ $msg->created_at->format('H:i') }}
-                                    @if($msg->user_id == Auth::id())
-                                        <span class="material-symbols-outlined text-[12px] align-middle {{ $msg->is_read ? 'text-brand-500' : 'text-gray-300' }}">done_all</span>
-                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -269,7 +344,34 @@
             </section>
         </div>
     </main>
+    @if($activeConversation) 
+
+        <div id="offerModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl transform transition-all scale-100">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Ajukan Penawaran</h3>
+                <p class="text-sm text-gray-500 mb-4">Masukkan harga yang ingin Anda ajukan ke penjual.</p>
+                
+                <form action="{{ route('chat.offer', $activeConversation->id) }}" method="POST">
+                    @csrf
+                    <div class="relative mb-6">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 font-bold">Rp</span>
+                        <input type="number" name="offer_price" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 font-bold text-gray-800" placeholder="0" required>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button type="button" onclick="toggleOfferModal()" class="flex-1 py-2.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition">Batal</button>
+                        <button type="submit" class="flex-1 py-2.5 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition shadow-lg shadow-green-500/30">Kirim Tawaran</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    @endif
+
     <script>
+        function toggleOfferModal() {
+            document.getElementById('offerModal').classList.toggle('hidden');
+        }
         function startVideoCall(conversationId) {
             // 1. Buat Nama Room Unik (Gabungan Nama App + ID Chat)
             // Menggunakan Random String biar tidak ditebak orang lain
