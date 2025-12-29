@@ -4,9 +4,9 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Messages - LandHub</title>
-    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
@@ -190,15 +190,15 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="toggleOfferModal()" class="p-2 text-green-600 bg-green-50 hover:bg-green-100 rounded-full transition-colors mr-1" title="Tawar Harga">
+                            <button onclick="toggleOfferModal()" class="p-2 text-gray-800  hover:text-gray-300 rounded-full transition-colors mr-1" title="Tawar Harga">
                                 <span class="material-symbols-outlined text-[24px]">monetization_on</span>
                             </button>
                             <button onclick="startVideoCall('{{ $activeConversation->id }}')" 
-                                    class="p-2 text-gray-400 rounded-full transition-colors" 
+                                    class="p-2 text-gray-800  hover:text-gray-300 rounded-full transition-colors" 
                                     title="Mulai Video Call">
                                 <span class="material-symbols-outlined text-[24px]">videocam</span>
                             </button>
-                            <button class="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-gray-50 rounded-full transition-colors">
+                            <button class="p-2 text-gray-800 hover:text-gray-300 rounded-full transition-colors">
                                 <span class="material-symbols-outlined text-[22px]">more_vert</span>
                             </button>
                         </div>
@@ -215,12 +215,12 @@
                                 @if($msg->type == 'offer')
                                     
                                     <div class="message-bubble {{ $msg->user_id == Auth::id() ? 'sent' : 'received' }} !p-0 overflow-hidden min-w-[250px]">
-                                        <div class="p-4 bg-white border-b border-gray-100">
+                                        <div class="p-4 bg-white border border-gray-200">
                                             <p class="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">Penawaran Harga</p>
                                             <h3 class="text-xl font-extrabold text-gray-800">Rp {{ number_format($msg->offer_price, 0, ',', '.') }}</h3>
                                         </div>
                                         
-                                        <div class="px-4 py-3 bg-gray-50 flex items-center justify-between">
+                                        <div class="px-4 py-3 bg-gray-50 flex items-center justify-between border border-gray-200">
                                             @if($msg->offer_status == 'pending')
                                                 <span class="text-xs font-bold text-orange-500 bg-orange-100 px-2 py-1 rounded">Menunggu Respon</span>
                                                 
@@ -258,7 +258,7 @@
                                                                 </p>
                                                             </div>
                                                             
-                                                            <a href="{{ route('payment.show', ['deal_id' => $deal->id]) }}" class="block w-full bg-primary hover:bg-blue-900 text-white text-center py-2 rounded-lg text-sm font-bold shadow-md transition transform hover:-translate-y-0.5">
+                                                            <a href="{{ route('payment.show', ['deal_id' => $deal->id]) }}" class="block w-full hover:bg-blue-900 bg-blue-600 text-white text-center py-2 rounded-lg text-sm font-bold shadow-md transition transform hover:-translate-y-0.5">
                                                                 Bayar Sekarang
                                                             </a>
                                                         </div>

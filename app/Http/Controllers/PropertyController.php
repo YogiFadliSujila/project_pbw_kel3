@@ -163,7 +163,7 @@ class PropertyController extends Controller
             return redirect()->route('properties.index')->with('success', 'Properti berhasil ditambahkan!');
         }
 
-        return redirect()->route('listing.index')->with('success', 'Properti berhasil ditambahkan!');
+        return redirect()->route('profil')->with('success', 'Properti berhasil ditambahkan!');
     }
 
     // Menampilkan Halaman Edit Status

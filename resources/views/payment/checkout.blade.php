@@ -145,16 +145,26 @@
         </div>
     </main>
 
+    <!-- Payment Success Overlay -->
     <div id="paymentOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+        
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
+
         <div id="paymentCard" class="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 relative p-8 transform transition-all duration-300 scale-95 opacity-0">
             
+            <!-- Close Button -->
+            <button onclick="closePaymentModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-800 transition hover:rotate-90 duration-200">
+                <span class="material-icons-outlined text-3xl">close</span>
+            </button>
+
+            <!-- Success Icon -->
             <div class="flex justify-center mb-6">
                 <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-indigo-200 animate-bounce">
                     <span class="material-icons text-white text-5xl">check</span>
                 </div>
             </div>
 
+            <!-- Success Message & Amount -->
             <div class="text-center mb-8">
                 <h3 class="text-xl text-slate-600 font-medium mb-2">Payment Success!</h3>
                 <h2 class="text-3xl font-bold text-slate-900 font-display">
@@ -164,22 +174,114 @@
 
             <div class="border-t border-dashed border-slate-300 my-6"></div>
 
+            <!-- Transaction Details -->
+            <div class="space-y-4 text-sm">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Ref Number</span>
+                    <span class="font-semibold text-slate-800" id="receiptRef">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Payment Time</span>
+                    <span class="font-semibold text-slate-800" id="receiptTime">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Payment Method</span>
+                    <span class="font-semibold text-slate-800">Bank Transfer</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Sender Name</span>
+                    <span class="font-semibold text-slate-800" id="receiptSender">{{ Auth::user()->name }}</span>
+                </div>
+            </div>
+
+            <div class="border-t border-dashed border-slate-300 my-6"></div>
+
+            <!-- Amount Summary -->
+            <div class="space-y-4 text-sm">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Amount</span>
+                    <span class="font-semibold text-slate-800">Rp {{ number_format($priceToPay, 0, ',', '.') }},00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Admin Fee</span>
+                    <span class="font-semibold text-slate-800">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="border-t border-dashed border-slate-300 my-6"></div>
+
+            <!-- Footer Message -->
+            <div class="text-center mb-6">
+                <p class="text-xs text-slate-400">Terima kasih telah mempercayai LandHub</p>
+            </div>
+
+            <!-- Close Button -->
             <div class="text-center">
-                 <button onclick="window.location.href='{{ route('landing') }}'" class="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-900">
-                    Kembali ke Beranda
-                 </button>
+                <button onclick="closePaymentModal()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-hover transition transform hover:-translate-y-0.5 shadow-lg">
+                    Tutup
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Auto-fill expiry date
+        // Cek apakah server mengirim sinyal sukses beserta DATA ASLI dari database
+        @if(session('success_transaction'))
+            document.addEventListener("DOMContentLoaded", function() {
+                // 1. Masukkan Data Asli dari Session ke Element HTML
+                document.getElementById('receiptRef').innerText = "{{ session('real_trx_code') ?? 'TRX-' + Date.now() }}";
+                document.getElementById('receiptTime').innerText = "{{ session('real_trx_time') ?? now()->format('d M Y, H:i') }}";
+                
+                // 2. Munculkan Modal
+                showPaymentSuccess(); 
+            });
+        @endif
+
+        function showPaymentSuccess() {
+            const overlay = document.getElementById('paymentOverlay');
+            const card = document.getElementById('paymentCard');
+
+            // Ambil nama pengirim dari input (jika ada)
+            const inputName = document.querySelector('input[name="card_holder_name"]');
+            if(inputName && inputName.value) {
+                document.getElementById('receiptSender').innerText = inputName.value;
+            }
+
+            // Animasi Masuk
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closePaymentModal() {
+            const overlay = document.getElementById('paymentOverlay');
+            const card = document.getElementById('paymentCard');
+
+            // 1. Animasi Keluar
+            overlay.classList.add('opacity-0');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+
+            // 2. Tunggu durasi animasi selesai (300ms) lalu redirect ke profil
+            setTimeout(() => {
+                window.location.href = "{{ route('profil') }}";
+            }, 300);
+        }
+
+        // Auto-fill expiry date dengan format DD/MM/YYYY
         document.addEventListener('DOMContentLoaded', function () {
             const expiryInput = document.getElementById('cardExpiry');
-            if (expiryInput) {
-                const now = new Date();
-                expiryInput.value = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getFullYear()).slice(-2)}`;
-            }
+            if (!expiryInput) return;
+
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+
+            expiryInput.value = `${dd}/${mm}/${yyyy}`;
         });
     </script>
 </body>

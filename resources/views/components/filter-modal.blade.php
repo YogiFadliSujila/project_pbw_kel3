@@ -21,12 +21,20 @@
                     <div class="p-8 space-y-8 bg-white">
                         <section>
                             <label class="block text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider">Tipe Properti</label>
+                            @php
+                                $propertyTypes = [
+                                    'tanah' => 'Lahan',
+                                    'rumah' => 'Rumah',
+                                    'ruko' => 'Ruko',
+                                    'gedung' => 'Gedung',
+                                ];
+                            @endphp
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                @foreach(['Lahan', 'Rumah', 'Ruko', 'Gedung'] as $type)
+                                @foreach($propertyTypes as $value => $label)
                                 <label class="cursor-pointer relative">
-                                    <input type="radio" name="category" value="{{ $type }}" class="peer sr-only" {{ request('category') == $type ? 'checked' : '' }}>
+                                    <input type="radio" name="category" value="{{ $value }}" class="peer sr-only" {{ request('category') == $value ? 'checked' : '' }}>
                                     <div class="flex items-center justify-center px-4 py-3 text-sm font-medium rounded-xl border border-gray-200 bg-white shadow-md text-gray-600 hover:bg-blue-50 hover:border-blue-200 transition-all peer-checked:border-2 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700">
-                                        {{ $type }}
+                                        {{ $label }}
                                     </div>
                                     <div class="absolute top-0 right-0 -mt-1 -mr-1 hidden peer-checked:block">
                                         <span class="flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 ring-2 ring-white">

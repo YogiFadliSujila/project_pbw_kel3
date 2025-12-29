@@ -14,12 +14,17 @@ class PaymentController extends Controller
 {
     public function show(Request $request)
     {
-        // ... (Kode show() biarkan sama seperti sebelumnya) ...
+        // Jika ada session sukses, tampilkan halaman checkout dengan popup
+        // (meskipun properti sudah Sold karena baru saja dibeli user ini)
+        $hasSuccessSession = session('success_transaction');
+        
         // SKENARIO 1: Pembayaran dari Hasil Tawar-Menawar
         if ($request->has('deal_id')) {
             $deal = PropertyDeal::with('property')->findOrFail($request->deal_id);
             if ($deal->user_id != Auth::id()) abort(403);
-            if ($deal->status == 'paid') return redirect()->route('chat.index')->with('error', 'Tagihan ini sudah dibayar.');
+            if ($deal->status == 'paid' && !$hasSuccessSession) {
+                return redirect()->route('chat.index')->with('error', 'Tagihan ini sudah dibayar.');
+            }
 
             $property = $deal->property; 
             $priceToPay = $deal->agreed_price;
@@ -28,7 +33,15 @@ class PaymentController extends Controller
         // SKENARIO 2: Pembayaran Langsung
         elseif ($request->has('property_id')) {
             $property = Property::findOrFail($request->property_id);
-            if ($property->user_id == Auth::id()) return back()->with('error', 'Anda tidak bisa membeli properti sendiri.');
+            
+            // Jika properti sudah Sold dan BUKAN redirect dari sukses pembayaran, tolak
+            if ($property->status === 'Sold' && !$hasSuccessSession) {
+                return redirect()->route('landing')->with('error', 'Properti ini sudah terjual.');
+            }
+            
+            if ($property->user_id == Auth::id()) {
+                return back()->with('error', 'Anda tidak bisa membeli properti sendiri.');
+            }
             
             $priceToPay = $property->price;
             $dealId = null;
@@ -92,12 +105,13 @@ class PaymentController extends Controller
             'created_at' => now()->addMinutes(2)
         ]);
 
-        // 7. Redirect Kembali (PENTING: Gunakan with() agar Modal Sukses muncul)
-        // Kita tidak redirect ke 'landing', tapi 'back()' agar modal checkout terganti modal sukses
-        return redirect()->back()->with([
+        // 7. Redirect ke halaman checkout dengan session data untuk popup sukses
+        return redirect()->route('payment.show', [
+            'property_id' => $request->property_id
+        ])->with([
             'success_transaction' => true,
             'real_trx_code' => $trxCode,
-            'real_trx_time' => now()->format('d-m-Y, H:i:s')
+            'real_trx_time' => now()->format('d M Y, H:i')
         ]);
     }
 }

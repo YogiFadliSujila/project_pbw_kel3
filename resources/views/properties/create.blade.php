@@ -114,13 +114,6 @@
         </div>
     </nav>
 
-    <div class="bg-blue-50 py-3 px-6">
-        <a href="{{ route('properties.index') }}" class="text-gray-600 hover:text-blue-900 flex items-center gap-2 text-sm font-medium">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            Kembali
-        </a>
-    </div>
-
     <header class="bg-blue-50 pt-10 pb-6 text-center">
         <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-3">Mulai Promosikan Lahanmu <br> hanya di LandHub</h1>
         <p class="text-gray-600 text-lg">isi data berikut untuk melengkapi proses registrasi</p>
@@ -336,6 +329,8 @@
                 description: document.querySelector('[name="description"]').value,
                 price: document.querySelector('[name="price"]').value,
                 location: document.querySelector('[name="location"]').value,
+                latitude: document.querySelector('[name="latitude"]').value,
+                longitude: document.querySelector('[name="longitude"]').value,
                 specifications: document.querySelector('[name="specifications"]').value,
                 area: document.querySelector('[name="area"]').value,
                 category: document.querySelector('[name="category"]').value,
@@ -353,6 +348,8 @@
                 if(data.description) document.querySelector('[name="description"]').value = data.description;
                 if(data.price) document.querySelector('[name="price"]').value = data.price;
                 if(data.location) document.querySelector('[name="location"]').value = data.location;
+                if(data.latitude) document.querySelector('[name="latitude"]').value = data.latitude;
+                if(data.longitude) document.querySelector('[name="longitude"]').value = data.longitude;
                 if(data.specifications) document.querySelector('[name="specifications"]').value = data.specifications;
                 if(data.area) document.querySelector('[name="area"]').value = data.area;
                 if(data.category) document.querySelector('[name="category"]').value = data.category;
