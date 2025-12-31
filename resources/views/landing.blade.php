@@ -24,7 +24,7 @@
 
         <div class="flex items-center gap-8">
             <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
-            <a href="#" class="font-medium hover:text-blue-600 transition">About Us</a>
+            <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
             
             @if(Route::has('login'))
                 @auth

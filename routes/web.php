@@ -48,6 +48,11 @@ Route::middleware(['auth'])->group(function () {
 
 // Ubah route '/' default menjadi ini:
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Route halaman About Us
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 // Route untuk halaman list properti publik
 
 Route::get('/temukan-lahan', [ListingController::class, 'index'])->name('listing.index');
