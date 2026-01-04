@@ -2,6 +2,10 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+
+// Jalankan perintah properties:expire setiap hari di tengah malam
+Schedule::command('properties:expire')->daily();
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

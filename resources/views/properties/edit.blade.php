@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-span-2">
                             <label class="block text-sm font-medium text-gray-500 mb-2">Photo</label>
-                            <div class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
+                            <div class="w-full h-full bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
                                 <img src="{{ $property->image ? asset($property->image) : 'https://via.placeholder.com/600x400' }}" class="w-full h-full object-cover">
                             </div>
                         </div>
@@ -63,8 +63,8 @@
                             <div class="relative">
                                 <select name="status" class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
                                     <option value="Pending" {{ $property->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="Accepted" {{ $property->status == 'Accepted' ? 'selected' : '' }}>Accepted (Setujui)</option>
-                                    <option value="Rejected" {{ $property->status == 'Rejected' ? 'selected' : '' }}>Rejected (Tolak)</option>
+                                    <option value="Accepted" {{ $property->status == 'Accepted' ? 'selected' : '' }}>Accepted</option>
+                                    <option value="Rejected" {{ $property->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                                 </select>
                             </div>
                             <p class="mt-2 text-sm text-gray-500">Mengubah status menjadi "Accepted" akan menayangkan iklan ini ke publik.</p>

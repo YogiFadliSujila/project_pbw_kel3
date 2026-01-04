@@ -18,9 +18,9 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): Response
+    public function create()
     {
-        return Inertia::render('Auth/Register');
+        return view('auth.register');
     }
 
     /**
@@ -33,19 +33,28 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'phone' => 'required|string|max:25',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'role' => 'pencari', // default role for registered users
         ]);
 
         event(new Registered($user));
 
+        // Auto-login user after successful registration
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect based on role: admin -> dashboard, others -> landing
+        if ($user->role === 'admin') {
+            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil. Selamat datang, Admin!');
+        }
+
+        return redirect()->route('landing')->with('success', 'Registrasi berhasil. Selamat datang!');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -16,12 +16,10 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): Response
+    public function create(): View  // Ubah tipe return jika perlu, atau hapus ': Response'
     {
-        return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
+        // Memaksa Laravel menggunakan file resources/views/auth/login.blade.php
+        return view('auth.login');
     }
 
     /**
@@ -33,7 +31,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect user after login based on role: admin -> dashboard, others -> landing
+        $user = Auth::user();
+        if ($user && $user->role === 'admin') {
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->route('landing');
     }
 
     /**

@@ -7,6 +7,7 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appElement = document.getElementById("app");
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -114,7 +115,8 @@ window.openShowModal = function (data) {
     if (modal) {
         // 1. Isi Data Text
         document.getElementById("show-category").innerText = data.category;
-        document.getElementById("show-status").innerText = data.status;
+        const displayedStatus = data.status;
+        document.getElementById("show-status").innerText = displayedStatus;
         document.getElementById("show-location").innerText = data.location;
         document.getElementById("show-area").innerText = data.area + " m²";
         document.getElementById("show-ads-category").innerText =
@@ -176,6 +178,48 @@ window.closeShowModal = function () {
         modalContent.classList.remove("scale-100", "opacity-100");
         modalContent.classList.add("scale-95", "opacity-0");
 
+        setTimeout(() => {
+            modal.classList.add("hidden");
+        }, 300);
+    }
+};
+
+// --- Logika Show Modal untuk User (Users Index) ---
+window.openUserModal = function (data) {
+    const modal = document.getElementById("user-show-modal");
+    const modalContent = document.getElementById("user-show-modal-content");
+
+    if (modal) {
+        document.getElementById("user-show-name").innerText = data.name || "-";
+        document.getElementById("user-show-email").innerText =
+            data.email || "-";
+        document.getElementById("user-show-phone").innerText =
+            data.phone || "-";
+        document.getElementById("user-show-role").innerText =
+            data.role === "admin"
+                ? "Admin"
+                : data.properties && data.properties.length > 0
+                ? "Penjual"
+                : "Pencari";
+        document.getElementById("user-show-joined").innerText = data.created_at
+            ? new Date(data.created_at).toLocaleDateString()
+            : "-";
+
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+            modalContent.classList.remove("scale-95", "opacity-0");
+            modalContent.classList.add("scale-100", "opacity-100");
+        }, 10);
+    }
+};
+
+window.closeUserShowModal = function () {
+    const modal = document.getElementById("user-show-modal");
+    const modalContent = document.getElementById("user-show-modal-content");
+
+    if (modal) {
+        modalContent.classList.remove("scale-100", "opacity-100");
+        modalContent.classList.add("scale-95", "opacity-0");
         setTimeout(() => {
             modal.classList.add("hidden");
         }, 300);
