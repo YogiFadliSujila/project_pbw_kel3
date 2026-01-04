@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\TicketTimeline;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Notifications\EstimationUpgraded;
 
 class TicketController extends Controller
 {
@@ -122,6 +123,21 @@ class TicketController extends Controller
             'description' => $request->description,
             'status_type' => $request->status_type,
         ]);
+
+        // Jika admin menambahkan timeline yang berkaitan dengan estimasi,
+        // kirim notifikasi ke user pemilik transaksi (pembeli)
+        try {
+            $titleLower = strtolower($request->title);
+            if (str_contains($titleLower, 'estimasi') || str_contains($titleLower, 'estimasi')) {
+                $transaction = Transaction::find($id);
+                if ($transaction && $transaction->user) {
+                    $transaction->user->notify(new EstimationUpgraded($transaction, $request->description ?? null));
+                }
+            }
+        } catch (\Throwable $e) {
+            // Jangan crash jika notifikasi gagal, hanya log (opsional)
+            logger()->error('Notify EstimationUpgraded failed: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Timeline berhasil ditambahkan!');
     }
