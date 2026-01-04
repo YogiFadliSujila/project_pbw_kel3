@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/initiate', [ChatController::class, 'initiate'])->name('chat.initiate');
     Route::post('/chat/{id}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::post('/chat/{id}/offer', [ChatController::class, 'sendOffer'])->name('chat.offer');
+    // Mark unread notifications as read (AJAX)
+    Route::post('/notifications/mark-read', [App\Http\Controllers\LandingController::class, 'markNotificationsRead'])->name('notifications.markRead');
     Route::get('/chat/offer/{id}/{status}', [ChatController::class, 'handleOffer'])->name('chat.handle_offer');
     // Menampilkan halaman checkout
     Route::get('/payment/checkout', [PaymentController::class, 'show'])->name('payment.show');
