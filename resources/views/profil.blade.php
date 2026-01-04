@@ -91,6 +91,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($myProperties as $prop)
                 <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition group relative">
+                    @if(Auth::check() && Auth::id() == $prop->user_id)
+                        <a href="{{ route('properties.owner.edit', $prop->id) }}" class="absolute top-4 right-4 z-20 bg-white/80 hover:bg-white text-sm text-primary px-3 py-2 rounded-full shadow-sm border border-slate-200 flex items-center gap-2">
+                            <span class="material-icons text-base">edit</span>
+                            <span class="hidden md:inline">Edit</span>
+                        </a>
+                    @endif
                     
                     <div class="relative h-64 w-full overflow-hidden">
                         <img 

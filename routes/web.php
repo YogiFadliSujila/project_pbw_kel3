@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
     // Akses membuat properti: bisa diakses oleh semua user yang terautentikasi (admin, penjual, pembeli)
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
+    
+    // Routes untuk owner (penjual) mengedit properti miliknya
+    Route::get('/my-properties/{property}/edit', [PropertyController::class, 'editOwner'])->name('properties.owner.edit');
+    Route::put('/my-properties/{property}', [PropertyController::class, 'updateOwner'])->name('properties.owner.update');
 });
 
 // Route Publik (Bisa diakses siapa saja, misal halaman depan)
