@@ -35,7 +35,12 @@ class LandingController extends Controller
                     ->inRandomOrder() // Acak agar semua Gold dapat giliran
                     ->first();
 
-        return view('landing', compact('properties', 'featuredProperties', 'popupProperty'));
+        $notifications = [];
+        if (auth()->check()) {
+            $notifications = auth()->user()->unreadNotifications()->take(10)->get();
+        }
+
+        return view('landing', compact('properties', 'featuredProperties', 'popupProperty', 'notifications'));
     }
 
     // Tambahkan ini di bawah method index()

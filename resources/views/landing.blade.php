@@ -22,9 +22,50 @@
             LandHub
         </div>
 
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-6">
             <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
             <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
+            
+            {{-- Notification bell for logged in users (buyers) --}}
+            @auth
+            <div class="relative">
+                <button id="notifToggle" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-700 border border-gray-200 shadow-sm hover:shadow-md transition">
+                    <span class="material-icons">notifications</span>
+                    @if(isset($notifications) && $notifications->count() > 0)
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">{{ $notifications->count() }}</span>
+                    @endif
+                </button>
+
+                <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden z-50">
+                    <div class="p-4 border-b border-gray-100 flex items-center gap-3">
+                        <img src="/storage/assets/g1.png" alt="logo" class="w-10 h-10 rounded-lg">
+                        <div>
+                            <div class="text-sm font-bold">Notifikasi</div>
+                            <div class="text-xs text-gray-500">Pemberitahuan terbaru</div>
+                        </div>
+                    </div>
+                    <div class="max-h-64 overflow-auto">
+                        @if(isset($notifications) && $notifications->count() > 0)
+                            @foreach($notifications as $note)
+                                @php $data = (array) $note->data; @endphp
+                                <a href="{{ $data['link'] ?? '#' }}" class="block p-3 hover:bg-gray-50 border-b border-gray-100 flex items-start gap-3">
+                                    <img src="/storage/assets/g4.png" alt="icon" class="w-8 h-8 rounded-md object-cover">
+                                    <div class="flex-1 text-sm">
+                                        <div class="font-semibold text-gray-800">{{ $data['message'] ?? 'Ada pembaruan pada tiket Anda' }}</div>
+                                        <div class="text-xs text-gray-500 mt-1">{{ \\Carbon\\Carbon::parse($note->created_at)->diffForHumans() }}</div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        @else
+                            <div class="p-4 text-sm text-gray-500">Tidak ada notifikasi.</div>
+                        @endif
+                    </div>
+                    <div class="p-3 text-center bg-gray-50">
+                        <a href="{{ route('profil') }}" class="text-sm text-blue-600 font-medium">Lihat semua</a>
+                    </div>
+                </div>
+            </div>
+            @endauth
             
             @if(Route::has('login'))
                 @auth
@@ -116,6 +157,21 @@
                     const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
                     if (!isClickInside && popup && !popup.classList.contains('hidden')) {
                         popup.classList.add('hidden');
+                    }
+                });
+                // Notification dropdown toggle
+                document.addEventListener('DOMContentLoaded', function() {
+                    const btn = document.getElementById('notifToggle');
+                    const dd = document.getElementById('notifDropdown');
+                    if (btn && dd) {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            dd.classList.toggle('hidden');
+                        });
+
+                        document.addEventListener('click', function(ev) {
+                            if (!dd.classList.contains('hidden')) dd.classList.add('hidden');
+                        });
                     }
                 });
             </script>
