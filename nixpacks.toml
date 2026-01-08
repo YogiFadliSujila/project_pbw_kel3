@@ -1,0 +1,15 @@
+[variables]
+    # Mengatasi error versi PHP yang tadi Anda alami
+    NIXPACKS_PHP_FALLBACK_VERSION = '8.3'
+
+[phases.setup]
+    # Memastikan ekstensi yang dibutuhkan Laravel terinstal
+    nixPkgs = ['...', 'php83Extensions.pdo_mysql', 'php83Extensions.mbstring']
+
+[phases.build]
+    # Perintah standar untuk membangun Laravel
+    cmds = ['composer install --optimize-autoloader --no-dev', 'npm install && npm run build']
+
+[phases.deploy]
+    # Perintah untuk menjalankan Laravel saat live
+    startCmd = 'php artisan serve --host 0.0.0.0 --port $PORT'
