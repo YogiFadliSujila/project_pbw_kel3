@@ -24,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Tambahkan middleware kustom untuk memaksa HTTPS jika diperlukan
         $middleware->append(\App\Http\Middleware\ForceToHTTPS::class);
+
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
