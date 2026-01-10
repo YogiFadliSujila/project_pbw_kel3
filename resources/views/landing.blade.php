@@ -397,7 +397,7 @@
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="https://img.freepik.com/free-psd/3d-rendering-hands-with-money_23-2151007619.jpg?t=st=1768039880~exp=1768043480~hmac=971bd54bbb780e9bc50ce3edcea632b1357709dd8a8bebdab556d2c0b9bd3b9d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/free-psd/3d-rendering-banking-sales-background_23-2151052659.jpg?t=st=1768041010~exp=1768044610~hmac=7f4d9e82ea178b5a3d75454383102a9a6c307537031f9e13d84a5c63f03ad86e&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur transaksi secara online</p>
             </div>
@@ -411,7 +411,7 @@
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div>
-                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354301.jpg?t=st=1768040095~exp=1768043695~hmac=2e8a9735c6b7290904c100770c70d7a41213db17ea712a828624c87fb66f727d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354292.jpg?t=st=1768040625~exp=1768044225~hmac=c75e56109424f9e96449fc8ed1e87647c13cfc7b9fee9a21d23d6fe31577654d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Untuk meyakinkan penjual kami terintegrasi dengan Google Maps</p>
             </div>
