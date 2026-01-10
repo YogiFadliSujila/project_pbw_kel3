@@ -376,42 +376,42 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="storage/assets/g1.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354303.jpg?t=st=1768038912~exp=1768042512~hmac=89abd24cbb55fd8802403bef707ec09b22acea6479748a0cc04f597faaa79833&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur simulasi lahan dan property</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="storage/assets/g2.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/vektor-gratis/ilustrasi-perwakilan-penjualan-isometrik_52683-83013.jpg?t=st=1768039514~exp=1768043114~hmac=848116e4dcdb0cbfbcea6e36f0c623a79e972eef2d9125863409f3970498cc1b&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Penjual dan pencari lahan bernegosiasi tanpa tatap muka</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                     <img src="storage/assets/g3.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                     <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354298.jpg?t=st=1768039711~exp=1768043311~hmac=52e4ccc7a52a61c7005198572293612a3ac71607662bd6b2d8d3e8a8198e9b13&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menjamin legalitas lahan dan property</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="storage/assets/g4.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/free-psd/3d-rendering-hands-with-money_23-2151007619.jpg?t=st=1768039880~exp=1768043480~hmac=971bd54bbb780e9bc50ce3edcea632b1357709dd8a8bebdab556d2c0b9bd3b9d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur transaksi secara online</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div>
-                    <img src="storage/assets/g5.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/psd-gratis/ilustrasi-3d-untuk-penjualan-real-estat_23-2151354301.jpg?t=st=1768039986~exp=1768043586~hmac=1d404c3ef8349b003d0d0dcee9c1ec9dbe975ca5e9c211be018360e18a4dbdd2&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur pasang iklan lahan agar cepat terjual</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div>
-                    <img src="storage/assets/g6.png" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354301.jpg?t=st=1768040095~exp=1768043695~hmac=2e8a9735c6b7290904c100770c70d7a41213db17ea712a828624c87fb66f727d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Untuk meyakinkan penjual kami terintegrasi dengan Google Maps</p>
             </div>
