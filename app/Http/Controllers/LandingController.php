@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\Review;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\TicketTimeline;
+use Illuminate\Support\Facades\Schema;
 
 class LandingController extends Controller
 {
@@ -35,7 +37,24 @@ class LandingController extends Controller
                     ->inRandomOrder() // Acak agar semua Gold dapat giliran
                     ->first();
 
-        return view('landing', compact('properties', 'featuredProperties', 'popupProperty'));
+        $notifications = collect();
+        if (auth()->check() && Schema::hasTable('notifications')) {
+            try {
+                $notifications = auth()->user()->unreadNotifications()->take(10)->get();
+            } catch (\Exception $e) {
+                // Jika terjadi error pada query notifikasi (mis. struktur DB tidak sesuai), jangan hentikan halaman
+                $notifications = collect();
+            }
+        }
+
+        $reviews = [];
+        try {
+            $reviews = Review::latest()->take(6)->get();
+        } catch (\Exception $e) {
+            $reviews = collect();
+        }
+
+        return view('landing', compact('properties', 'featuredProperties', 'popupProperty', 'notifications', 'reviews'));
     }
 
     // Tambahkan ini di bawah method index()
@@ -170,6 +189,28 @@ class LandingController extends Controller
                         ->firstOrFail();
 
         return view('ticket-status', compact('transaction'));
+    }
+    
+    // AJAX: tandai semua notifikasi yang belum dibaca sebagai dibaca
+    public function markNotificationsRead(Request $request)
+    {
+        if (!auth()->check()) {
+            return response()->json(['success' => false], 403);
+        }
+
+        // Jika tabel notifications tidak ada, abaikan (hindari error saat pertama kali deploy)
+        if (!Schema::hasTable('notifications')) {
+            return response()->json(['success' => true]);
+        }
+
+        $user = auth()->user();
+        try {
+            $user->unreadNotifications->markAsRead();
+        } catch (\Exception $e) {
+            // silent fail
+        }
+
+        return response()->json(['success' => true]);
     }
     
     // Tambahkan method ini

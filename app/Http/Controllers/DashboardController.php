@@ -39,15 +39,33 @@ class DashboardController extends Controller
         
         
         // 2. DATA GRAFIK (TRANSAKSI PER BULAN TAHUN INI)
-        $transactionsData = Transaction::select(
-                DB::raw('MONTH(created_at) as month'), 
-                DB::raw('COUNT(*) as count')
-            )
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('count', 'month')
-            ->toArray();
+        // Buat query yang kompatibel dengan driver DB (MySQL vs SQLite)
+        $driver = DB::connection()->getDriverName();
+
+        if ($driver === 'sqlite') {
+            // SQLite tidak punya fungsi MONTH(), pakai strftime dan cast ke integer
+            $monthSelect = DB::raw("CAST(strftime('%m', created_at) AS INTEGER) as month");
+
+            $transactionsData = Transaction::select(
+                    $monthSelect,
+                    DB::raw('COUNT(*) as count')
+                )
+                ->whereRaw("strftime('%Y', created_at) = ?", [date('Y')])
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month')
+                ->toArray();
+        } else {
+            $transactionsData = Transaction::select(
+                    DB::raw('MONTH(created_at) as month'),
+                    DB::raw('COUNT(*) as count')
+                )
+                ->whereYear('created_at', date('Y'))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month')
+                ->toArray();
+        }
 
         // Normalisasi Data (Isi bulan yang kosong dengan 0)
         $chartData = [];

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Notifications\NewPropertyUploaded;
 
 class PropertyController extends Controller
 {
@@ -144,6 +145,15 @@ class PropertyController extends Controller
         // Kita tampung ke variabel $property agar bisa dipakai untuk simpan galeri
         $property = Property::create($validated);
 
+        // Kirim notifikasi ke admin bahwa ada property baru (jika ada admin)
+        try {
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewPropertyUploaded($property));
+            }
+        } catch (\Exception $e) {
+            // silent fail supaya tidak mengganggu proses utama
+        }
         // [BARU] 6. Handle Upload Foto Galeri
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $file) {
@@ -172,6 +182,18 @@ class PropertyController extends Controller
         return view('properties.edit', compact('property'));
     }
 
+    // Menampilkan Halaman Edit untuk Owner (Penjual)
+    public function editOwner(Property $property)
+    {
+        $user = Auth::user();
+
+        if (!$user || ($user->id !== $property->user_id && $user->role !== 'admin')) {
+            abort(403);
+        }
+
+        return view('properties.edit_owner', compact('property'));
+    }
+
     // Memproses Perubahan Status
     public function update(Request $request, Property $property)
     {
@@ -184,6 +206,69 @@ class PropertyController extends Controller
         ]);
 
         return redirect()->route('properties.index')->with('success', 'Status properti berhasil diperbarui!');
+    }
+    
+    // Memproses Update Data oleh Owner (Penjual)
+    public function updateOwner(Request $request, Property $property)
+    {
+        $user = Auth::user();
+
+        if (!$user || ($user->id !== $property->user_id && $user->role !== 'admin')) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'description'    => 'required',
+            'price'          => 'required|numeric',
+            'location'       => 'required',
+            'specifications' => 'required',
+            'area'           => 'required',
+            'category'       => 'required',
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'document'       => 'nullable|mimes:pdf,doc,docx|max:5120',
+            'gallery_images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'gallery_images'   => 'max:10',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+        ]);
+
+        // Handle Upload Foto Utama (ganti jika ada file baru)
+        if ($request->hasFile('image')) {
+            if ($property->image) {
+                $old = str_replace('/storage/', '', $property->image);
+                Storage::disk('public')->delete($old);
+            }
+            $pathImg = $request->file('image')->store('properties/images', 'public');
+            $validated['image'] = '/storage/' . $pathImg;
+        }
+
+        // Handle Upload Dokumen
+        if ($request->hasFile('document')) {
+            if ($property->document) {
+                $oldDoc = str_replace('/storage/', '', $property->document);
+                Storage::disk('public')->delete($oldDoc);
+            }
+            $pathDoc = $request->file('document')->store('properties/documents', 'public');
+            $validated['document'] = '/storage/' . $pathDoc;
+        }
+
+        $validated['latitude'] = $request->latitude;
+        $validated['longitude'] = $request->longitude;
+
+        // Update property
+        $property->update($validated);
+
+        // Handle Upload Foto Galeri (tambahkan saja)
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('properties/gallery', 'public');
+                $property->gallery()->create([
+                    'image_path' => $path
+                ]);
+            }
+        }
+
+        return redirect()->route('profil')->with('success', 'Properti berhasil diperbarui!');
     }
     
     // Menghapus Property

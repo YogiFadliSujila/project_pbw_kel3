@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LandHub - Temukan Lahan Impianmu</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -22,7 +23,7 @@
             LandHub
         </div>
 
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-6">
             <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
             <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
             
@@ -92,12 +93,26 @@
                             </div>
                         </div>
                     </div>
+                    <div class="max-h-64 overflow-auto">
+                        @if(isset($notifications) && $notifications->count() > 0)
+                            @foreach($notifications as $n)
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b last:border-b-0">
+                                    <div class="text-sm font-medium">{{ $n->data['title'] ?? 'Notifikasi' }}</div>
+                                    <div class="text-xs text-gray-500">{{ $n->data['message'] ?? ($n->data['body'] ?? '') }}</div>
+                                </a>
+                            @endforeach
+                        @else
+                            <div class="p-4 text-sm text-gray-500">Belum ada notifikasi</div>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
                 @else
                     <a href="{{ route('login') }}" class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 hover:bg-purple-200 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     </a>
                 @endauth
-            @endif
 
             <script>
                 function toggleProfilePopup() {
@@ -116,6 +131,48 @@
                     const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
                     if (!isClickInside && popup && !popup.classList.contains('hidden')) {
                         popup.classList.add('hidden');
+                    }
+                });
+                // Notification dropdown toggle
+                document.addEventListener('DOMContentLoaded', function() {
+                    const btn = document.getElementById('notifToggle');
+                    const dd = document.getElementById('notifDropdown');
+                    const markReadUrl = "{{ route('notifications.markRead') }}";
+
+                    if (btn && dd) {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+
+                            const wasHidden = dd.classList.contains('hidden');
+                            dd.classList.toggle('hidden');
+
+                            // Jika dropdown baru dibuka, tandai notifikasi sebagai dibaca
+                            if (wasHidden && !dd.classList.contains('hidden')) {
+                                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                                fetch(markReadUrl, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRF-TOKEN': token
+                                    },
+                                    body: JSON.stringify({})
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        document.querySelectorAll('.notif-count').forEach(el => el.remove());
+                                    }
+                                })
+                                .catch(() => {
+                                    // silent fail
+                                });
+                            }
+                        });
+
+                        document.addEventListener('click', function(ev) {
+                            if (!dd.classList.contains('hidden')) dd.classList.add('hidden');
+                        });
                     }
                 });
             </script>
@@ -340,44 +397,63 @@
             <p class="text-sm text-gray-500">Kata mereka tentang LandHub</p>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6">
-            <div class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
-                <div class="w-10 h-10 rounded-full bg-purple-100 flex-shrink-0"></div>
-                <div>
-                    <h5 class="font-bold text-sm">Tatang Kurniawan</h5>
-                    <p class="text-sm text-gray-400 mb-2">Penjual Lahan</p>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Platform ini membantu saya menjual lahan yang sudah 1 tahun lamanya tidak terjual, dengan bantuan fitur pasang iklan menjadikan lahan saya cepat terjual.
-                    </p>
-                </div>
+        <div class="max-w-4xl mx-auto mb-6">
+            <div class="mb-6">
+                <form id="reviewForm" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold mb-3">Tambahkan Ulasan</h4>
+                    @auth
+                        <p class="text-sm text-gray-500 mb-3">Anda masuk sebagai <strong>{{ Auth::user()->name }}</strong>. Ulasan akan terkait ke akun Anda.</p>
+                    @endauth
+
+                    @guest
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-500">Nama</label>
+                            <input type="text" name="guest_name" id="guest_name" class="w-full mt-1 p-2 border rounded" placeholder="Nama Anda">
+                        </div>
+                    @endguest
+
+                    <div class="mb-3">
+                        <label class="text-xs text-gray-500">Ulasan</label>
+                        <textarea name="body" id="review_body" rows="3" class="w-full mt-1 p-2 border rounded" placeholder="Tulis pengalaman Anda..." required></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-xs text-gray-500 mr-2">Rating</label>
+                            <select name="rating" id="review_rating" class="p-1 border rounded text-sm">
+                                <option value="">(opsional)</option>
+                                <option value="5">5 — Sangat Baik</option>
+                                <option value="4">4 — Baik</option>
+                                <option value="3">3 — Cukup</option>
+                                <option value="2">2 — Kurang</option>
+                                <option value="1">1 — Buruk</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded font-bold">Kirim Ulasan</button>
+                        </div>
+                    </div>
+
+                    <div id="reviewErrors" class="text-sm text-red-600 mt-3 hidden"></div>
+                    <div id="reviewSuccess" class="text-sm text-green-600 mt-3 hidden">Ulasan terkirim.</div>
+                </form>
             </div>
 
-             <div class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
-                <div class="w-10 h-10 rounded-full bg-pink-100 flex-shrink-0"></div>
-                <div>
-                    <h5 class="font-bold text-sm">Zaskia Zivara Cellista</h5>
-                    <p class="text-sm text-gray-400 mb-2">Pencari Lahan</p>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                       Saya sangat terbantu dengan adanya platform ini. Bisa mencari lahan dengan legalitas yang jelas dan transaksi yang aman.
-                    </p>
+            <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach($reviews as $rv)
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-700">{{ strtoupper(substr($rv->user?->name ?? $rv->guest_name ?? 'G',0,1)) }}</div>
+                    <div>
+                        <h5 class="font-bold text-sm">{{ $rv->user?->name ?? $rv->guest_name ?? 'Guest' }}</h5>
+                        @if($rv->rating)
+                            <p class="text-xs text-yellow-600 font-semibold">Rating: {{ $rv->rating }} / 5</p>
+                        @endif
+                        <p class="text-sm text-gray-600 leading-relaxed mt-2">{{ $rv->body }}</p>
+                        <p class="text-xs text-gray-400 mt-2">{{ $rv->created_at->diffForHumans() }}</p>
+                    </div>
                 </div>
+                @endforeach
             </div>
-
-             <div class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0"></div>
-                <div>
-                    <h5 class="font-bold text-sm">Rahmat Hasanuddin</h5>
-                    <p class="text-sm text-gray-400 mb-2">Pencari Lahan</p>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Platform ini menyediakan fitur negosiasi yang sangat membantu bagi orang seperti saya yang mempunyai budget pas.
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="flex justify-center gap-2 mt-6">
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-800"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
         </div>
     </section>
 
@@ -554,6 +630,81 @@
         });
     </script>
     @endif
-
 </body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('reviewForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const url = "{{ route('reviews.store') }}";
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const body = document.getElementById('review_body').value.trim();
+        const rating = document.getElementById('review_rating').value || null;
+        const guestNameEl = document.getElementById('guest_name');
+        const guest_name = guestNameEl ? guestNameEl.value.trim() : null;
+
+        const payload = { body, rating };
+        if (guest_name) payload.guest_name = guest_name;
+
+        const errorsEl = document.getElementById('reviewErrors');
+        const successEl = document.getElementById('reviewSuccess');
+        errorsEl.classList.add('hidden');
+        successEl.classList.add('hidden');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(async (res) => {
+            if (!res.ok) {
+                const json = await res.json().catch(() => ({}));
+                throw json;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data.success && data.review) {
+                // append new review card
+                const list = document.getElementById('reviewsList');
+                const r = data.review;
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4';
+                card.innerHTML = `<div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-700">${(r.name||'G').charAt(0).toUpperCase()}</div>
+                    <div>
+                        <h5 class="font-bold text-sm">${r.name}</h5>
+                        ${r.rating ? `<p class="text-xs text-yellow-600 font-semibold">Rating: ${r.rating} / 5</p>` : ''}
+                        <p class="text-sm text-gray-600 leading-relaxed mt-2">${r.body}</p>
+                        <p class="text-xs text-gray-400 mt-2">${r.created_at}</p>
+                    </div>`;
+                list.prepend(card);
+
+                // reset form
+                form.reset();
+                successEl.classList.remove('hidden');
+                setTimeout(() => successEl.classList.add('hidden'), 3000);
+            }
+        })
+        .catch(err => {
+            if (err && err.errors) {
+                const msgs = Object.values(err.errors).flat().join(' ');
+                errorsEl.textContent = msgs;
+                errorsEl.classList.remove('hidden');
+            } else {
+                errorsEl.textContent = 'Terjadi kesalahan. Coba lagi.';
+                errorsEl.classList.remove('hidden');
+            }
+        });
+    });
+});
+</script>
+
 </html>

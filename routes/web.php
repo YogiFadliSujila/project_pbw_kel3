@@ -11,6 +11,7 @@ use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\PaymentController; // <--- Import Controller
@@ -42,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/initiate', [ChatController::class, 'initiate'])->name('chat.initiate');
     Route::post('/chat/{id}/send', [ChatController::class, 'send'])->name('chat.send');
     Route::post('/chat/{id}/offer', [ChatController::class, 'sendOffer'])->name('chat.offer');
+    // Mark unread notifications as read (AJAX)
+    Route::post('/notifications/mark-read', [App\Http\Controllers\LandingController::class, 'markNotificationsRead'])->name('notifications.markRead');
     Route::get('/chat/offer/{id}/{status}', [ChatController::class, 'handleOffer'])->name('chat.handle_offer');
     // Menampilkan halaman checkout
     Route::get('/payment/checkout', [PaymentController::class, 'show'])->name('payment.show');
@@ -61,10 +64,13 @@ Route::get('/about', function () {
 
 Route::get('/temukan-lahan', [ListingController::class, 'index'])->name('listing.index');
 
+
 Route::get('/dashboard', function () {
     return view('dashboard'); // <--- Mengarah ke dashboard.blade.php
 })->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 // Catatan: Saya tambahkan middleware 'admin' agar dashboard ini hanya untuk admin
+// Route untuk menyimpan ulasan (bisa dikirim oleh tamu atau user terautentikasi)
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 // 3. FITUR PROFIL (Harus Login dulu)
 Route::middleware('auth')->group(function () {
@@ -75,6 +81,10 @@ Route::middleware('auth')->group(function () {
     // Akses membuat properti: bisa diakses oleh semua user yang terautentikasi (admin, penjual, pembeli)
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
+    
+    // Routes untuk owner (penjual) mengedit properti miliknya
+    Route::get('/my-properties/{property}/edit', [PropertyController::class, 'editOwner'])->name('properties.owner.edit');
+    Route::put('/my-properties/{property}', [PropertyController::class, 'updateOwner'])->name('properties.owner.update');
 });
 
 // Route Publik (Bisa diakses siapa saja, misal halaman depan)
