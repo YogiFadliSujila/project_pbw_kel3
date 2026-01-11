@@ -11,10 +11,7 @@ use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CommentController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\ReviewController;
->>>>>>> origin/memperbaiki-landing
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ListingController; 
 use App\Http\Controllers\PaymentController;// <--- Import Controller
@@ -63,16 +60,8 @@ Route::get('/about', function () {
 
 Route::get('/temukan-lahan', [ListingController::class, 'index'])->name('listing.index');
 
-<<<<<<< HEAD
-=======
 // Route untuk menyimpan ulasan (bisa dikirim oleh tamu atau user terautentikasi)
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-
->>>>>>> origin/memperbaiki-landing
-Route::get('/dashboard', function () {
-    return view('dashboard'); // <--- Mengarah ke dashboard.blade.php
-})->middleware(['auth', 'verified', 'admin'])->name('dashboard'); 
-// Catatan: Saya tambahkan middleware 'admin' agar dashboard ini hanya untuk admin
 
 // 3. FITUR PROFIL (Harus Login dulu)
 Route::middleware('auth')->group(function () {

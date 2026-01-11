@@ -7,11 +7,8 @@ use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PropertyDeal;
-<<<<<<< HEAD
-=======
 use App\Notifications\NewMessageReceived;
 use App\Models\User;
->>>>>>> origin/memperbaiki-landing
 
 class ChatController extends Controller
 {
@@ -74,12 +71,8 @@ class ChatController extends Controller
     public function send(Request $request, $conversationId)
     {
         $request->validate(['body' => 'required']);
-<<<<<<< HEAD
 
-        Message::create([
-=======
         $message = Message::create([
->>>>>>> origin/memperbaiki-landing
             'conversation_id' => $conversationId,
             'user_id' => Auth::id(),
             'body' => $request->body
@@ -88,8 +81,6 @@ class ChatController extends Controller
         // Update timestamp percakapan agar naik ke atas list
         Conversation::find($conversationId)->touch();
 
-<<<<<<< HEAD
-=======
         // Kirim notifikasi ke penerima (user lain di percakapan)
         try {
             $conv = Conversation::find($conversationId);
@@ -103,8 +94,6 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             // silent fail
         }
-
->>>>>>> origin/memperbaiki-landing
         return back();
     }
     // Kirim Tawaran Harga
@@ -122,9 +111,6 @@ class ChatController extends Controller
             'offer_price' => $request->offer_price,
             'offer_status' => 'pending'
         ]);
-
-<<<<<<< HEAD
-=======
         // Notifikasi ke penerima
         try {
             $conv = Conversation::find($conversationId);
@@ -137,8 +123,6 @@ class ChatController extends Controller
                 }
             }
         } catch (\Exception $e) {}
-
->>>>>>> origin/memperbaiki-landing
         return back();
     }
 
@@ -183,9 +167,6 @@ class ChatController extends Controller
             'body' => $responseText,
             'type' => 'text'
         ]);
-
-<<<<<<< HEAD
-=======
         // Notify original user that there's a reply
         try {
             $conv = $message->conversation;
@@ -195,8 +176,6 @@ class ChatController extends Controller
                 $origUser->notify(new NewMessageReceived($lastMsg));
             }
         } catch (\Exception $e) {}
-
->>>>>>> origin/memperbaiki-landing
         return back();
     }
 }
