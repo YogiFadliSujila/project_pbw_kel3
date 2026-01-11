@@ -13,8 +13,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ListingController; 
-use App\Http\Controllers\PaymentController;// <--- Import Controller
+use App\Http\Controllers\ListingController;
+use App\Http\Controllers\PaymentController; // <--- Import Controller
 
 // Route Halaman Pricing / Kategori Iklan
 Route::get('/pricing', [App\Http\Controllers\LandingController::class, 'pricing'])->name('pricing.index');
@@ -27,10 +27,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/profil', [App\Http\Controllers\LandingController::class, 'profil'])->name('profil');
+    // Blade edit profile page (uses resources/views/profile/edit.blade.php)
+    Route::get('/profil/edit', function () {
+        return view('profile.edit');
+    })->name('profil.edit');
     Route::get('/ticket-status/{transactionCode}', [App\Http\Controllers\LandingController::class, 'trackTicket'])->name('ticket.status');
     // Route Halaman Bayar Paket (GET)
     Route::get('/membership/payment', [App\Http\Controllers\MembershipController::class, 'payment'])->name('membership.payment');
-    
+
     // Route Proses Bayar / Aktivasi (POST)
     Route::post('/membership/process', [App\Http\Controllers\MembershipController::class, 'process'])->name('membership.process');
     Route::post('/properties/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
@@ -44,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/offer/{id}/{status}', [ChatController::class, 'handleOffer'])->name('chat.handle_offer');
     // Menampilkan halaman checkout
     Route::get('/payment/checkout', [PaymentController::class, 'show'])->name('payment.show');
-    
+
     // Memproses pembayaran (tombol "Bayar Sekarang")
     Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
 });
@@ -60,6 +64,11 @@ Route::get('/about', function () {
 
 Route::get('/temukan-lahan', [ListingController::class, 'index'])->name('listing.index');
 
+
+Route::get('/dashboard', function () {
+    return view('dashboard'); // <--- Mengarah ke dashboard.blade.php
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
+// Catatan: Saya tambahkan middleware 'admin' agar dashboard ini hanya untuk admin
 // Route untuk menyimpan ulasan (bisa dikirim oleh tamu atau user terautentikasi)
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
@@ -93,7 +102,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
     // Manajemen user oleh admin
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');    
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
@@ -106,8 +115,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/settings', [SettingsController::class, 'edit'])->name('settings.edit');
     Route::put('/admin/settings', [SettingsController::class, 'update'])->name('settings.update');
-
 });
 
 // 4. SISTEM AUTH (Login/Register bawaan)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
