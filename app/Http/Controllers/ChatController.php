@@ -7,6 +7,11 @@ use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PropertyDeal;
+<<<<<<< HEAD
+=======
+use App\Notifications\NewMessageReceived;
+use App\Models\User;
+>>>>>>> origin/memperbaiki-landing
 
 class ChatController extends Controller
 {
@@ -69,8 +74,12 @@ class ChatController extends Controller
     public function send(Request $request, $conversationId)
     {
         $request->validate(['body' => 'required']);
+<<<<<<< HEAD
 
         Message::create([
+=======
+        $message = Message::create([
+>>>>>>> origin/memperbaiki-landing
             'conversation_id' => $conversationId,
             'user_id' => Auth::id(),
             'body' => $request->body
@@ -79,6 +88,23 @@ class ChatController extends Controller
         // Update timestamp percakapan agar naik ke atas list
         Conversation::find($conversationId)->touch();
 
+<<<<<<< HEAD
+=======
+        // Kirim notifikasi ke penerima (user lain di percakapan)
+        try {
+            $conv = Conversation::find($conversationId);
+            if ($conv) {
+                $receiverId = ($conv->sender_id == Auth::id()) ? $conv->receiver_id : $conv->sender_id;
+                $receiver = User::find($receiverId);
+                if ($receiver) {
+                    $receiver->notify(new NewMessageReceived($message));
+                }
+            }
+        } catch (\Exception $e) {
+            // silent fail
+        }
+
+>>>>>>> origin/memperbaiki-landing
         return back();
     }
     // Kirim Tawaran Harga
@@ -97,6 +123,22 @@ class ChatController extends Controller
             'offer_status' => 'pending'
         ]);
 
+<<<<<<< HEAD
+=======
+        // Notifikasi ke penerima
+        try {
+            $conv = Conversation::find($conversationId);
+            if ($conv) {
+                $lastMsg = Message::where('conversation_id', $conversationId)->latest()->first();
+                $receiverId = ($conv->sender_id == Auth::id()) ? $conv->receiver_id : $conv->sender_id;
+                $receiver = User::find($receiverId);
+                if ($receiver && $lastMsg) {
+                    $receiver->notify(new NewMessageReceived($lastMsg));
+                }
+            }
+        } catch (\Exception $e) {}
+
+>>>>>>> origin/memperbaiki-landing
         return back();
     }
 
@@ -142,6 +184,19 @@ class ChatController extends Controller
             'type' => 'text'
         ]);
 
+<<<<<<< HEAD
+=======
+        // Notify original user that there's a reply
+        try {
+            $conv = $message->conversation;
+            $lastMsg = Message::where('conversation_id', $conv->id)->latest()->first();
+            $origUser = User::find($message->user_id);
+            if ($origUser && $lastMsg) {
+                $origUser->notify(new NewMessageReceived($lastMsg));
+            }
+        } catch (\Exception $e) {}
+
+>>>>>>> origin/memperbaiki-landing
         return back();
     }
 }

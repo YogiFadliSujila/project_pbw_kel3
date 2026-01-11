@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+<<<<<<< HEAD
+=======
+use App\Models\Review;
+>>>>>>> origin/memperbaiki-landing
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -46,7 +50,18 @@ class LandingController extends Controller
             }
         }
 
+<<<<<<< HEAD
         return view('landing', compact('properties', 'featuredProperties', 'popupProperty', 'notifications'));
+=======
+        $reviews = [];
+        try {
+            $reviews = Review::latest()->take(6)->get();
+        } catch (\Exception $e) {
+            $reviews = collect();
+        }
+
+        return view('landing', compact('properties', 'featuredProperties', 'popupProperty', 'notifications', 'reviews'));
+>>>>>>> origin/memperbaiki-landing
     }
 
     // Tambahkan ini di bawah method index()

@@ -423,6 +423,7 @@
             <h3 class="font-bold text-lg mb-1">Ulasan</h3>
             <p class="text-sm text-gray-500">Kata mereka tentang LandHub</p>
         </div>
+<<<<<<< HEAD
 
         <div class="flex flex-col md:flex-row gap-6">
             <div class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
@@ -462,6 +463,65 @@
         <div class="flex justify-center gap-2 mt-6">
             <div class="w-1.5 h-1.5 rounded-full bg-gray-800"></div>
             <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+=======
+        <div class="max-w-4xl mx-auto mb-6">
+            <div class="mb-6">
+                <form id="reviewForm" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold mb-3">Tambahkan Ulasan</h4>
+                    @auth
+                        <p class="text-sm text-gray-500 mb-3">Anda masuk sebagai <strong>{{ Auth::user()->name }}</strong>. Ulasan akan terkait ke akun Anda.</p>
+                    @endauth
+
+                    @guest
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-500">Nama</label>
+                            <input type="text" name="guest_name" id="guest_name" class="w-full mt-1 p-2 border rounded" placeholder="Nama Anda">
+                        </div>
+                    @endguest
+
+                    <div class="mb-3">
+                        <label class="text-xs text-gray-500">Ulasan</label>
+                        <textarea name="body" id="review_body" rows="3" class="w-full mt-1 p-2 border rounded" placeholder="Tulis pengalaman Anda..." required></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-xs text-gray-500 mr-2">Rating</label>
+                            <select name="rating" id="review_rating" class="p-1 border rounded text-sm">
+                                <option value="">(opsional)</option>
+                                <option value="5">5 — Sangat Baik</option>
+                                <option value="4">4 — Baik</option>
+                                <option value="3">3 — Cukup</option>
+                                <option value="2">2 — Kurang</option>
+                                <option value="1">1 — Buruk</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded font-bold">Kirim Ulasan</button>
+                        </div>
+                    </div>
+
+                    <div id="reviewErrors" class="text-sm text-red-600 mt-3 hidden"></div>
+                    <div id="reviewSuccess" class="text-sm text-green-600 mt-3 hidden">Ulasan terkirim.</div>
+                </form>
+            </div>
+
+            <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach($reviews as $rv)
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-700">{{ strtoupper(substr($rv->user?->name ?? $rv->guest_name ?? 'G',0,1)) }}</div>
+                    <div>
+                        <h5 class="font-bold text-sm">{{ $rv->user?->name ?? $rv->guest_name ?? 'Guest' }}</h5>
+                        @if($rv->rating)
+                            <p class="text-xs text-yellow-600 font-semibold">Rating: {{ $rv->rating }} / 5</p>
+                        @endif
+                        <p class="text-sm text-gray-600 leading-relaxed mt-2">{{ $rv->body }}</p>
+                        <p class="text-xs text-gray-400 mt-2">{{ $rv->created_at->diffForHumans() }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+>>>>>>> origin/memperbaiki-landing
         </div>
     </section>
 
@@ -638,6 +698,85 @@
         });
     </script>
     @endif
+<<<<<<< HEAD
+=======
+</body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('reviewForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const url = "{{ route('reviews.store') }}";
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const body = document.getElementById('review_body').value.trim();
+        const rating = document.getElementById('review_rating').value || null;
+        const guestNameEl = document.getElementById('guest_name');
+        const guest_name = guestNameEl ? guestNameEl.value.trim() : null;
+
+        const payload = { body, rating };
+        if (guest_name) payload.guest_name = guest_name;
+
+        const errorsEl = document.getElementById('reviewErrors');
+        const successEl = document.getElementById('reviewSuccess');
+        errorsEl.classList.add('hidden');
+        successEl.classList.add('hidden');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(async (res) => {
+            if (!res.ok) {
+                const json = await res.json().catch(() => ({}));
+                throw json;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data.success && data.review) {
+                // append new review card
+                const list = document.getElementById('reviewsList');
+                const r = data.review;
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4';
+                card.innerHTML = `<div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-700">${(r.name||'G').charAt(0).toUpperCase()}</div>
+                    <div>
+                        <h5 class="font-bold text-sm">${r.name}</h5>
+                        ${r.rating ? `<p class="text-xs text-yellow-600 font-semibold">Rating: ${r.rating} / 5</p>` : ''}
+                        <p class="text-sm text-gray-600 leading-relaxed mt-2">${r.body}</p>
+                        <p class="text-xs text-gray-400 mt-2">${r.created_at}</p>
+                    </div>`;
+                list.prepend(card);
+
+                // reset form
+                form.reset();
+                successEl.classList.remove('hidden');
+                setTimeout(() => successEl.classList.add('hidden'), 3000);
+            }
+        })
+        .catch(err => {
+            if (err && err.errors) {
+                const msgs = Object.values(err.errors).flat().join(' ');
+                errorsEl.textContent = msgs;
+                errorsEl.classList.remove('hidden');
+            } else {
+                errorsEl.textContent = 'Terjadi kesalahan. Coba lagi.';
+                errorsEl.classList.remove('hidden');
+            }
+        });
+    });
+});
+</script>
+>>>>>>> origin/memperbaiki-landing
 
 </body>
 </html>
