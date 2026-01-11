@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Notifications\NewPropertyUploaded;
 
 class PropertyController extends Controller
 {
@@ -143,6 +144,16 @@ class PropertyController extends Controller
         // 5. Simpan Data Property ke Database
         // Kita tampung ke variabel $property agar bisa dipakai untuk simpan galeri
         $property = Property::create($validated);
+
+        // Kirim notifikasi ke admin bahwa ada property baru (jika ada admin)
+        try {
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewPropertyUploaded($property));
+            }
+        } catch (\Exception $e) {
+            // silent fail supaya tidak mengganggu proses utama
+        }
 
         // [BARU] 6. Handle Upload Foto Galeri
         if ($request->hasFile('gallery_images')) {

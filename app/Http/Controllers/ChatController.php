@@ -7,6 +7,8 @@ use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PropertyDeal;
+use App\Notifications\NewMessageReceived;
+use App\Models\User;
 
 class ChatController extends Controller
 {
@@ -69,8 +71,7 @@ class ChatController extends Controller
     public function send(Request $request, $conversationId)
     {
         $request->validate(['body' => 'required']);
-
-        Message::create([
+        $message = Message::create([
             'conversation_id' => $conversationId,
             'user_id' => Auth::id(),
             'body' => $request->body
@@ -78,6 +79,20 @@ class ChatController extends Controller
         
         // Update timestamp percakapan agar naik ke atas list
         Conversation::find($conversationId)->touch();
+
+        // Kirim notifikasi ke penerima (user lain di percakapan)
+        try {
+            $conv = Conversation::find($conversationId);
+            if ($conv) {
+                $receiverId = ($conv->sender_id == Auth::id()) ? $conv->receiver_id : $conv->sender_id;
+                $receiver = User::find($receiverId);
+                if ($receiver) {
+                    $receiver->notify(new NewMessageReceived($message));
+                }
+            }
+        } catch (\Exception $e) {
+            // silent fail
+        }
 
         return back();
     }
@@ -96,6 +111,19 @@ class ChatController extends Controller
             'offer_price' => $request->offer_price,
             'offer_status' => 'pending'
         ]);
+
+        // Notifikasi ke penerima
+        try {
+            $conv = Conversation::find($conversationId);
+            if ($conv) {
+                $lastMsg = Message::where('conversation_id', $conversationId)->latest()->first();
+                $receiverId = ($conv->sender_id == Auth::id()) ? $conv->receiver_id : $conv->sender_id;
+                $receiver = User::find($receiverId);
+                if ($receiver && $lastMsg) {
+                    $receiver->notify(new NewMessageReceived($lastMsg));
+                }
+            }
+        } catch (\Exception $e) {}
 
         return back();
     }
@@ -141,6 +169,16 @@ class ChatController extends Controller
             'body' => $responseText,
             'type' => 'text'
         ]);
+
+        // Notify original user that there's a reply
+        try {
+            $conv = $message->conversation;
+            $lastMsg = Message::where('conversation_id', $conv->id)->latest()->first();
+            $origUser = User::find($message->user_id);
+            if ($origUser && $lastMsg) {
+                $origUser->notify(new NewMessageReceived($lastMsg));
+            }
+        } catch (\Exception $e) {}
 
         return back();
     }
