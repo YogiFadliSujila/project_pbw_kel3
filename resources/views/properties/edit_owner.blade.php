@@ -130,7 +130,7 @@
                             <div class="mt-4 grid grid-cols-3 gap-3">
                                 @foreach($property->gallery as $img)
                                     <div class="w-full h-24 overflow-hidden rounded-lg border">
-                                        <img src="{{ asset('storage/' . $img->image_path) }}" class="w-full h-full object-cover">
+                                        <x-image :src="$img->image_path" class="w-full h-full object-cover" />
                                     </div>
                                 @endforeach
                             </div>

@@ -76,8 +76,41 @@ class Property extends Model
      */
     public function getImageUrlAttribute($value)
     {
-        if (empty($value)) {
+        // Jika kolom image_url kosong, coba gunakan kolom `image` sebagai sumber
+        $imageValue = $value ?: ($this->attributes['image'] ?? null);
+
+        if (empty($imageValue)) {
             return asset('images/placeholder.png');
+        }
+
+        if (Str::startsWith($imageValue, ['http://', 'https://', 'data:'])) {
+            return $imageValue;
+        }
+
+        try {
+            // Jika menggunakan disk s3 (Supabase), bangun URL dari path yang disimpan
+            if (config('filesystems.disks.s3')) {
+                return Storage::disk('s3')->url($imageValue);
+            }
+        } catch (\Exception $e) {
+            // ignore dan jatuhkan ke fallback
+        }
+
+        // Jika value mengandung prefix storage (mis. '/storage/...'), kembalikan asset yang sesuai
+        if (Str::startsWith($imageValue, ['/storage/', 'storage/'])) {
+            return asset(ltrim($imageValue, '/'));
+        }
+
+        return asset('storage/' . ltrim($imageValue, '/'));
+    }
+
+    /**
+     * Accessor untuk mendapatkan URL dokumen (document)
+     */
+    public function getDocumentUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
         }
 
         if (Str::startsWith($value, ['http://', 'https://'])) {
@@ -85,12 +118,15 @@ class Property extends Model
         }
 
         try {
-            // Coba build URL lewat disk s3 (Supabase). Jika gagal, lanjut ke fallback.
             if (config('filesystems.disks.s3')) {
                 return Storage::disk('s3')->url($value);
             }
         } catch (\Exception $e) {
-            // ignore dan jatuhkan ke fallback
+            // ignore
+        }
+
+        if (Str::startsWith($value, ['/storage/', 'storage/'])) {
+            return asset(ltrim($value, '/'));
         }
 
         return asset('storage/' . ltrim($value, '/'));

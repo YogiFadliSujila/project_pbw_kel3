@@ -150,12 +150,8 @@
             @forelse($properties as $prop)
             <a href="{{ route('property.show', $prop->id) }}" class="group block no-underline">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                <div class="rounded-xl overflow-hidden mb-4 relative h-64 w-full">
-                    <img 
-                        src="{{asset(ltrim($prop->image, '/'))}}" 
-                        alt="{{ $prop->title }}" 
-                        class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
-                    >
+                    <div class="rounded-xl overflow-hidden mb-4 relative h-64 w-full">
+                    <x-image :src="$prop->image_url ?? $prop->image" :alt="$prop->title" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" />
                     @if($prop->priority_level == 1) 
                         <div class="absolute top-4 left-4 z-10">
                             <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 border border-yellow-200">

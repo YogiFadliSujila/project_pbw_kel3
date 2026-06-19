@@ -224,7 +224,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex gap-1 w-24">
                                         <div class="w-8 h-8 rounded bg-gray-200 overflow-hidden border border-gray-300 shrink-0">
-                                            <img src="{{ $item->image ? asset($item->image) : 'https://via.placeholder.com/100' }}" class="w-full h-full object-cover">
+                                            <x-image :src="$item->image_url ?? $item->image" class="w-full h-full object-cover" :placeholder="'https://via.placeholder.com/100'" />
                                         </div>
                                     </div>
                                 </td>
@@ -267,7 +267,7 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($item->document)
-                                        <a href="{{ asset($item->document) }}" target="_blank" class="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded bg-white hover:bg-gray-50 w-max transition group">
+                                        <a href="{{ $item->document_url }}" target="_blank" class="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded bg-white hover:bg-gray-50 w-max transition group">
                                             <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
                                             <span class="text-xs text-gray-600 group-hover:text-blue-600">Lihat Dokumen</span>
                                         </a>

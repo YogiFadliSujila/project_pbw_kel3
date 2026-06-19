@@ -366,11 +366,7 @@
         <div class="lg:col-span-5 space-y-6">
             
             <div class="relative w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-md group">
-                <img 
-                    alt="{{ $property->title }}" 
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                    src="{{ $property->image ? asset($property->image) : 'https://via.placeholder.com/800' }}"
-                />
+                <x-image :src="$property->image_url ?? $property->image" :alt="$property->title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" :placeholder="'https://via.placeholder.com/800'" />
                 <div class="absolute bottom-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg transform rotate-[-5deg]">FOR SALE</div>
             </div>
 
@@ -382,11 +378,7 @@
             <div class="grid grid-cols-3 gap-4"> 
                 @foreach($gallery->take(9) as $index => $img)
                     <div class="aspect-video rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
-                        <img 
-                            class="w-full h-full object-cover hover:opacity-90 transition" 
-                            src="{{ asset('storage/' . $img->image_path) }}" 
-                            alt="Gallery {{ $index }}"
-                        />
+                        <x-image :src="$img->image_path" :alt="'Gallery ' . $index" class="w-full h-full object-cover hover:opacity-90 transition" />
                         @if($loop->last && $gallery->count() > 9)
                             <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group-hover:bg-opacity-40 transition">
                                 <span class="text-white font-bold text-lg">

@@ -99,11 +99,7 @@
                     @endif
                     
                     <div class="relative h-64 w-full overflow-hidden">
-                        <img 
-                            src="{{ $prop->image ? asset(ltrim($prop->image, '/')) : 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80' }}" 
-                            alt="{{ $prop->title }}" 
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        >
+                        <x-image :src="$prop->image_url ?? $prop->image" :alt="$prop->title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" :placeholder="'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80'" />
                         
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition duration-300"></div>
 
@@ -155,11 +151,7 @@
             @forelse($transactions as $trx)
             <div class="flex flex-col lg:flex-row gap-8 items-start bg-white p-6 rounded-3xl shadow-sm border border-slate-100 mb-8">
                 <div class="w-full lg:w-[350px] h-64 flex-shrink-0 overflow-hidden rounded-2xl relative group">
-                    <img 
-                        alt="{{ $trx->property->title }}" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                        src="{{ asset(ltrim($trx->property->image)) }}"
-                    />
+                    <x-image :src="$trx->property->image_url ?? $trx->property->image" :alt="$trx->property->title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                         LUNAS
                     </div>

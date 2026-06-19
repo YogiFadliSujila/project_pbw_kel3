@@ -493,7 +493,7 @@
             </button>
 
             <div class="w-full md:w-1/2 h-64 md:h-auto relative">
-                <img src="{{ $popupProperty->image ? asset(ltrim($popupProperty->image, '/')) : '' }}" class="w-full h-full object-cover">
+                <x-image :src="$popupProperty->image_url ?? $popupProperty->image" class="w-full h-full object-cover" />
                 <div class="absolute top-4 left-4 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded shadow-md">
                     REKOMENDASI HARI INI
                 </div>

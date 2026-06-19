@@ -89,23 +89,17 @@ class PropertyController extends Controller
 
         // 2. Handle Upload Foto Utama (Thumbnail)
         if ($request->hasFile('image')) {
-            // Simpan gambar ke Supabase Storage (disk 's3')
-            // Gambar akan masuk ke sub-folder 'properties' di dalam bucket Supabase Anda
+            // Simpan gambar ke Supabase Storage (disk 's3') dan simpan *path* ke database
+            // (jangan simpan URL penuh supaya nanti bisa dihapus/dikelola dengan mudah)
             $path = $request->file('image')->store('properties', 's3');
-
-            // Simpan URL lengkap ke data yang akan dimass-assignment saat create
-            try {
-                $validated['image'] = Storage::disk('s3')->url($path);
-            } catch (\Exception $e) {
-                // Jika gagal membentuk URL, simpan path sebagai fallback
-                $validated['image'] = $path;
-            }
+            $validated['image'] = $path;
         }
 
-        // 3. Handle Upload Dokumen
+        // 3. Handle Upload Dokumen (simpan ke S3)
         if ($request->hasFile('document')) {
-            $pathDoc = $request->file('document')->store('properties/documents', 'public');
-            $validated['document'] = '/storage/' . $pathDoc;
+            // Simpan dokumen ke S3 dan simpan *path* ke DB
+            $pathDoc = $request->file('document')->store('properties/documents', 's3');
+            $validated['document'] = $pathDoc;
         }
 
         // 4. Setup User & Paket
@@ -161,16 +155,14 @@ class PropertyController extends Controller
         } catch (\Exception $e) {
             // silent fail supaya tidak mengganggu proses utama
         }
-        // [BARU] 6. Handle Upload Foto Galeri
+        // [BARU] 6. Handle Upload Foto Galeri (simpan ke S3)
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $file) {
-                // Simpan file
-                $path = $file->store('properties/gallery', 'public');
-                
-                // Simpan ke tabel property_images via relasi
-                // Pastikan Anda sudah membuat relasi images() di model Property
+                // Simpan file ke S3 dan simpan key/path ke DB
+                $path = $file->store('properties/gallery', 's3');
+
                 $property->gallery()->create([
-                    'image_path' => $path // Simpan path raw (tanpa /storage/) atau sesuaikan
+                    'image_path' => $path
                 ]);
             }
         }
@@ -242,21 +234,80 @@ class PropertyController extends Controller
         // Handle Upload Foto Utama (ganti jika ada file baru)
         if ($request->hasFile('image')) {
             if ($property->image) {
-                $old = str_replace('/storage/', '', $property->image);
-                Storage::disk('public')->delete($old);
+                $current = $property->image;
+                try {
+                    if (Str::startsWith($current, ['/storage/', 'storage/'])) {
+                        $old = ltrim(str_replace('/storage/', '', $current), '/');
+                        Storage::disk('public')->delete($old);
+                    } else {
+                        // Jika menggunakan S3 (path disimpan tanpa prefix), hapus dari disk s3
+                        if (config('filesystems.disks.s3')) {
+                            // Jika yang tersimpan adalah URL penuh, coba ekstrak path relatif
+                            if (Str::startsWith($current, ['http://', 'https://'])) {
+                                try {
+                                    $base = rtrim(Storage::disk('s3')->url(''), '/');
+                                } catch (\Exception $e) {
+                                    $base = null;
+                                }
+                                if ($base && Str::startsWith($current, $base)) {
+                                    $relative = ltrim(substr($current, strlen($base)), '/');
+                                    Storage::disk('s3')->delete($relative);
+                                } else {
+                                    Storage::disk('s3')->delete(basename($current));
+                                }
+                            } else {
+                                Storage::disk('s3')->delete($current);
+                            }
+                        } else {
+                            Storage::disk('public')->delete($current);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // ignore fail
+                }
             }
-            $pathImg = $request->file('image')->store('properties/images', 'public');
-            $validated['image'] = '/storage/' . $pathImg;
+
+            // Simpan gambar baru ke S3 agar konsisten dengan flow create()
+            $pathImg = $request->file('image')->store('properties', 's3');
+            $validated['image'] = $pathImg;
         }
 
-        // Handle Upload Dokumen
+        // Handle Upload Dokumen (simpan ke S3)
         if ($request->hasFile('document')) {
             if ($property->document) {
-                $oldDoc = str_replace('/storage/', '', $property->document);
-                Storage::disk('public')->delete($oldDoc);
+                $currentDoc = $property->document;
+                try {
+                    if (Str::startsWith($currentDoc, ['/storage/', 'storage/'])) {
+                        $oldDoc = ltrim(str_replace('/storage/', '', $currentDoc), '/');
+                        Storage::disk('public')->delete($oldDoc);
+                    } else {
+                        if (config('filesystems.disks.s3')) {
+                            if (Str::startsWith($currentDoc, ['http://', 'https://'])) {
+                                try {
+                                    $base = rtrim(Storage::disk('s3')->url(''), '/');
+                                } catch (\Exception $e) {
+                                    $base = null;
+                                }
+                                if ($base && Str::startsWith($currentDoc, $base)) {
+                                    $relative = ltrim(substr($currentDoc, strlen($base)), '/');
+                                    Storage::disk('s3')->delete($relative);
+                                } else {
+                                    Storage::disk('s3')->delete(basename($currentDoc));
+                                }
+                            } else {
+                                Storage::disk('s3')->delete($currentDoc);
+                            }
+                        } else {
+                            Storage::disk('public')->delete($currentDoc);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // ignore fail
+                }
             }
-            $pathDoc = $request->file('document')->store('properties/documents', 'public');
-            $validated['document'] = '/storage/' . $pathDoc;
+
+            $pathDoc = $request->file('document')->store('properties/documents', 's3');
+            $validated['document'] = $pathDoc;
         }
 
         $validated['latitude'] = $request->latitude;
@@ -265,10 +316,10 @@ class PropertyController extends Controller
         // Update property
         $property->update($validated);
 
-        // Handle Upload Foto Galeri (tambahkan saja)
+        // Handle Upload Foto Galeri (simpan ke S3)
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('properties/gallery', 'public');
+                $path = $file->store('properties/gallery', 's3');
                 $property->gallery()->create([
                     'image_path' => $path
                 ]);
@@ -283,22 +334,102 @@ class PropertyController extends Controller
     {
         // 1. Hapus File Foto Utama
         if ($property->image) {
-            $imagePath = str_replace('/storage/', '', $property->image);
-            Storage::disk('public')->delete($imagePath);
+            $current = $property->image;
+            try {
+                if (Str::startsWith($current, ['/storage/', 'storage/'])) {
+                    $imagePath = ltrim(str_replace('/storage/', '', $current), '/');
+                    Storage::disk('public')->delete($imagePath);
+                } else {
+                    if (config('filesystems.disks.s3')) {
+                        // Jika yang tersimpan adalah URL penuh, ekstrak path relatif bila memungkinkan
+                        if (Str::startsWith($current, ['http://', 'https://'])) {
+                            try {
+                                $base = rtrim(Storage::disk('s3')->url(''), '/');
+                            } catch (\Exception $e) {
+                                $base = null;
+                            }
+                            if ($base && Str::startsWith($current, $base)) {
+                                $relative = ltrim(substr($current, strlen($base)), '/');
+                                Storage::disk('s3')->delete($relative);
+                            } else {
+                                Storage::disk('s3')->delete(basename($current));
+                            }
+                        } else {
+                            Storage::disk('s3')->delete($current);
+                        }
+                    } else {
+                        Storage::disk('public')->delete($current);
+                    }
+                }
+            } catch (\Exception $e) {
+                // ignore fail
+            }
         }
 
-        // 2. Hapus File Dokumen
+        // 2. Hapus File Dokumen (dukungan public atau s3)
         if ($property->document) {
-            $docPath = str_replace('/storage/', '', $property->document);
-            Storage::disk('public')->delete($docPath);
+            $currentDoc = $property->document;
+            try {
+                if (Str::startsWith($currentDoc, ['/storage/', 'storage/'])) {
+                    $docPath = ltrim(str_replace('/storage/', '', $currentDoc), '/');
+                    Storage::disk('public')->delete($docPath);
+                } else {
+                    if (config('filesystems.disks.s3')) {
+                        if (Str::startsWith($currentDoc, ['http://', 'https://'])) {
+                            try {
+                                $base = rtrim(Storage::disk('s3')->url(''), '/');
+                            } catch (\Exception $e) {
+                                $base = null;
+                            }
+                            if ($base && Str::startsWith($currentDoc, $base)) {
+                                $relative = ltrim(substr($currentDoc, strlen($base)), '/');
+                                Storage::disk('s3')->delete($relative);
+                            } else {
+                                Storage::disk('s3')->delete(basename($currentDoc));
+                            }
+                        } else {
+                            Storage::disk('s3')->delete($currentDoc);
+                        }
+                    } else {
+                        Storage::disk('public')->delete($currentDoc);
+                    }
+                }
+            } catch (\Exception $e) {
+                // ignore fail
+            }
         }
 
-        // [BARU] 3. Hapus File Foto Galeri
-        // Loop semua gambar galeri terkait dan hapus dari storage
+        // [BARU] 3. Hapus File Foto Galeri (dukungan public atau s3)
         foreach ($property->gallery as $galleryImage) {
-            // Asumsi image_path disimpan tanpa '/storage/' prefix di loop store di atas.
-            // Jika Anda menyimpannya dengan prefix, gunakan str_replace seperti di atas.
-            Storage::disk('public')->delete($galleryImage->image_path);
+            $current = $galleryImage->image_path;
+            try {
+                if (Str::startsWith($current, ['/storage/', 'storage/'])) {
+                    $path = ltrim(str_replace('/storage/', '', $current), '/');
+                    Storage::disk('public')->delete($path);
+                } else {
+                    if (config('filesystems.disks.s3')) {
+                        if (Str::startsWith($current, ['http://', 'https://'])) {
+                            try {
+                                $base = rtrim(Storage::disk('s3')->url(''), '/');
+                            } catch (\Exception $e) {
+                                $base = null;
+                            }
+                            if ($base && Str::startsWith($current, $base)) {
+                                $relative = ltrim(substr($current, strlen($base)), '/');
+                                Storage::disk('s3')->delete($relative);
+                            } else {
+                                Storage::disk('s3')->delete(basename($current));
+                            }
+                        } else {
+                            Storage::disk('s3')->delete($current);
+                        }
+                    } else {
+                        Storage::disk('public')->delete($current);
+                    }
+                }
+            } catch (\Exception $e) {
+                // ignore fail
+            }
         }
 
         // 4. Hapus Data (Termasuk data di tabel property_images karena onDelete cascade)
