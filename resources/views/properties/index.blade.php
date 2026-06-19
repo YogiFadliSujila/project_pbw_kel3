@@ -512,6 +512,72 @@
                 closeLogoutModal();
             }
         });
+
+        // Property detail modal: populate and show/hide
+        function openShowModal(item) {
+            const showModal = document.getElementById('show-modal');
+            const showModalContent = document.getElementById('show-modal-content');
+            const img = document.getElementById('show-image');
+            const docLink = document.getElementById('show-document-link');
+            const showCategoryEl = document.getElementById('show-category');
+            const showStatusEl = document.getElementById('show-status');
+            const showLocationEl = document.getElementById('show-location');
+            const showPriceEl = document.getElementById('show-price');
+            const showAreaEl = document.getElementById('show-area');
+            const showAdsCatEl = document.getElementById('show-ads-category');
+            const showDescEl = document.getElementById('show-description');
+            const showSpecsEl = document.getElementById('show-specifications');
+            const showEmailEl = document.getElementById('show-email');
+
+            const placeholder = "{{ asset('images/placeholder.png') }}";
+
+            img.src = item.image_url || placeholder;
+
+            if (item.document_url) {
+                docLink.href = item.document_url;
+                docLink.style.display = '';
+                docLink.setAttribute('target', '_blank');
+                docLink.setAttribute('rel', 'noopener noreferrer');
+                docLink.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                docLink.href = '#';
+                docLink.style.display = 'none';
+            }
+
+            showCategoryEl.textContent = item.ads_category || '-';
+            showStatusEl.textContent = item.status || '-';
+            showLocationEl.textContent = item.location || item.title || '-';
+            showPriceEl.textContent = item.price ? ('IDR ' + new Intl.NumberFormat('id-ID').format(Number(item.price))) : 'IDR 0';
+            showAreaEl.textContent = item.area ? (item.area + ' m2') : '0 m2';
+            showAdsCatEl.textContent = item.ads_category || '-';
+            showDescEl.textContent = item.description || '-';
+            showSpecsEl.textContent = item.specifications || '-';
+            showEmailEl.textContent = (item.user && item.user.email) ? item.user.email : '-';
+
+            showModal.classList.remove('hidden');
+            setTimeout(() => {
+                showModal.classList.remove('opacity-0');
+                showModalContent.classList.remove('scale-95');
+                showModalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeShowModal() {
+            const showModal = document.getElementById('show-modal');
+            const showModalContent = document.getElementById('show-modal-content');
+            const img = document.getElementById('show-image');
+            const docLink = document.getElementById('show-document-link');
+
+            showModal.classList.add('opacity-0');
+            showModalContent.classList.remove('scale-100');
+            showModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                showModal.classList.add('hidden');
+                // reset
+                if (img) img.src = '';
+                if (docLink) { docLink.href = '#'; docLink.style.display = ''; }
+            }, 300);
+        }
     </script>
 </body>
 </html>
