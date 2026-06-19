@@ -109,28 +109,31 @@ class Property extends Model
      */
     public function getDocumentUrlAttribute($value)
     {
-        if (empty($value)) {
+        // Jika kolom document_url kosong, gunakan kolom `document` sebagai sumber
+        $docValue = $value ?: ($this->attributes['document'] ?? null);
+
+        if (empty($docValue)) {
             return null;
         }
 
-        if (Str::startsWith($value, ['http://', 'https://'])) {
-            return $value;
+        if (Str::startsWith($docValue, ['http://', 'https://', 'data:'])) {
+            return $docValue;
         }
 
         // Jika value mengandung prefix storage (mis. '/storage/...'), kembalikan asset lokal terlebih dahulu
-        if (Str::startsWith($value, ['/storage/', 'storage/'])) {
-            return asset(ltrim($value, '/'));
+        if (Str::startsWith($docValue, ['/storage/', 'storage/'])) {
+            return asset(ltrim($docValue, '/'));
         }
 
         try {
             if (config('filesystems.disks.s3')) {
-                return Storage::disk('s3')->url($value);
+                return Storage::disk('s3')->url($docValue);
             }
         } catch (\Exception $e) {
             // ignore
         }
 
-        return asset('storage/' . ltrim($value, '/'));
+        return asset('storage/' . ltrim($docValue, '/'));
     }
 
 }
