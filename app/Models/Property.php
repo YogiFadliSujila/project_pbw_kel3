@@ -87,6 +87,11 @@ class Property extends Model
             return $imageValue;
         }
 
+        // Jika value mengandung prefix storage (mis. '/storage/...'), kembalikan asset yang sesuai terlebih dahulu
+        if (Str::startsWith($imageValue, ['/storage/', 'storage/'])) {
+            return asset(ltrim($imageValue, '/'));
+        }
+
         try {
             // Jika menggunakan disk s3 (Supabase), bangun URL dari path yang disimpan
             if (config('filesystems.disks.s3')) {
@@ -94,11 +99,6 @@ class Property extends Model
             }
         } catch (\Exception $e) {
             // ignore dan jatuhkan ke fallback
-        }
-
-        // Jika value mengandung prefix storage (mis. '/storage/...'), kembalikan asset yang sesuai
-        if (Str::startsWith($imageValue, ['/storage/', 'storage/'])) {
-            return asset(ltrim($imageValue, '/'));
         }
 
         return asset('storage/' . ltrim($imageValue, '/'));
@@ -117,16 +117,17 @@ class Property extends Model
             return $value;
         }
 
+        // Jika value mengandung prefix storage (mis. '/storage/...'), kembalikan asset lokal terlebih dahulu
+        if (Str::startsWith($value, ['/storage/', 'storage/'])) {
+            return asset(ltrim($value, '/'));
+        }
+
         try {
             if (config('filesystems.disks.s3')) {
                 return Storage::disk('s3')->url($value);
             }
         } catch (\Exception $e) {
             // ignore
-        }
-
-        if (Str::startsWith($value, ['/storage/', 'storage/'])) {
-            return asset(ltrim($value, '/'));
         }
 
         return asset('storage/' . ltrim($value, '/'));

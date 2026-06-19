@@ -267,7 +267,10 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($item->document)
-                                        <a href="{{ $item->document_url }}" target="_blank" class="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded bg-white hover:bg-gray-50 w-max transition group">
+                                        @php
+                                            $docHref = $item->document_url ?? asset('storage/' . ltrim($item->document, '/'));
+                                        @endphp
+                                        <a href="{{ $docHref }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded bg-white hover:bg-gray-50 w-max transition group">
                                             <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
                                             <span class="text-xs text-gray-600 group-hover:text-blue-600">Lihat Dokumen</span>
                                         </a>
@@ -293,7 +296,20 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex justify-center items-center gap-3">
-                                        <button onclick="openShowModal({{ json_encode($item) }})" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
+                                        <button onclick="openShowModal(@json([
+                                            'id' => $item->id,
+                                            'title' => $item->title,
+                                            'description' => $item->description,
+                                            'specifications' => $item->specifications,
+                                            'location' => $item->location,
+                                            'price' => $item->price,
+                                            'area' => $item->area,
+                                            'ads_category' => $item->ads_category,
+                                            'status' => $item->status,
+                                            'user' => ['email' => $item->user->email ?? null],
+                                            'image_url' => $item->image_url,
+                                            'document_url' => $item->document_url,
+                                        ]))" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </button>
                                         @if($item->status == 'Sold')
