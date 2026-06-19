@@ -296,20 +296,22 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex justify-center items-center gap-3">
-                                        <button data-item='@json([
-                                            'id' => $item->id,
-                                            'title' => $item->title,
-                                            'description' => $item->description,
-                                            'specifications' => $item->specifications,
-                                            'location' => $item->location,
-                                            'price' => $item->price,
-                                            'area' => $item->area,
-                                            'ads_category' => $item->ads_category,
-                                            'status' => $item->status,
-                                            'user' => ['email' => $item->user->email ?? null],
-                                            'image_url' => $item->image_url,
-                                            'document_url' => $item->document_url,
-                                        ])' onclick="openShowModal(JSON.parse(this.dataset.item))" class="text-gray-500 hover:text-blue-600 transition" title="Lihat Detail">
+                                        <button
+                                            data-id="{{ $item->id }}"
+                                            data-title="{{ e($item->title) }}"
+                                            data-description="{{ e($item->description) }}"
+                                            data-specifications="{{ e($item->specifications) }}"
+                                            data-location="{{ e($item->location) }}"
+                                            data-price="{{ $item->price }}"
+                                            data-area="{{ $item->area }}"
+                                            data-ads-category="{{ e($item->ads_category) }}"
+                                            data-status="{{ e($item->status) }}"
+                                            data-user-email="{{ $item->user->email ?? '' }}"
+                                            data-image-url="{{ $item->image_url }}"
+                                            data-document-url="{{ $item->document_url }}"
+                                            onclick="openShowModalFromEl(this)"
+                                            class="text-gray-500 hover:text-blue-600 transition"
+                                            title="Lihat Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </button>
                                         @if($item->status == 'Sold')
@@ -560,6 +562,27 @@
                 showModalContent.classList.remove('scale-95');
                 showModalContent.classList.add('scale-100');
             }, 10);
+        }
+
+        // Helper: build item object from element data-* attributes
+        function openShowModalFromEl(el) {
+            const dataset = el.dataset || {};
+            const item = {
+                id: dataset.id || null,
+                title: dataset.title || null,
+                description: dataset.description || null,
+                specifications: dataset.specifications || null,
+                location: dataset.location || null,
+                price: dataset.price ? Number(dataset.price) : null,
+                area: dataset.area ? Number(dataset.area) : null,
+                ads_category: dataset.adsCategory || dataset.adsCategory || dataset.adsCategory,
+                status: dataset.status || null,
+                user: { email: dataset.userEmail || null },
+                image_url: dataset.imageUrl || null,
+                document_url: dataset.documentUrl || null,
+            };
+
+            openShowModal(item);
         }
 
         function closeShowModal() {
