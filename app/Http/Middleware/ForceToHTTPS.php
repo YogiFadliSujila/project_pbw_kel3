@@ -16,8 +16,9 @@ class ForceToHTTPS
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (str_ends_with($request->getHost(), 'ngrok-free.dev')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+
+        if (!$request->secure() && app()->environment('production')) {
+            return redirect()->secure($request->getRequestUri());
         }
 
         return $next($request);

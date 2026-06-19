@@ -277,12 +277,8 @@
 
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
                 <a href="{{ route('property.show', $prop->id)}}">
-                <div class="rounded-xl overflow-hidden mb-4 relative h-48 group">
-                    <img
-                        src="{{ $prop->image ? asset(ltrim($prop->image, '/')) : '' }}"
-                        alt="{{ $prop->title }}"
-                        class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500"
-                    >
+                    <div class="rounded-xl overflow-hidden mb-4 relative h-48 group">
+                        <x-image :src="$prop->image_url ?? $prop->image" :alt="$prop->title" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" />
                     
                     {{-- [FASE 4] VISUAL BADGE START --}}
                     @if($prop->priority_level == 1) 

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 // Tambahkan di dalam class Property
 use App\Models\Comment; // Jangan lupa import
 
@@ -65,6 +67,33 @@ class Property extends Model
         $query->when($filters['max_area'] ?? false, function($query, $area) {
             return $query->where('area', '<=', $area);
         });
+    }
+
+    /**
+     * Accessor untuk memastikan `image_url` selalu mengembalikan URL yang dapat diakses.
+     * - Jika nilai kolom sudah berupa URL penuh, kembalikan apa adanya.
+     * - Jika berisi path, coba ambil URL lewat disk `s3` lalu fallback ke `storage` lokal.
+     */
+    public function getImageUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return asset('images/placeholder.png');
+        }
+
+        if (Str::startsWith($value, ['http://', 'https://'])) {
+            return $value;
+        }
+
+        try {
+            // Coba build URL lewat disk s3 (Supabase). Jika gagal, lanjut ke fallback.
+            if (config('filesystems.disks.s3')) {
+                return Storage::disk('s3')->url($value);
+            }
+        } catch (\Exception $e) {
+            // ignore dan jatuhkan ke fallback
+        }
+
+        return asset('storage/' . ltrim($value, '/'));
     }
 
 }

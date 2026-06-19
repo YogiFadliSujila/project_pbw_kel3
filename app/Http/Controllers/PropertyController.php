@@ -89,10 +89,12 @@ class PropertyController extends Controller
 
         // 2. Handle Upload Foto Utama (Thumbnail)
         if ($request->hasFile('image')) {
-            $pathImg = $request->file('image')->store('properties/images', 'public');
-            // Simpan path relatif saja agar lebih bersih di database, atau gunakan '/storage/' sesuai preferensi Anda
-            // Disini saya mengikuti format lama Anda:
-            $validated['image'] = '/storage/' . $pathImg;
+            // 1. Simpan gambar ke Supabase Storage, Laravel otomatis memakai disk 's3'
+            // Gambar akan masuk ke sub-folder 'properties' di dalam bucket Supabase Anda
+            $path = $request->file('image')->store('properties', 's3');
+            // 2. Simpan URL lengkap gambar tersebut ke dalam TiDB Cloud Anda
+            $property->image_url = Storage::disk('s3')->url($path);
+            $property->save();
         }
 
         // 3. Handle Upload Dokumen
