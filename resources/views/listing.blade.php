@@ -209,31 +209,28 @@
         {{ $properties->withQueryString()->links() }}
     </div>
 
-    <footer class="bg-white border-t border-gray-200 py-12 mt-auto">
-        <div class="px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+    <footer class="bg-white border-t border-gray-200 py-8 md:py-12">
+        <div class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6 md:gap-8">
             <div>
                 <h2 class="text-2xl font-extrabold text-[#1E2B58] mb-2">LandHub</h2>
-                <p class="text-xs text-gray-500 max-w-xs mb-8">
+                <p class="text-xs text-gray-500 max-w-xs">
                     Temukan lahan impianmu di LandHub.
-                </p>
-                <p class="text-[10px] text-gray-400">
-                    © LandHub 2025 - by pbw kel 3 <span class="text-red-500">♥</span>
                 </p>
             </div>
 
             <div>
-                <h4 class="font-bold text-sm mb-4">Tentang Kami :</h4>
+                <h4 class="font-bold text-sm mb-4">Tentang Kami</h4>
                 <ul class="space-y-2 text-xs text-gray-500">
-                    <li>Mahasiswa Informatika</li>
-                    <li>Universitas Sebelas April</li>
+                    <li><a href="#" class="hover:text-blue-600">Mahasiswa Informatika</a></li>
+                    <li><a href="#" class="hover:text-blue-600">Universitas Sebelas April</a></li>
                 </ul>
             </div>
 
              <div>
-                <h4 class="font-bold text-sm mb-4">Hubungi Kami :</h4>
+                <h4 class="font-bold text-sm mb-4">Hubungi Kami</h4>
                 <ul class="space-y-2 text-xs text-gray-500">
                     <li>info@landhub.com</li>
-                    <li>+62 81234567890</li>
+                    <li>+62 896760300163</li>
                 </ul>
             </div>
         </div>

@@ -406,23 +406,30 @@
 
     </main>
 
-    <footer class="bg-white border-t border-slate-100 pt-16 pb-8">
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
+    <footer class="bg-white border-t border-gray-200 py-8 md:py-12">
+        <div class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6 md:gap-8">
             <div>
-                <h3 class="text-xl font-bold text-primary mb-4">LandHub</h3>
-                <p class="text-slate-500 mb-1">Temukan Lahan Impianmu</p>
-                <p class="text-slate-500">di LandHub</p>
+                <h2 class="text-2xl font-extrabold text-[#1E2B58] mb-2">LandHub</h2>
+                <p class="text-xs text-gray-500 max-w-xs">
+                    Temukan lahan impianmu di LandHub.
+                </p>
             </div>
+
             <div>
-                <h4 class="font-bold text-slate-900 mb-4">Hubungi Kami :</h4>
-                <ul class="space-y-2 text-slate-500">
-                    <li>info@LandHub.com</li>
-                    <li>+62 812 3456 7899</li>
+                <h4 class="font-bold text-sm mb-4">Tentang Kami</h4>
+                <ul class="space-y-2 text-xs text-gray-500">
+                    <li><a href="#" class="hover:text-blue-600">Mahasiswa Informatika</a></li>
+                    <li><a href="#" class="hover:text-blue-600">Universitas Sebelas April</a></li>
                 </ul>
             </div>
-        </div>
-        <div class="mt-16 text-center text-xs text-slate-400">
-            <p>© LandHub 2025 - by greatest team 3 <span class="text-red-500">❤️</span></p>
+
+             <div>
+                <h4 class="font-bold text-sm mb-4">Hubungi Kami</h4>
+                <ul class="space-y-2 text-xs text-gray-500">
+                    <li>info@landhub.com</li>
+                    <li>+62 89676300163</li>
+                </ul>
+            </div>
         </div>
     </footer>
 

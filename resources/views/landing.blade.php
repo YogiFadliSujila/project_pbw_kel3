@@ -217,7 +217,7 @@
         </script>
     </nav>
 
-    <header class="px-4 sm:px-6 md:px-12 max-w-7xl items-center mx-auto mt-4 md:mt-8 mb-8 md:mb-16 md:h-[60vh]">
+    <header class="px-4 sm:px-6 md:px-12 max-w-7xl items-center mx-auto mt-4 md:mt-8 mb-8 md:mb-16">
         <div class="flex flex-col-reverse md:flex-row justify-between items-center gap-4 md:gap-10">
             <div class="md:w-1/2 pt-6 md:pt-10 text-center md:text-left">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">
@@ -498,9 +498,6 @@
                 <p class="text-xs text-gray-500 max-w-xs">
                     Temukan lahan impianmu di LandHub.
                 </p>
-                <p class="text-[10px] text-gray-400 mt-8">
-                    © LandHub 2025 - by pbw kel 3 <span class="text-red-500">♥</span>
-                </p>
             </div>
 
             <div>
@@ -515,7 +512,7 @@
                 <h4 class="font-bold text-sm mb-4">Hubungi Kami</h4>
                 <ul class="space-y-2 text-xs text-gray-500">
                     <li>info@landhub.com</li>
-                    <li>+62 81234567890</li>
+                    <li>+62 89676300163</li>
                 </ul>
             </div>
         </div>

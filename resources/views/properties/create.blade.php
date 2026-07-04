@@ -292,29 +292,30 @@
         </div>
     </main>
 
-    <footer class="bg-white py-10 px-6 border-t border-gray-200">
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+    <footer class="bg-white border-t border-gray-200 py-8 md:py-12">
+        <div class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6 md:gap-8">
             <div>
-                <h2 class="text-2xl font-bold text-blue-900 mb-3">LandHub</h2>
-                <p class="text-gray-600 text-sm">Temukan Lahan Impianmu <br> di LandHub</p>
+                <h2 class="text-2xl font-extrabold text-[#1E2B58] mb-2">LandHub</h2>
+                <p class="text-xs text-gray-500 max-w-xs">
+                    Temukan lahan impianmu di LandHub.
+                </p>
             </div>
+
             <div>
-                <h3 class="font-bold text-gray-900 mb-3">Tentang Kami :</h3>
-                <ul class="text-gray-600 text-sm space-y-2">
-                    <li>Mahasiswa Informatika</li>
-                    <li>Universitas Sebelas April</li>
+                <h4 class="font-bold text-sm mb-4">Tentang Kami</h4>
+                <ul class="space-y-2 text-xs text-gray-500">
+                    <li><a href="#" class="hover:text-blue-600">Mahasiswa Informatika</a></li>
+                    <li><a href="#" class="hover:text-blue-600">Universitas Sebelas April</a></li>
                 </ul>
             </div>
-            <div>
-                <h3 class="font-bold text-gray-900 mb-3">Hubungi Kami :</h3>
-                <ul class="text-gray-600 text-sm space-y-2">
-                    <li>info@LandHub.com</li>
-                    <li>+62 12 345678999</li>
+
+             <div>
+                <h4 class="font-bold text-sm mb-4">Hubungi Kami</h4>
+                <ul class="space-y-2 text-xs text-gray-500">
+                    <li>info@landhub.com</li>
+                    <li>+62 89676300163</li>
                 </ul>
             </div>
-        </div>
-        <div class="container mx-auto text-center text-gray-500 text-sm mt-10">
-            © LandHub 2025 - by greatest team 3 ❤️
         </div>
     </footer>
 

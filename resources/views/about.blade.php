@@ -181,55 +181,31 @@
 </div>
 </div>
 </section>
-<footer class="bg-white dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-<div>
-<div class="flex items-center gap-2 mb-4">
-<span class="material-icons-round text-primary text-2xl">home_work</span>
-<span class="text-xl font-bold text-slate-900 dark:text-white">LandHub</span>
-</div>
-<p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
-                        Temukan Lahan Impianmu di LandHub.
-                    </p>
-<div class="flex space-x-4">
-<a class="text-slate-400 hover:text-primary transition-colors" href="#"><i class="material-icons-round">facebook</i></a>
-<a class="text-slate-400 hover:text-primary transition-colors" href="#"><i class="material-icons-round">smart_display</i></a> 
-<a class="text-slate-400 hover:text-primary transition-colors" href="#"><i class="material-icons-round">camera_alt</i></a> 
-</div>
-</div>
-<div>
-<h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Tentang Kami</h4>
-<ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-<li>Mahasiswa Informatika</li>
-<li>Universitas Sebelas April</li>
-<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-</ul>
-</div>
-<div>
-<h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Hubungi Kami</h4>
-<ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-<li class="flex items-center gap-2">
-<span class="material-icons-round text-xs">email</span>
-                            info@LandHub.com
-                        </li>
-<li class="flex items-center gap-2">
-<span class="material-icons-round text-xs">phone</span>
-                            +62 12 3456 78999
-                        </li>
-<li class="flex items-center gap-2">
-<span class="material-icons-round text-xs">location_on</span>
-                            Solo, Indonesia
-                        </li>
-</ul>
-</div>
-</div>
-<div class="border-t border-slate-100 dark:border-slate-800 pt-8 text-center">
-<p class="text-sm text-slate-500 dark:text-slate-500">
-                    © LandHub 2025 - by greatest team 3 <span class="text-red-500">♥</span>
-</p>
-</div>
-</div>
+<footer class="bg-white border-t border-gray-200 py-8 md:py-12">
+    <div class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6 md:gap-8">
+        <div>
+            <h2 class="text-2xl font-extrabold text-[#1E2B58] mb-2">LandHub</h2>
+            <p class="text-xs text-gray-500 max-w-xs">
+                Temukan lahan impianmu di LandHub.
+            </p>
+        </div>
+
+        <div>
+            <h4 class="font-bold text-sm mb-4">Tentang Kami</h4>
+            <ul class="space-y-2 text-xs text-gray-500">
+                <li><a href="#" class="hover:text-blue-600">Mahasiswa Informatika</a></li>
+                <li><a href="#" class="hover:text-blue-600">Universitas Sebelas April</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-bold text-sm mb-4">Hubungi Kami</h4>
+            <ul class="space-y-2 text-xs text-gray-500">
+                <li>info@landhub.com</li>
+                <li>+62 89676300163</li>
+            </ul>
+        </div>
+    </div>
 </footer>
 
 </body></html>
