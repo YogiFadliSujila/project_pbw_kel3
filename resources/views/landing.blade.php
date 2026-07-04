@@ -10,24 +10,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        html { scroll-behavior: smooth; }
+        img, svg { max-width: 100%; height: auto; }
         /* Custom Scrollbar hide */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none;  scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#F8F9FE] text-[#1E2B58]">
+<body class="bg-[#F8F9FE] text-[#1E2B58] overflow-x-hidden">
 
-    <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
-        <div class="text-2xl font-extrabold tracking-tight">
-            LandHub
-        </div>
+    <nav class="w-full py-4 px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
+        <div class="flex items-center justify-between gap-3">
+            <a href="{{ route('landing') }}" class="text-2xl font-extrabold tracking-tight">LandHub</a>
 
-        <div class="flex items-center gap-6">
-            <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
-            <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
-            
-            @if(Route::has('login'))
+            <button type="button" id="mobileMenuButton" onclick="toggleMobileMenu()" class="lg:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-blue-300 hover:text-blue-600" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobileNavMenu">
+                <span class="material-icons">menu</span>
+            </button>
+
+            <div class="hidden lg:flex items-center gap-6">
+                <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
+                <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
+                
+                @if(Route::has('login'))
                 @auth
                     <div class="relative">
                         <button onclick="toggleProfilePopup()" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold border-2 border-transparent hover:border-blue-300 transition focus:outline-none">
@@ -114,6 +119,16 @@
             @endif
 
             <script>
+                function toggleMobileMenu() {
+                    const menu = document.getElementById('mobileNavMenu');
+                    const button = document.getElementById('mobileMenuButton');
+                    if (!menu || !button) return;
+
+                    const isHidden = menu.classList.contains('hidden');
+                    menu.classList.toggle('hidden');
+                    button.setAttribute('aria-expanded', String(isHidden));
+                }
+
                 function toggleProfilePopup() {
                     const popup = document.getElementById('profilePopup');
                     if (popup.classList.contains('hidden')) {
@@ -176,23 +191,43 @@
                 });
             </script>
         </div>
+
+        <div id="mobileNavMenu" class="hidden lg:hidden mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
+            <div class="flex flex-col gap-2">
+                <a href="{{ route('landing') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">Home</a>
+                <a href="{{ route('about') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">About Us</a>
+                @if(Route::has('login'))
+                    @auth
+                        <a href="{{ route('profil') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">Profil</a>
+                        <a href="{{ route('chat.index') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">Pesan</a>
+                        <a href="{{ route('listing.index') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">Daftar Lahan</a>
+                        <form method="POST" action="{{ route('logout') }}" class="pt-1">
+                            @csrf
+                            <button type="submit" class="min-h-[44px] w-full rounded-xl bg-red-50 px-3 py-2 text-left font-semibold text-red-600">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="min-h-[44px] rounded-xl px-3 py-2 font-semibold text-blue-700 hover:bg-blue-50">Masuk</a>
+                    @endauth
+                @endif
+            </div>
+        </div>
     </nav>
 
-    <header class="px-6 md:px-12 max-w-7xl items-center mx-auto mt-8 mb-16 h-[60vh]">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="md:w-1/2 pt-10">
-                <h1 class="text-7xl md:text-5xl font-extrabold leading-tight mb-4">
+    <header class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl mx-auto mt-6 sm:mt-8 mb-12 sm:mb-16 lg:mb-20">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8 lg:gap-10">
+            <div class="w-full md:w-1/2 pt-4 sm:pt-6 lg:pt-10 text-center md:text-left">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight mb-4 sm:mb-5">
                     Temukan Lahan <br> Impianmu <br> di LandHub
                 </h1>
-                <p class="text-base text-gray-500 mb-8 max-w-md leading-relaxed">
+                <p class="text-sm sm:text-base text-gray-500 mb-6 sm:mb-8 max-w-md mx-auto md:mx-0 leading-relaxed">
                     Platform Digital Penjualan dan Pencarian Lahan yang mempertemukan penjual dan pembeli lahan secara transparan, mudah, dan aman.
                 </p>
-                <div class="gap-4 flex">
-                    <a href="{{ route('listing.index') }}" class="flex px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+                    <a href="{{ route('listing.index') }}" class="flex min-h-[44px] items-center justify-center px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
                         <span class="mr-3">Temukan Lahan</span>
-                        <Span>→</Span>
+                        <span>→</span>
                     </a>
-                    <a href="{{ route('properties.create') }}" class="flex px-6 py-3 border-2 border-[#1E2B58] text-[#1E2B58] font-bold rounded-lg hover:bg-[#1E2B58] hover:text-white transition">
+                    <a href="{{ route('properties.create') }}" class="flex min-h-[44px] items-center justify-center px-6 py-3 border-2 border-[#1E2B58] text-[#1E2B58] font-bold rounded-lg hover:bg-[#1E2B58] hover:text-white transition">
                         <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                         </svg>
@@ -201,8 +236,8 @@
                 </div>
             </div>
 
-            <div class="md:w-1/2 flex justify-end pt-10">
-                 <svg width="375" height="270" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="w-full md:w-1/2 flex justify-center md:justify-end pt-4 sm:pt-6 lg:pt-10">
+                 <svg class="w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[400px] h-auto" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
                     <text x="145" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
@@ -248,20 +283,19 @@
         </section>
     </section>
 
-    <section class="px-6 md:px-12 max-w-4xl mx-auto mb-16">
-        <form action="{{ route('listing.index') }}" method="GET" class="relative">
-            
+    <section class="px-4 sm:px-6 md:px-8 lg:px-12 max-w-4xl mx-auto mb-16">
+        <form action="{{ route('listing.index') }}" method="GET" class="relative w-full">
             <input 
                 type="text" 
                 name="search" 
                 value="{{ request('search') }}"
                 placeholder="Cari Lahan Impianmu..." 
-                class="w-full py-4 pl-8 pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
+                class="w-full min-h-[48px] py-3 sm:py-4 pl-4 sm:pl-8 pr-14 sm:pr-16 rounded-full bg-[#EAF0F6] border-none focus:ring-2 focus:ring-blue-300 shadow-sm text-gray-700"
             >
             
-            <button type="button" onclick="toggleFilterModal()" class="absolute right-6 transform translate-y-4 text-gray-500 hover:text-gray-800">
-                <span class="material-icons">tune</span> </button>
-            </button>            
+            <button type="button" onclick="toggleFilterModal()" class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-gray-500 hover:text-gray-800">
+                <span class="material-icons">tune</span>
+            </button>
         </form>
     </section>
     <x-filter-modal />
@@ -272,13 +306,13 @@
             <p class="text-base text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             @foreach($properties as $prop)
 
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
-                <a href="{{ route('property.show', $prop->id)}}">
+            <div class="flex h-full flex-col bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
+                <a href="{{ route('property.show', $prop->id)}}" class="flex h-full flex-col">
                     <div class="rounded-xl overflow-hidden mb-4 relative h-48 group">
-                        <x-image :src="$prop->image_url ?? $prop->image" :alt="$prop->title" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" />
+                        <x-image :src="$prop->image_url ?? $prop->image" :alt="$prop->title" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" loading="lazy" />
                     
                     {{-- [FASE 4] VISUAL BADGE START --}}
                     @if($prop->priority_level == 1) 
@@ -303,7 +337,7 @@
                     <div class="absolute bottom-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded shadow-md uppercase">For Sale</div>
                 </div>
                 
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-start gap-3">
                     <div>
                         @php
                             $price = $prop->price;
@@ -321,9 +355,9 @@
                         <p class="text-xs font-bold text-gray-600">Luas: {{ $prop->area }} m²</p>
                     </div>
                 </div>
-                <p class="text-xs font-bold text-gray-800 truncate max-w-[150px]">{{ $prop->description }}</p>
-                <p class="text-xs text-gray-400 truncate">{{ $prop->location }}</p>
-                <a href="{{ route('property.show', $prop->id) }}" class="text-xs font-bold text-blue-600 hover:underline">Detail Lahan</a>
+                <p class="mt-2 text-xs font-bold text-gray-800 break-words">{{ $prop->description }}</p>
+                <p class="text-xs text-gray-400 break-words">{{ $prop->location }}</p>
+                <a href="{{ route('property.show', $prop->id) }}" class="mt-3 inline-flex min-h-[44px] items-center text-xs font-bold text-blue-600 hover:underline">Detail Lahan</a>
             </div>
             @endforeach
         </div>
@@ -341,45 +375,45 @@
             <p class="text-base text-gray-500">Mengapa LandHub dan bagaimana Platformnya</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354303.jpg?t=st=1768038912~exp=1768042512~hmac=89abd24cbb55fd8802403bef707ec09b22acea6479748a0cc04f597faaa79833&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img loading="lazy" src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354303.jpg?t=st=1768038912~exp=1768042512~hmac=89abd24cbb55fd8802403bef707ec09b22acea6479748a0cc04f597faaa79833&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur simulasi lahan dan property</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="https://img.freepik.com/vektor-gratis/ilustrasi-perwakilan-penjualan-isometrik_52683-83013.jpg?t=st=1768039514~exp=1768043114~hmac=848116e4dcdb0cbfbcea6e36f0c623a79e972eef2d9125863409f3970498cc1b&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img loading="lazy" src="https://img.freepik.com/vektor-gratis/ilustrasi-perwakilan-penjualan-isometrik_52683-83013.jpg?t=st=1768039514~exp=1768043114~hmac=848116e4dcdb0cbfbcea6e36f0c623a79e972eef2d9125863409f3970498cc1b&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Penjual dan pencari lahan bernegosiasi tanpa tatap muka</p>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                     <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354298.jpg?t=st=1768039711~exp=1768043311~hmac=52e4ccc7a52a61c7005198572293612a3ac71607662bd6b2d8d3e8a8198e9b13&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                     <img loading="lazy" src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354298.jpg?t=st=1768039711~exp=1768043311~hmac=52e4ccc7a52a61c7005198572293612a3ac71607662bd6b2d8d3e8a8198e9b13&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menjamin legalitas lahan dan property</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
-                    <img src="https://img.freepik.com/free-psd/3d-rendering-banking-sales-background_23-2151052659.jpg?t=st=1768041010~exp=1768044610~hmac=7f4d9e82ea178b5a3d75454383102a9a6c307537031f9e13d84a5c63f03ad86e&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img loading="lazy" src="https://img.freepik.com/free-psd/3d-rendering-banking-sales-background_23-2151052659.jpg?t=st=1768041010~exp=1768044610~hmac=7f4d9e82ea178b5a3d75454383102a9a6c307537031f9e13d84a5c63f03ad86e&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur transaksi secara online</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div>
-                    <img src="https://img.freepik.com/psd-gratis/ilustrasi-3d-untuk-penjualan-real-estat_23-2151354301.jpg?t=st=1768039986~exp=1768043586~hmac=1d404c3ef8349b003d0d0dcee9c1ec9dbe975ca5e9c211be018360e18a4dbdd2&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img loading="lazy" src="https://img.freepik.com/psd-gratis/ilustrasi-3d-untuk-penjualan-real-estat_23-2151354301.jpg?t=st=1768039986~exp=1768043586~hmac=1d404c3ef8349b003d0d0dcee9c1ec9dbe975ca5e9c211be018360e18a4dbdd2&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Menyediakan fitur pasang iklan lahan agar cepat terjual</p>
             </div>
 
              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div>
-                    <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354292.jpg?t=st=1768040625~exp=1768044225~hmac=c75e56109424f9e96449fc8ed1e87647c13cfc7b9fee9a21d23d6fe31577654d&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
+                    <img loading="lazy" src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354292.jpg?t=st=1768040625~exp=1768044225~hmac=c75e56109424f9e96449fc8ed1e87647c13cfc7b9fee9a21d23d6fe31577654d&w=1480" class="w-full h-48 object-cover rounded-xl mb-4" alt="Icon">
                 </div>
                 <p class="text-sm text-gray-600 font-medium px-4">Untuk meyakinkan penjual kami terintegrasi dengan Google Maps</p>
             </div>
