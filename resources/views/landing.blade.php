@@ -241,7 +241,7 @@
             </div>
 
             <div class="flex justify-center md:justify-end w-full md:w-1/2 pt-4 md:pt-10">
-                 <svg class="w-48 h-auto sm:w-56 md:w-[375px] md:h-[270px]" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <svg class="w-56 h-auto sm:w-64 md:w-[375px] md:h-[270px]" viewBox="0 28 240 125" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
                     <text x="145" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
