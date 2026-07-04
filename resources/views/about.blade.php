@@ -58,7 +58,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 <div class="flex justify-between items-center h-20">
 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
-<span class="material-icons-round text-primary text-4xl group-hover:scale-110 transition-transform">home_work</span>
+
 <span class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary transition-colors">LandHub</span>
 </div>
 <div class="hidden md:flex items-center space-x-8">
@@ -87,14 +87,6 @@
 <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
                         LandHub merupakan sebuah platform online yang mempertemukan penjual dan pembeli lahan secara transparan, mudah, dan aman. Aplikasi ini memanfaatkan teknologi digital dan peta interaktif untuk membantu pengguna menemukan lahan yang sesuai dengan kebutuhan mereka baik untuk perumahan, investasi, maupun usaha.
                     </p>
-<div class="flex flex-wrap gap-4 pt-4">
-<button class="px-8 py-3 bg-primary text-white font-semibold rounded-full shadow-lg shadow-primary/30 hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300">
-                            Learn More
-                        </button>
-<button class="px-8 py-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-semibold rounded-full hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition-all duration-300 flex items-center gap-2">
-<span class="material-icons-round text-sm">play_arrow</span> Watch Video
-                        </button>
-</div>
 </div>
 <div class="relative flex justify-center items-center lg:justify-end">
 <div class="absolute w-96 h-96 bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
