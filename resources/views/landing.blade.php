@@ -218,7 +218,7 @@
     </nav>
 
     <header class="px-4 sm:px-6 md:px-12 max-w-7xl items-center mx-auto mt-4 md:mt-8 mb-8 md:mb-16 md:h-[60vh]">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-10">
+        <div class="flex flex-col-reverse md:flex-row justify-between items-center gap-4 md:gap-10">
             <div class="md:w-1/2 pt-6 md:pt-10 text-center md:text-left">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">
                     Temukan Lahan <br> Impianmu <br> di LandHub
@@ -240,8 +240,8 @@
                 </div>
             </div>
 
-            <div class="hidden md:flex md:w-1/2 justify-end pt-10">
-                 <svg width="375" height="270" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex justify-center md:justify-end w-full md:w-1/2 pt-4 md:pt-10">
+                 <svg class="w-48 h-auto sm:w-56 md:w-[375px] md:h-[270px]" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
                     <text x="145" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
