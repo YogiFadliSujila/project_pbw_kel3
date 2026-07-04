@@ -14,16 +14,26 @@
         /* Custom Scrollbar hide */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none;  scrollbar-width: none; }
+        /* Mobile menu transition */
+        #mobileMenu { max-height: 0; overflow: hidden; transition: max-height 0.35s ease-in-out; }
+        #mobileMenu.open { max-height: 600px; }
     </style>
 </head>
 <body class="bg-[#F8F9FE] text-[#1E2B58]">
 
-    <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
+    <nav class="w-full py-4 md:py-6 px-4 sm:px-6 md:px-12 flex flex-wrap justify-between items-center max-w-7xl mx-auto relative">
         <div class="text-2xl font-extrabold tracking-tight">
             LandHub
         </div>
 
-        <div class="flex items-center gap-6">
+        {{-- Hamburger Button (mobile only) --}}
+        <button id="hamburgerBtn" onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition focus:outline-none" aria-label="Menu">
+            <svg id="hamburgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        {{-- Desktop nav links --}}
+        <div class="hidden md:flex items-center gap-6">
             <a href="{{route('landing')}}" class="font-medium hover:text-blue-600 transition">Home</a>
             <a href="{{ route('about') }}" class="font-medium hover:text-blue-600 transition">About Us</a>
             
@@ -112,88 +122,117 @@
                     </a>
                 @endauth
             @endif
-
-            <script>
-                function toggleProfilePopup() {
-                    const popup = document.getElementById('profilePopup');
-                    if (popup.classList.contains('hidden')) {
-                        popup.classList.remove('hidden');
-                        popup.classList.add('opacity-100', 'translate-y-0');
-                        popup.classList.remove('opacity-0', '-translate-y-2');
-                    } else {
-                        popup.classList.add('hidden');
-                    }
-                }
-                document.addEventListener('click', function(event) {
-                    const popup = document.getElementById('profilePopup');
-                    const trigger = document.querySelector('button[onclick="toggleProfilePopup()"]');
-                    const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
-                    if (!isClickInside && popup && !popup.classList.contains('hidden')) {
-                        popup.classList.add('hidden');
-                    }
-                });
-                // Notification dropdown toggle
-                document.addEventListener('DOMContentLoaded', function() {
-                    const btn = document.getElementById('notifToggle');
-                    const dd = document.getElementById('notifDropdown');
-                    const markReadUrl = "{{ route('notifications.markRead') }}";
-
-                    if (btn && dd) {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-
-                            const wasHidden = dd.classList.contains('hidden');
-                            dd.classList.toggle('hidden');
-
-                            // Jika dropdown baru dibuka, tandai notifikasi sebagai dibaca
-                            if (wasHidden && !dd.classList.contains('hidden')) {
-                                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                                fetch(markReadUrl, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json',
-                                        'X-CSRF-TOKEN': token
-                                    },
-                                    body: JSON.stringify({})
-                                })
-                                .then(res => res.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        document.querySelectorAll('.notif-count').forEach(el => el.remove());
-                                    }
-                                })
-                                .catch(() => {
-                                    // silent fail
-                                });
-                            }
-                        });
-
-                        document.addEventListener('click', function(ev) {
-                            if (!dd.classList.contains('hidden')) dd.classList.add('hidden');
-                        });
-                    }
-                });
-            </script>
         </div>
+
+        {{-- Mobile Menu Drawer --}}
+        <div id="mobileMenu" class="md:hidden w-full basis-full">
+            <div class="flex flex-col gap-2 py-4 border-t border-gray-200 mt-3">
+                <a href="{{route('landing')}}" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition">Home</a>
+                <a href="{{ route('about') }}" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition">About Us</a>
+
+                @if(Route::has('login'))
+                    @auth
+                        <a href="{{route('profil')}}" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 transition">Profil</a>
+                        <a href="{{ route('chat.index') }}" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 transition">Pesan</a>
+                        <a href="#Rekomendasi" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 transition">Rekomendasi Lahan</a>
+                        <a href="{{ route('profil.edit') }}" class="font-medium py-3 px-4 rounded-xl hover:bg-blue-50 transition">Pengaturan</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left font-medium py-3 px-4 rounded-xl text-red-600 hover:bg-red-50 transition">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="font-medium py-3 px-4 rounded-xl bg-[#1E2B58] text-white text-center hover:bg-blue-900 transition">Login</a>
+                    @endauth
+                @endif
+            </div>
+        </div>
+
+        <script>
+            function toggleMobileMenu() {
+                const menu = document.getElementById('mobileMenu');
+                const hamburger = document.getElementById('hamburgerIcon');
+                const close = document.getElementById('closeIcon');
+                menu.classList.toggle('open');
+                hamburger.classList.toggle('hidden');
+                close.classList.toggle('hidden');
+            }
+
+            function toggleProfilePopup() {
+                const popup = document.getElementById('profilePopup');
+                if (popup.classList.contains('hidden')) {
+                    popup.classList.remove('hidden');
+                    popup.classList.add('opacity-100', 'translate-y-0');
+                    popup.classList.remove('opacity-0', '-translate-y-2');
+                } else {
+                    popup.classList.add('hidden');
+                }
+            }
+            document.addEventListener('click', function(event) {
+                const popup = document.getElementById('profilePopup');
+                const trigger = document.querySelector('button[onclick="toggleProfilePopup()"]');
+                const isClickInside = popup && (popup.contains(event.target) || (trigger && trigger.contains(event.target)));
+                if (!isClickInside && popup && !popup.classList.contains('hidden')) {
+                    popup.classList.add('hidden');
+                }
+            });
+            // Notification dropdown toggle
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('notifToggle');
+                const dd = document.getElementById('notifDropdown');
+                const markReadUrl = "{{ route('notifications.markRead') }}";
+
+                if (btn && dd) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+
+                        const wasHidden = dd.classList.contains('hidden');
+                        dd.classList.toggle('hidden');
+
+                        if (wasHidden && !dd.classList.contains('hidden')) {
+                            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                            fetch(markReadUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': token
+                                },
+                                body: JSON.stringify({})
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.querySelectorAll('.notif-count').forEach(el => el.remove());
+                                }
+                            })
+                            .catch(() => {});
+                        }
+                    });
+
+                    document.addEventListener('click', function(ev) {
+                        if (!dd.classList.contains('hidden')) dd.classList.add('hidden');
+                    });
+                }
+            });
+        </script>
     </nav>
 
-    <header class="px-6 md:px-12 max-w-7xl items-center mx-auto mt-8 mb-16 h-[60vh]">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="md:w-1/2 pt-10">
-                <h1 class="text-7xl md:text-5xl font-extrabold leading-tight mb-4">
+    <header class="px-4 sm:px-6 md:px-12 max-w-7xl items-center mx-auto mt-4 md:mt-8 mb-8 md:mb-16 md:h-[60vh]">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-10">
+            <div class="md:w-1/2 pt-6 md:pt-10 text-center md:text-left">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4">
                     Temukan Lahan <br> Impianmu <br> di LandHub
                 </h1>
-                <p class="text-base text-gray-500 mb-8 max-w-md leading-relaxed">
+                <p class="text-sm sm:text-base text-gray-500 mb-6 md:mb-8 max-w-md mx-auto md:mx-0 leading-relaxed">
                     Platform Digital Penjualan dan Pencarian Lahan yang mempertemukan penjual dan pembeli lahan secara transparan, mudah, dan aman.
                 </p>
-                <div class="gap-4 flex">
-                    <a href="{{ route('listing.index') }}" class="flex px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
+                <div class="gap-3 sm:gap-4 flex flex-col sm:flex-row justify-center md:justify-start">
+                    <a href="{{ route('listing.index') }}" class="flex items-center justify-center px-5 sm:px-6 py-3 bg-[#1E2B58] text-white font-bold rounded-lg shadow-lg hover:bg-blue-900 transition">
                         <span class="mr-3">Temukan Lahan</span>
-                        <Span>→</Span>
+                        <span>→</span>
                     </a>
-                    <a href="{{ route('properties.create') }}" class="flex px-6 py-3 border-2 border-[#1E2B58] text-[#1E2B58] font-bold rounded-lg hover:bg-[#1E2B58] hover:text-white transition">
-                        <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <a href="{{ route('properties.create') }}" class="flex items-center justify-center px-5 sm:px-6 py-3 border-2 border-[#1E2B58] text-[#1E2B58] font-bold rounded-lg hover:bg-[#1E2B58] hover:text-white transition">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                         </svg>
                         <span>Pasang Iklan</span>
@@ -201,7 +240,7 @@
                 </div>
             </div>
 
-            <div class="md:w-1/2 flex justify-end pt-10">
+            <div class="hidden md:flex md:w-1/2 justify-end pt-10">
                  <svg width="375" height="270" viewBox="16 50 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
@@ -211,7 +250,7 @@
         </div>
     </header>
 
-    <section class="px-6 md:px-12 max-w-7xl mx-auto mb-16 text-center">
+    <section class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mb-10 md:mb-16 text-center">
         <h3 class="font-bold text-xl mb-1">Promo Periode 2025</h3>
         <p class="text-base text-gray-500 mb-6">Lahan terbaik dengan harga terjangkau siap jadi milik kamu</p>
         
@@ -248,7 +287,7 @@
         </section>
     </section>
 
-    <section class="px-6 md:px-12 max-w-4xl mx-auto mb-16">
+    <section class="px-4 sm:px-6 md:px-12 max-w-4xl mx-auto mb-10 md:mb-16">
         <form action="{{ route('listing.index') }}" method="GET" class="relative">
             
             <input 
@@ -266,13 +305,13 @@
     </section>
     <x-filter-modal />
 
-    <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
+    <section class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mb-12 md:mb-20">
         <div class="text-center mb-10">
             <h3 id = "Rekomendasi" class="font-bold text-xl mb-1">Rekomendasi</h3>
             <p class="text-base text-gray-500">Lahan terbaik hanya untuk kamu, segera amankan</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             @foreach($properties as $prop)
 
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition">
@@ -335,13 +374,13 @@
         </div>
     </section>
 
-    <section class="px-6 md:px-12 max-w-7xl mx-auto mb-20">
+    <section class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mb-12 md:mb-20">
         <div class="text-center mb-10">
             <h3 class="font-bold text-xl mb-1">Kelebihan</h3>
             <p class="text-base text-gray-500">Mengapa LandHub dan bagaimana Platformnya</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
                 <div >
                     <img src="https://img.freepik.com/free-psd/3d-illustration-real-estate-sales_23-2151354303.jpg?t=st=1768038912~exp=1768042512~hmac=89abd24cbb55fd8802403bef707ec09b22acea6479748a0cc04f597faaa79833&w=1480" class="w-full h-full opacity-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden" alt="Icon">
@@ -386,7 +425,7 @@
         </div>
     </section>
 
-    <section class="px-6 md:px-12 max-w-7xl mx-auto mb-24">
+    <section class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mb-12 md:mb-24">
         <div class="text-center mb-10">
             <h3 class="font-bold text-lg mb-1">Ulasan</h3>
             <p class="text-sm text-gray-500">Kata mereka tentang LandHub</p>
@@ -434,7 +473,7 @@
                 </form>
             </div>
 
-            <div id="reviewsList" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="reviewsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 @foreach($reviews as $rv)
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
                     <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-sm font-bold text-gray-700">{{ strtoupper(substr($rv->user?->name ?? $rv->guest_name ?? 'G',0,1)) }}</div>
@@ -452,8 +491,8 @@
         </div>
     </section>
 
-    <footer class="bg-white border-t border-gray-200 py-12">
-        <div class="px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+    <footer class="bg-white border-t border-gray-200 py-8 md:py-12">
+        <div class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-start text-center md:text-left gap-6 md:gap-8">
             <div>
                 <h2 class="text-2xl font-extrabold text-[#1E2B58] mb-2">LandHub</h2>
                 <p class="text-xs text-gray-500 max-w-xs">
@@ -492,7 +531,7 @@
                 <span class="material-icons">close</span>
             </button>
 
-            <div class="w-full md:w-1/2 h-64 md:h-auto relative">
+            <div class="w-full md:w-1/2 h-48 sm:h-64 md:h-auto relative">
                 <x-image :src="$popupProperty->image_url ?? $popupProperty->image" class="w-full h-full object-cover" />
                 <div class="absolute top-4 left-4 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded shadow-md">
                     REKOMENDASI HARI INI
