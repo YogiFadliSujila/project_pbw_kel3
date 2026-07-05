@@ -161,7 +161,7 @@ function toggleMobileMenu() {
 <div class="flex flex-wrap justify-center gap-8">
 <div class="group bg-white dark:bg-surface-dark rounded-2xl shadow-soft hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 border border-slate-100 dark:border-slate-800 p-8 w-full sm:w-80 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
 <div class="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-blue-50 dark:border-slate-700 group-hover:border-primary transition-colors">
-<img alt="Yogi Fadli Sujila" class="w-full h-full object-cover" src="https://media.canva.com/v2/image-resize/format:JPG/height:275/quality:92/uri:ifs%3A%2F%2FM%2F4238d43a-2f95-4cb6-a6b3-eca003292dc7/watermark:F/width:275?csig=AAAAAAAAAAAAAAAAAAAAADe7qFhhUo13YeHHoGQGM1E67RbYzFiPZJWPzpIP0T7t&exp=1783207282&osig=AAAAAAAAAAAAAAAAAAAAAEqPiMn_6xym_NUfUNjtooFlP2aGihusnd6XSzfLE-iJ&signer=media-rpc&x-canva-quality=screen"/>
+<img alt="Yogi Fadli Sujila" class="w-full h-full object-cover" src="https://i.imgur.com/5w8dRGq.jpg"/>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Yogi Fadli Sujila</h3>
 <p class="text-xs font-bold tracking-wider text-primary uppercase mb-4">Chief Executive Officer</p>
@@ -172,7 +172,7 @@ function toggleMobileMenu() {
 </div>
 <div class="group bg-white dark:bg-surface-dark rounded-2xl shadow-soft hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 border border-slate-100 dark:border-slate-800 p-8 w-full sm:w-80 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
 <div class="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-blue-50 dark:border-slate-700 group-hover:border-primary transition-colors">
-<img alt="Adis Supriadi" class="w-full h-full object-cover" src="https://media.canva.com/v2/image-resize/format:JPG/height:290/quality:92/uri:ifs%3A%2F%2FM%2Fbca70b00-ca0d-4486-945a-469eadf19496/watermark:F/width:221?csig=AAAAAAAAAAAAAAAAAAAAAHiPW-1E4fNPpi3t1ciRK7_JBDW3Ih9Tt5iVdUGBW_xV&exp=1783206681&osig=AAAAAAAAAAAAAAAAAAAAAMEK2Sn14z4qWYsxmcRSuCBcPZY943cA2l74fvbHwVIr&signer=media-rpc&x-canva-quality=screen"/>
+<img alt="Adis Supriadi" class="w-full h-full object-cover" src="https://i.imgur.com/qJF8WgI.jpg"/>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Adis Supriadi</h3>
 <p class="text-xs font-bold tracking-wider text-primary uppercase mb-4">Chief Technology Officer</p>
@@ -185,7 +185,7 @@ function toggleMobileMenu() {
 <div class="flex flex-wrap justify-center gap-8">
 <div class="group bg-white dark:bg-surface-dark rounded-2xl shadow-soft hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 border border-slate-100 dark:border-slate-800 p-8 w-full sm:w-80 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
 <div class="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-blue-50 dark:border-slate-700 group-hover:border-primary transition-colors">
-<img alt="Muhammad Syakar Abdillah" class="w-full h-full object-cover" src="https://media.canva.com/v2/image-resize/format:JPG/height:800/quality:92/uri:ifs%3A%2F%2FM%2Fa06ffa96-c3f8-4339-8490-97b0b7398142/watermark:F/width:600?csig=AAAAAAAAAAAAAAAAAAAAAOdONCo6j0gc8yIAVJFmh4QJNwVNlyciQi8elLORQXj_&exp=1783208403&osig=AAAAAAAAAAAAAAAAAAAAAMznIn1yv9RGuLZdZHotbkrs0RBhQlWwc8uXR38wTdKz&signer=media-rpc&x-canva-quality=screen"/>
+<img alt="Muhammad Syakar Abdillah" class="w-full h-full object-cover" src="https://i.imgur.com/zKlqQFP.jpg"/>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Muhammad Syakar A.</h3>
 <p class="text-xs font-bold tracking-wider text-primary uppercase mb-4">Chief Financial Officer</p>
@@ -196,7 +196,7 @@ function toggleMobileMenu() {
 </div>
 <div class="group bg-white dark:bg-surface-dark rounded-2xl shadow-soft hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 border border-slate-100 dark:border-slate-800 p-8 w-full sm:w-80 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
 <div class="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-blue-50 dark:border-slate-700 group-hover:border-primary transition-colors">
-<img alt="Dini Andriati" class="w-full h-full object-cover" src="https://media.canva.com/v2/image-resize/format:JPG/height:325/quality:92/uri:ifs%3A%2F%2FM%2Ffd697ae5-9f3a-4a35-84b0-5cc73b97548b/watermark:F/width:244?csig=AAAAAAAAAAAAAAAAAAAAAHdM0iNBvjrmbjaFy50_nL2Wffn5NUvUXnfO0LVZpfXL&exp=1783207064&osig=AAAAAAAAAAAAAAAAAAAAAOMlfX0rwNGJ4obONp8FNahNhaYlBZeQqkBtdI_FMBjZ&signer=media-rpc&x-canva-quality=screen"/>
+<img alt="Dini Andriati" class="w-full h-full object-cover" src="https://i.imgur.com/Vyolpbp.jpg"/>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Dini Andriati</h3>
 <p class="text-xs font-bold tracking-wider text-primary uppercase mb-4">Chief Market Officer</p>
@@ -207,7 +207,7 @@ function toggleMobileMenu() {
 </div>
 <div class="group bg-white dark:bg-surface-dark rounded-2xl shadow-soft hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 border border-slate-100 dark:border-slate-800 p-8 w-full sm:w-80 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2">
 <div class="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-blue-50 dark:border-slate-700 group-hover:border-primary transition-colors">
-<img alt="Rama Maulana Nurrahman" class="w-full h-full object-cover" src="https://media.canva.com/v2/image-resize/format:JPG/height:800/quality:92/uri:ifs%3A%2F%2FM%2F92086f1d-4cf2-4387-9b19-70803ea09d52/watermark:F/width:600?csig=AAAAAAAAAAAAAAAAAAAAABeJORh2Luf2vcXkut0QxTIxCHlDFJXNGS45umm8tav9&exp=1783208442&osig=AAAAAAAAAAAAAAAAAAAAAGU_g9jkZmYJhzSw5NW757aBnkgCKX2tfb0zBQ5z7JmK&signer=media-rpc&x-canva-quality=screen"/>
+<img alt="Rama Maulana Nurrahman" class="w-full h-full object-cover" src="https://i.imgur.com/6QjCDyz.jpg"/>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Rama Maulana N.</h3>
 <p class="text-xs font-bold tracking-wider text-primary uppercase mb-4">Chief Operating Officer</p>
