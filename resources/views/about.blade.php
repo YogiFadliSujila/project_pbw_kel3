@@ -51,30 +51,75 @@
         .dark ::-webkit-scrollbar-thumb {
             background-color: #334155;
         }
+        /* Mobile menu transition */
+        #mobileMenu { max-height: 0; overflow: hidden; transition: max-height 0.35s ease-in-out; }
+        #mobileMenu.open { max-height: 600px; }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-sans antialiased transition-colors duration-300">
 <nav class="sticky top-0 z-50 w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between items-center h-20">
+<div class="flex flex-wrap justify-between items-center h-20">
 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
-
 <span class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary transition-colors">LandHub</span>
 </div>
+
+{{-- Desktop nav links --}}
 <div class="hidden md:flex items-center space-x-8">
 <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-white font-medium transition-colors" href="{{ route('landing') }}">Home</a>
 <a class="text-primary font-semibold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-primary" href="{{ route('about') }}">About Us</a>
-<button class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white transition-all duration-300">
-<span class="material-icons-round">person</span>
-</button>
+@if(Route::has('login'))
+    @auth
+        <a href="{{ route('profil') }}" class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold hover:bg-blue-800 transition-all duration-300">
+            {{ substr(Auth::user()->name, 0, 1) }}
+        </a>
+    @else
+        <a href="{{ route('login') }}" class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary hover:text-white transition-all duration-300">
+            <span class="material-icons-round">person</span>
+        </a>
+    @endauth
+@endif
 </div>
+
+{{-- Hamburger Button (mobile only) --}}
 <div class="md:hidden flex items-center">
-<button class="text-slate-600 dark:text-slate-300 hover:text-primary focus:outline-none">
-<span class="material-icons-round text-3xl">menu</span>
+<button id="hamburgerBtn" onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition focus:outline-none" aria-label="Menu">
+    <svg id="hamburgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 </button>
 </div>
+
+{{-- Mobile Menu Drawer --}}
+<div id="mobileMenu" class="md:hidden w-full basis-full">
+<div class="flex flex-col gap-2 py-4 border-t border-slate-200 dark:border-slate-700 mt-3">
+    <a href="{{ route('landing') }}" class="font-medium py-3 px-4 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition">Home</a>
+    <a href="{{ route('about') }}" class="font-medium py-3 px-4 rounded-xl text-primary bg-blue-50 dark:bg-slate-800 transition">About Us</a>
+    @if(Route::has('login'))
+        @auth
+            <a href="{{ route('profil') }}" class="font-medium py-3 px-4 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-slate-800 transition">Profil</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full text-left font-medium py-3 px-4 rounded-xl text-red-600 hover:bg-red-50 transition">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="font-medium py-3 px-4 rounded-xl bg-primary text-white text-center hover:bg-blue-800 transition">Login</a>
+        @endauth
+    @endif
 </div>
 </div>
+
+</div>
+</div>
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const hamburger = document.getElementById('hamburgerIcon');
+    const close = document.getElementById('closeIcon');
+    menu.classList.toggle('open');
+    hamburger.classList.toggle('hidden');
+    close.classList.toggle('hidden');
+}
+</script>
 </nav>
 <section class="relative overflow-hidden pt-16 pb-24 lg:pt-32 lg:pb-32">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -92,9 +137,11 @@
 <div class="absolute w-96 h-96 bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
 <div class="relative bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-700 transform hover:scale-105 transition-transform duration-500">
 <div class="flex flex-col items-center">
-<span class="material-icons-round text-8xl text-primary mb-2">roofing</span>
-<h2 class="text-4xl font-bold text-slate-900 dark:text-white tracking-tighter">LandHub</h2>
-<p class="text-slate-400 dark:text-slate-500 tracking-[0.5em] text-sm uppercase mt-1 font-semibold">Property</p>
+<svg class="w-56 h-auto sm:w-64 md:w-[300px]" viewBox="0 28 240 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 120 V 83 L 67 44 L 108 78" stroke="#1E2B58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="47" y="115" font-family="'Inter', sans-serif" font-weight="800" font-size="38" fill="#1E2B58">LandHub</text>
+    <text x="145" y="135" font-family="'Inter', sans-serif" font-weight="500" font-size="12" letter-spacing="0.2em" fill="#586486">Property</text>
+</svg>
 </div>
 </div>
 </div>
