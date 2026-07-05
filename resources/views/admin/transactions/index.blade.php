@@ -13,7 +13,20 @@
 
     <div class="flex h-screen overflow-hidden">
 
-        <aside class="w-64 bg-white border-r border-gray-100 hidden md:flex flex-col flex-shrink-0 z-20">
+        <!-- Mobile Header Bar -->
+        <div class="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-100 flex items-center justify-between px-4 h-14 md:hidden">
+            <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-100 transition">
+                <svg class="w-6 h-6 text-[#1E2B58]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <h1 class="text-lg font-bold text-[#1E2B58]">LandHub</h1>
+            <div class="w-10"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside id="mobileSidebar" class="w-64 bg-white border-r border-gray-100 flex-col flex-shrink-0 z-50 fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex">
             <div class="h-20 flex items-center px-8 border-b border-gray-50">
                 <h1 class="text-2xl font-bold text-[#1E2B58]">LandHub</h1>
             </div>
@@ -61,10 +74,10 @@
             </div>
         </aside>
 
-        <main class="flex-1 overflow-y-auto bg-[#F8F9FE] p-8">
+        <main class="flex-1 overflow-y-auto bg-[#F8F9FE] p-4 md:p-8 pt-18 md:pt-8">
             
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold text-[#1E2B58]">Transactions</h2>
+            <div class="flex justify-between items-center mb-6 md:mb-10">
+                <h2 class="text-xl md:text-3xl font-bold text-[#1E2B58]">Transactions</h2>
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm font-bold text-gray-900">{{ Auth::user()->name }}</p>
@@ -197,7 +210,7 @@
                 </form>
 
                 <div class="pt-3 pr-6 pl-6 pb-3 overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
                         <thead>
                             <tr class="bg-gray-100 text-gray-900 text-xs font-bold tracking-wider">
                                 <th class="px-6 py-4 rounded-l-xl">Id Transaction</th>
@@ -318,6 +331,11 @@
                 closeLogoutModal();
             }
         });
+
+        function toggleSidebar() {
+            document.getElementById('mobileSidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>

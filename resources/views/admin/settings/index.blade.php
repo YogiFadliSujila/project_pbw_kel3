@@ -47,7 +47,20 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark font-sans antialiased text-gray-800 dark:text-gray-200 h-screen overflow-hidden flex transition-colors duration-300">
 
-        <aside class="w-64 bg-white border-r border-gray-100 hidden md:flex flex-col flex-shrink-0 z-20">
+        <!-- Mobile Header Bar -->
+        <div class="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-100 flex items-center justify-between px-4 h-14 md:hidden">
+            <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-100 transition">
+                <svg class="w-6 h-6 text-[#1E2B58]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <h1 class="text-lg font-bold text-[#1E2B58]">LandHub</h1>
+            <div class="w-10"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside id="mobileSidebar" class="w-64 bg-white border-r border-gray-100 flex-col flex-shrink-0 z-50 fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex">
             <div class="h-20 flex items-center px-8 border-b border-gray-50">
                 <h1 class="text-2xl font-bold text-[#1E2B58]">LandHub</h1>
             </div>
@@ -93,10 +106,7 @@
 
     <div class="flex-1 flex flex-col h-full overflow-hidden">
         
-        <header class="h-20 bg-background-light dark:bg-background-dark flex items-center justify-between px-8 md:px-12 flex-shrink-0">
-            <button class="md:hidden text-gray-600 dark:text-gray-300">
-                <span class="material-icons-outlined">menu</span>
-            </button>
+        <header class="h-20 bg-background-light dark:bg-background-dark hidden md:flex items-center justify-between px-8 md:px-12 flex-shrink-0">
             <div class="flex-1"></div> 
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-300">
@@ -109,9 +119,9 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 md:px-12">
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 md:px-12 pt-18 md:pt-4">
             <div class="max-w-4xl mx-auto pb-12">
-                <h2 class="text-3xl font-bold text-dark-blue dark:text-white text-center mb-8">Edit Profile</h2>
+                <h2 class="text-xl md:text-3xl font-bold text-dark-blue dark:text-white text-center mb-8">Edit Profile</h2>
                 
                 <div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8 md:p-12">
                     
@@ -263,6 +273,11 @@
                 closeLogoutModal();
             }
         });
+
+        function toggleSidebar() {
+            document.getElementById('mobileSidebar').classList.toggle('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>
