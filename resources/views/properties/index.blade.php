@@ -320,8 +320,8 @@
                                             data-ads-category="{{ e($item->ads_category) }}"
                                             data-status="{{ e($item->status) }}"
                                             data-user-email="{{ $item->user->email ?? '' }}"
-                                            data-image-url="{{ $item->image_url }}"
-                                            data-document-url="{{ $item->document_url }}"
+                                            data-image-url="{{ $item->image_url ?? asset('storage/' . ltrim($item->image, '/'))}}"
+                                            data-document-url="{{ $item->document_url ?? ($item->document ? asset('storage/' . ltrim($item->document, '/')) : '') }}"
                                             onclick="openShowModalFromEl(this)"
                                             class="text-gray-500 hover:text-blue-600 transition"
                                             title="Lihat Detail">
@@ -377,7 +377,7 @@
                     
                     <div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
-                            <img id="show-image" src="{{ $item->image_url ?? $item->image }}" alt="Property Image" class="w-full h-64 object-cover">
+                            <img id="show-image" src="" alt="Property Image" class="w-full h-64 object-cover">
                         </div>
                         
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
@@ -390,12 +390,7 @@
                                     <p class="text-xs text-gray-500">Legal Document</p>
                                 </div>
                             </div>
-                            <a id="show-document-link" 
-                                href="{{ $item->document_url ?? asset('storage/' . ltrim($item->document, '/')) }}" 
-                                target="_blank" 
-                                class="text-blue-600 hover:text-blue-800 text-sm font-bold">
-                                Download
-                            </a>
+                            <a id="show-document-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-bold">Download</a>
                         </div>
                     </div>
 
@@ -567,7 +562,7 @@
             showCategoryEl.textContent = item.ads_category || '-';
             showStatusEl.textContent = item.status || '-';
             showLocationEl.textContent = item.location || item.title || '-';
-            showPriceEl.textContent = item.price ? ('IDR ' + new Intl.NumberFormat('id-ID').format(Number(item.price))) : 'IDR 0';
+            showPriceEl.textContent = item.price ? ('Rp ' + new Intl.NumberFormat('id-ID').format(Number(item.price))) : 'Rp 0';
             showAreaEl.textContent = item.area ? (item.area + ' m2') : '0 m2';
             showAdsCatEl.textContent = item.ads_category || '-';
             showDescEl.textContent = item.description || '-';
@@ -593,7 +588,7 @@
                 location: dataset.location || null,
                 price: dataset.price ? Number(dataset.price) : null,
                 area: dataset.area ? Number(dataset.area) : null,
-                ads_category: dataset.adsCategory || dataset.adsCategory || dataset.adsCategory,
+                ads_category: dataset.adsCategory || null,
                 status: dataset.status || null,
                 user: { email: dataset.userEmail || null },
                 image_url: dataset.imageUrl || null,
@@ -616,7 +611,7 @@
                 showModal.classList.add('hidden');
                 // reset
                 if (img) img.src = '';
-                if (docLink) { docLink.href = '#'; docLink.style.display = ''; }
+                if (docLink) { docLink.href = '#'; docLink.style.display = 'none'; }
             }, 300);
         }
 
