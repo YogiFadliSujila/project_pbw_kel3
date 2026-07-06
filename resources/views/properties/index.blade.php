@@ -377,26 +377,25 @@
                     
                     <div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
-                            <x-image :src="$item->image_url ?? $item->image" alt="Property Image" class="w-full h-64 object-cover" />
+                            <img id="show-image" src="{{ $item->image_url ?? $item->image }}" alt="Property Image" class="w-full h-64 object-cover">
                         </div>
                         
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
-                            @if($item->document)
-                                @php
-                                    $docHref = $item->document_url ?? asset('storage/' . ltrim($item->document, '/'));
-                                @endphp
-                                <a href="{{ $docHref }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3">
-                                    <div class="bg-white p-2 rounded-full shadow-sm">
-                                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-gray-700">Dokumen Kepemilikan</p>
-                                        <p class="text-xs text-gray-500">Legal Document</p>
-                                    </div>     
-                                </a>
-                            @else
-                                <span class="text-xs text-gray-400 italic">Tidak ada file</span>
-                            @endif
+                            <div class="flex items-center gap-3">
+                                <div class="bg-white p-2 rounded-full shadow-sm">
+                                    <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-700">Dokumen Kepemilikan</p>
+                                    <p class="text-xs text-gray-500">Legal Document</p>
+                                </div>
+                            </div>
+                            <a id="show-document-link" 
+                                href="{{ $item->document_url ?? asset('storage/' . ltrim($item->document, '/')) }}" 
+                                target="_blank" 
+                                class="text-blue-600 hover:text-blue-800 text-sm font-bold">
+                                Download
+                            </a>
                         </div>
                     </div>
 
