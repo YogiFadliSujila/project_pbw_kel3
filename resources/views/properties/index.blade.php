@@ -544,9 +544,33 @@
             const showSpecsEl = document.getElementById('show-specifications');
             const showEmailEl = document.getElementById('show-email');
 
-            const placeholder = "{{ asset('images/placeholder.png') }}";
+            // --- 1. Perbaikan URL Gambar ---
+            if (img) {
+                let finalImageUrl = item.image_url;
+                
+                // Tangkap URL dummy yang terpotong dari database
+                if (finalImageUrl === '600x400?text=No+Image' || finalImageUrl === '/600x400?text=No+Image') {
+                    finalImageUrl = 'https://via.placeholder.com/600x400?text=No+Image';
+                } else if (!finalImageUrl) {
+                    finalImageUrl = "{{ asset('images/placeholder.png') }}"; // Gambar default bawaan
+                }
+                
+                img.src = finalImageUrl;
+            }
 
-            img.src = item.image_url || placeholder;
+            // --- 2. Perbaikan Dokumen ---
+            if (docLink) {
+                if (item.document_url && item.document_url !== '' && item.document_url !== '#') {
+                    docLink.href = item.document_url;
+                    docLink.style.display = '';
+                    docLink.setAttribute('target', '_blank');
+                    docLink.setAttribute('rel', 'noopener noreferrer');
+                    docLink.classList.remove('opacity-50', 'pointer-events-none');
+                } else {
+                    docLink.href = '#';
+                    docLink.style.display = 'none'; // Sembunyikan sepenuhnya jika dokumen kosong
+                }
+            }
 
             if (item.document_url) {
                 docLink.href = item.document_url;
