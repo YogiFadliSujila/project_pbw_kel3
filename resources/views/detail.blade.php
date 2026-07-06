@@ -366,7 +366,7 @@
         <div class="lg:col-span-5 space-y-6">
             
             <div class="relative w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-md group">
-                <x-image :src="$property->image_url ?? $property->image" :alt="$property->title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" :placeholder="'https://via.placeholder.com/800'" />
+                <x-image :src="$property->image_url ?? $property->image" :alt="$property->title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div class="absolute bottom-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg transform rotate-[-5deg]">FOR SALE</div>
             </div>
 

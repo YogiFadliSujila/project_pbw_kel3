@@ -237,7 +237,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex gap-1 w-24">
                                         <div class="w-8 h-8 rounded bg-gray-200 overflow-hidden border border-gray-300 shrink-0">
-                                            <x-image :src="$item->image_url ?? $item->image" class="w-full h-full object-cover" :placeholder="'https://via.placeholder.com/100'" />
+                                            <x-image :src="$item->image_url ?? $item->image" class="w-full h-full object-cover" />
                                         </div>
                                     </div>
                                 </td>
@@ -544,33 +544,14 @@
             const showSpecsEl = document.getElementById('show-specifications');
             const showEmailEl = document.getElementById('show-email');
 
-            // --- 1. Perbaikan URL Gambar ---
-            if (img) {
-                let finalImageUrl = item.image_url;
-                
-                // Tangkap URL dummy yang terpotong dari database
-                if (finalImageUrl === '600x400?text=No+Image' || finalImageUrl === '/600x400?text=No+Image') {
-                    finalImageUrl = 'https://via.placeholder.com/600x400?text=No+Image';
-                } else if (!finalImageUrl) {
-                    finalImageUrl = "{{ asset('images/placeholder.png') }}"; // Gambar default bawaan
-                }
-                
-                img.src = finalImageUrl;
-            }
+            const placeholderSvg = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect fill="#F3F4F6" width="100%" height="100%"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="Inter, Arial, sans-serif" font-size="24">No Image</text></svg>');
 
-            // --- 2. Perbaikan Dokumen ---
-            if (docLink) {
-                if (item.document_url && item.document_url !== '' && item.document_url !== '#') {
-                    docLink.href = item.document_url;
-                    docLink.style.display = '';
-                    docLink.setAttribute('target', '_blank');
-                    docLink.setAttribute('rel', 'noopener noreferrer');
-                    docLink.classList.remove('opacity-50', 'pointer-events-none');
-                } else {
-                    docLink.href = '#';
-                    docLink.style.display = 'none'; // Sembunyikan sepenuhnya jika dokumen kosong
-                }
+            let finalImageUrl = item.image_url;
+            if (!finalImageUrl || finalImageUrl.includes('via.placeholder.com') || finalImageUrl.includes('600x400?text=No')) {
+                finalImageUrl = placeholderSvg;
             }
+            img.src = finalImageUrl;
+            img.onerror = function() { this.onerror = null; this.src = placeholderSvg; };
 
             if (item.document_url) {
                 docLink.href = item.document_url;
