@@ -320,8 +320,8 @@
                                             data-ads-category="{{ e($item->ads_category) }}"
                                             data-status="{{ e($item->status) }}"
                                             data-user-email="{{ $item->user->email ?? '' }}"
-                                            data-image-url="{{ $item->image_url }}"
-                                            data-document-url="{{ $item->document_url }}"
+                                            data-image-url="{{ $item->image_url ?? asset('storage/' . ltrim($item->image, '/')) }}"
+                                            data-document-url="{{ $item->document ? ($item->document_url ?? asset('storage/' . ltrim($item->document, '/'))) : '' }}"
                                             onclick="openShowModalFromEl(this)"
                                             class="text-gray-500 hover:text-blue-600 transition"
                                             title="Lihat Detail">
@@ -377,7 +377,7 @@
                     
                     <div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
-                            <img id="show-image" src="" alt="Property Image" class="w-full h-64 object-cover">
+                            <img id="show-image" src="" alt="Property Image" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
                         </div>
                         
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
@@ -546,6 +546,7 @@
 
             const placeholder = "{{ asset('images/placeholder.png') }}";
 
+            img.onerror = function() { this.onerror = null; this.src = placeholder; };
             img.src = item.image_url || placeholder;
 
             if (item.document_url) {
