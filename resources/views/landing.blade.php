@@ -251,7 +251,7 @@
     </header>
 
     <section class="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mb-10 md:mb-16 text-center">
-        <h3 class="font-bold text-xl mb-1">Promo Periode 2025</h3>
+        <h3 class="font-bold text-xl mb-1">Promo Periode 2026</h3>
         <p class="text-base text-gray-500 mb-6">Lahan terbaik dengan harga terjangkau siap jadi milik kamu</p>
         
         @php
