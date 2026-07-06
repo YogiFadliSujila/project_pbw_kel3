@@ -377,7 +377,7 @@
                     
                     <div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
-                            <x-image :src="$property->image_url ?? $property->image" alt="Property Image" class="w-full h-64 object-cover">
+                            <x-image :src="$property->image_url ?? $property->image" alt="Property Image" class="w-full h-64 object-cover" />
                         </div>
                         
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
