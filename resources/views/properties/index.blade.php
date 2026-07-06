@@ -330,97 +330,6 @@
                                     </div>
                                 </td>
                             </tr>
-
-                            {{-- Per-item Show Modal (server-side rendered) --}}
-                            <div id="show-modal-{{ $item->id }}" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-                                <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeShowModal('show-modal-{{ $item->id }}')"></div>
-                                
-                                <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl mx-4 relative z-10 overflow-hidden transform transition-all scale-95 opacity-0 flex flex-col max-h-[90vh]" id="show-modal-content-{{ $item->id }}">
-                                    
-                                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                                        <h3 class="text-xl font-bold text-blue-900">Detail Properti</h3>
-                                    </div>
-
-                                    <div class="p-6 overflow-y-auto">
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            
-                                            <div>
-                                                <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
-                                                    <x-image :src="$item->image_url ?? $item->image" class="w-full h-64 object-cover" :placeholder="'https://via.placeholder.com/600x400'" />
-                                                </div>
-                                                
-                                                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
-                                                    <div class="flex items-center gap-3">
-                                                        <div class="bg-white p-2 rounded-full shadow-sm">
-                                                            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-sm font-bold text-gray-700">Dokumen Kepemilikan</p>
-                                                            <p class="text-xs text-gray-500">Legal Document</p>
-                                                        </div>
-                                                    </div>
-                                                    @if($item->document)
-                                                        @php
-                                                            $modalDocHref = $item->document_url ?? asset('storage/' . ltrim($item->document, '/'));
-                                                        @endphp
-                                                        <a href="{{ $modalDocHref }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 text-sm font-bold">Download</a>
-                                                    @else
-                                                        <span class="text-gray-400 text-sm italic">Tidak ada file</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <div class="space-y-4">
-                                                <div>
-                                                    <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-2">{{ $item->ads_category ?? '-' }}</span>
-                                                    @php
-                                                        $modalStatusColor = match($item->status) {
-                                                            'Accepted' => 'bg-green-100 text-green-700',
-                                                            'Sold'     => 'bg-blue-100 text-blue-700',
-                                                            'Rejected' => 'bg-red-100 text-red-700',
-                                                            'Pending'  => 'bg-orange-100 text-orange-700',
-                                                            default    => 'bg-gray-100 text-gray-700'
-                                                        };
-                                                    @endphp
-                                                    <span class="inline-block px-3 py-1 {{ $modalStatusColor }} rounded-full text-xs font-bold mb-2 ml-2">{{ $item->status }}</span>
-                                                    
-                                                    <h2 class="text-2xl font-bold text-gray-900">{{ $item->location }}</h2>
-                                                    <p class="text-xl font-bold text-green-600 mt-1">IDR {{ number_format($item->price, 0, ',', '.') }}</p>
-                                                </div>
-
-                                                <div class="grid grid-cols-2 gap-4">
-                                                    <div class="bg-gray-50 p-3 rounded-lg">
-                                                        <p class="text-xs text-gray-500">Luas Area</p>
-                                                        <p class="font-bold text-gray-800">{{ $item->area }} m2</p>
-                                                    </div>
-                                                    <div class="bg-gray-50 p-3 rounded-lg">
-                                                        <p class="text-xs text-gray-500">Tipe Iklan</p>
-                                                        <p class="font-bold text-gray-800">{{ $item->ads_category ?? '-' }}</p>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <p class="text-sm font-bold text-gray-700 mb-1">Deskripsi</p>
-                                                    <p class="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg h-24 overflow-y-auto">{{ $item->description }}</p>
-                                                </div>
-
-                                                <div>
-                                                    <p class="text-sm font-bold text-gray-700 mb-1">Spesifikasi</p>
-                                                    <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{{ $item->specifications }}</p>
-                                                </div>
-                                                
-                                                <div>
-                                                    <p class="text-xs text-gray-400 mt-2">Pemilik: <span class="text-gray-600">{{ $item->user->email ?? '-' }}</span></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-                                        <button onclick="closeShowModal('show-modal-{{ $item->id }}')" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Tutup</button>
-                                    </div>
-                                </div>
-                            </div>
                             @empty
                             <tr>
                                 <td colspan="13" class="px-6 py-10 text-center text-gray-500">
@@ -442,8 +351,98 @@
         </main>
     </div>
 
+    {{-- Per-item Show Modals (rendered outside table for valid HTML) --}}
+    @foreach($properties as $item)
+    <div id="show-modal-{{ $item->id }}" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" onclick="closeShowModal('show-modal-{{ $item->id }}')"></div>
+        
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl mx-4 relative z-10 overflow-hidden transform transition-all scale-95 opacity-0 flex flex-col max-h-[90vh]" id="show-modal-content-{{ $item->id }}">
+            
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-xl font-bold text-blue-900">Detail Properti</h3>
+            </div>
 
+            <div class="p-6 overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div>
+                        <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm mb-4">
+                            <x-image :src="$item->image_url ?? $item->image" class="w-full h-64 object-cover" :placeholder="'https://via.placeholder.com/600x400'" />
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-white p-2 rounded-full shadow-sm">
+                                    <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-700">Dokumen Kepemilikan</p>
+                                    <p class="text-xs text-gray-500">Legal Document</p>
+                                </div>
+                            </div>
+                            @if($item->document)
+                                @php
+                                    $modalDocHref = $item->document_url ?? asset('storage/' . ltrim($item->document, '/'));
+                                @endphp
+                                <a href="{{ $modalDocHref }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 text-sm font-bold">Download</a>
+                            @else
+                                <span class="text-gray-400 text-sm italic">Tidak ada file</span>
+                            @endif
+                        </div>
+                    </div>
 
+                    <div class="space-y-4">
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-2">{{ $item->ads_category ?? '-' }}</span>
+                            @php
+                                $modalStatusColor = match($item->status) {
+                                    'Accepted' => 'bg-green-100 text-green-700',
+                                    'Sold'     => 'bg-blue-100 text-blue-700',
+                                    'Rejected' => 'bg-red-100 text-red-700',
+                                    'Pending'  => 'bg-orange-100 text-orange-700',
+                                    default    => 'bg-gray-100 text-gray-700'
+                                };
+                            @endphp
+                            <span class="inline-block px-3 py-1 {{ $modalStatusColor }} rounded-full text-xs font-bold mb-2 ml-2">{{ $item->status }}</span>
+                            
+                            <h2 class="text-2xl font-bold text-gray-900">{{ $item->location }}</h2>
+                            <p class="text-xl font-bold text-green-600 mt-1">IDR {{ number_format($item->price, 0, ',', '.') }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500">Luas Area</p>
+                                <p class="font-bold text-gray-800">{{ $item->area }} m2</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-xs text-gray-500">Tipe Iklan</p>
+                                <p class="font-bold text-gray-800">{{ $item->ads_category ?? '-' }}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-bold text-gray-700 mb-1">Deskripsi</p>
+                            <p class="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg h-24 overflow-y-auto">{{ $item->description }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-bold text-gray-700 mb-1">Spesifikasi</p>
+                            <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{{ $item->specifications }}</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-xs text-gray-400 mt-2">Pemilik: <span class="text-gray-600">{{ $item->user->email ?? '-' }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                <button onclick="closeShowModal('show-modal-{{ $item->id }}')" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+    @endforeach
 
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
