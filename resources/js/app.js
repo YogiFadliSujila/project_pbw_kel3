@@ -143,25 +143,30 @@ window.openShowModal = function (data) {
 
         // 3. Handle Gambar
         const imgElement = document.getElementById("show-image");
-        if (data.image) {
-            // Cek apakah link gambar sudah full path atau perlu ditambah base url
-            // Karena kita pakai asset() di blade, di sini kita asumsikan path dari DB perlu '/storage' jika belum ada
-            // TAPI, cara paling aman kirim path bersih:
-            imgElement.src = data.image;
-        } else {
-            imgElement.src =
-                "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect fill="#F3F4F6" width="100%" height="100%"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="Inter, Arial, sans-serif" font-size="24">No Image</text></svg>');
+        const placeholderSvg = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect fill="#F3F4F6" width="100%" height="100%"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="Inter, Arial, sans-serif" font-size="24">No Image</text></svg>');
 
+        let finalImageUrl = data.image_url || data.image;
+        if (!finalImageUrl || finalImageUrl.includes('via.placeholder.com') || finalImageUrl.includes('600x400?text=No')) {
+            finalImageUrl = placeholderSvg;
         }
+        
+        imgElement.src = finalImageUrl;
+        imgElement.onerror = function() { this.onerror = null; this.src = placeholderSvg; };
 
         // 4. Handle Dokumen Link
         const docLink = document.getElementById("show-document-link");
-        if (data.document) {
-            docLink.href = data.document;
+        const docUrl = data.document_url || data.document;
+        if (docUrl && docUrl !== '#') {
+            docLink.href = docUrl;
             docLink.classList.remove("hidden");
+            // ensure styles match what index blade had
+            docLink.style.display = '';
+            docLink.setAttribute('target', '_blank');
+            docLink.setAttribute('rel', 'noopener noreferrer');
         } else {
             docLink.href = "#";
             docLink.classList.add("hidden");
+            docLink.style.display = 'none';
         }
 
         // 5. Tampilkan Modal dengan Animasi
