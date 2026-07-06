@@ -9,23 +9,25 @@ import { ZiggyVue } from "ziggy-js";
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 const appElement = document.getElementById("app");
 
-createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(
-            `./Pages/${name}.vue`,
-            import.meta.glob("./Pages/**/*.vue"),
-        ),
-    setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .mount(el);
-    },
-    progress: {
-        color: "#4B5563",
-    },
-});
+if (appElement) {
+    createInertiaApp({
+        title: (title) => `${title} - ${appName}`,
+        resolve: (name) =>
+            resolvePageComponent(
+                `./Pages/${name}.vue`,
+                import.meta.glob("./Pages/**/*.vue"),
+            ),
+        setup({ el, App, props, plugin }) {
+            return createApp({ render: () => h(App, props) })
+                .use(plugin)
+                .use(ZiggyVue)
+                .mount(el);
+        },
+        progress: {
+            color: "#4B5563",
+        },
+    });
+}
 
 // --- Logika Toast Notification ---
 
@@ -148,7 +150,8 @@ window.openShowModal = function (data) {
             imgElement.src = data.image;
         } else {
             imgElement.src =
-                "https://via.placeholder.com/600x400?text=No+Image";
+                "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect fill="#F3F4F6" width="100%" height="100%"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9CA3AF" font-family="Inter, Arial, sans-serif" font-size="24">No Image</text></svg>');
+
         }
 
         // 4. Handle Dokumen Link
