@@ -21,6 +21,15 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Login dengan Google
+
+1. Konfigurasikan OAuth consent screen di Google Cloud Console, lalu buat OAuth 2.0 Client ID bertipe **Web application**.
+2. Tambahkan URL callback aplikasi sebagai **Authorized redirect URI**, misalnya `http://localhost/auth/google/callback`.
+3. Isi `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, dan `GOOGLE_REDIRECT_URI` pada `.env`. URL callback harus sama persis dengan yang didaftarkan di Google Cloud Console.
+4. Jalankan `php artisan config:clear` setelah mengubah konfigurasi.
+
+Di produksi, gunakan HTTPS untuk `APP_URL` dan `GOOGLE_REDIRECT_URI`. Akun baru dibuat dengan role `pencari`; login hanya diteruskan jika Google menyatakan email telah terverifikasi.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
